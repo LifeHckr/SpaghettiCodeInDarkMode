@@ -136,8 +136,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             //Fall Tween
                 if (this.body.deltaAbsY() > 15) {
                     this.scene.sound.play("landSound", {mute: false, volume: .5, rate: 1.5, detune: -600});
-                    //More squish when landing from a slightly higher height
-                    //Also funny stuff to keep the hitbox from deforming
+                //More squish when landing from a slightly higher height
+                //Also funny stuff to keep the hitbox from deforming
                     this.scene.tweens.add({
                         onUpdate: () => {this.setBodySize(24 *(SCALE/this.scaleX), 24*(SCALE/this.scaleY))},
                         targets     : this,
