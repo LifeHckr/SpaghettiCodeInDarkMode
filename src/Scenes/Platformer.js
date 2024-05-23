@@ -294,6 +294,7 @@ class Platformer extends Phaser.Scene {
         my.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         my.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         my.keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        my.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
     //debug key listener (assigned to D key)
         if (game.config.physics.arcade.debug) {
             this.input.keyboard.on('keydown-G', () => {
@@ -482,6 +483,35 @@ class Platformer extends Phaser.Scene {
                                 }
                             my.sprite.player.bumpTimed = false;
                         },
+                    });
+                }
+            }
+        //DashMove
+            if (Math.abs(my.sprite.player.body.velocity.x) > this.RUNTHRESHOLD) {
+                if(Phaser.Input.Keyboard.JustDown(my.keyE)) {
+                    my.sprite.player.setMaxVelocity(1000000, this.MAXVELOCITYY);
+                    if (cursors.right.isDown || my.keyD.isDown) {
+                        my.sprite.player.setVelocityX(2000);
+                    } else if (cursors.left.isDown || my.keyA.isDown) {
+                        my.sprite.player.setVelocityX(-2000);
+                    }
+                    this.time.addEvent({
+                        delay: 100,                // ms
+                        callback: ()=>{
+                            my.sprite.player.setMaxVelocity(this.MAXVELOCITYX, this.MAXVELOCITYY);
+                            if (cursors.right.isDown || my.keyD.isDown) {
+                                my.sprite.player.setVelocityX(100);
+                            } else if (cursors.left.isDown || my.keyA.isDown) {
+                                my.sprite.player.setVelocityX(-100);
+                            }  
+                            if (!my.sprite.player.body.blocked.down) {
+                                my.sprite.player.anims.play('jump');
+                            } else {
+                                my.sprite.player.anims.play('idle');
+                            }   
+                            my.sprite.player.running = 1;
+                        },
+                        loop: false
                     });
                 }
             }
