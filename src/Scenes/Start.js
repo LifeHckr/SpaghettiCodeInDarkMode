@@ -3,7 +3,7 @@ class Start extends Phaser.Scene {
     constructor(){
         super("Start");
     }
-
+    //Don't worry about this for now.
     preload() {
           
     }

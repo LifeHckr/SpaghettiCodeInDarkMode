@@ -12,17 +12,6 @@
 
 // debug with extreme prejudice
 "use strict"
-
-/*
-TODO:
-XCustom Font
-XAdd more plants to the overworld
-XAdd a stretch of flat land to teach player to run
-Timer/score/end level/game over
-Sound
-XCamera offset
-*/
-
 // game config
 let config = {
     parent: 'phaser-game',
@@ -47,7 +36,7 @@ let config = {
     },
     width:  1200,//window.innerWidth * window.devicePixelRatio
     height: 700,//window.innerHeight * window.devicePixelRatio,
-    scene: [Load, Start, Platformer, GameOver]
+    scene: [Load, Platformer, GameOver]
 }
 
 var cursors;

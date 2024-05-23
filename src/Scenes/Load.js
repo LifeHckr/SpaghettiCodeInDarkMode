@@ -105,11 +105,17 @@ class Load extends Phaser.Scene {
 
 
         
-
+        // Controls
+        cursors = this.input.keyboard.createCursorKeys();
+        my.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+        my.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        my.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        my.keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        my.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
 
 
          // ...and pass to the next Scene
-         this.scene.start("Start");
+         this.scene.start("platformerScene");
     }
 
     // Never get here since a new scene is started in create()
