@@ -13,7 +13,7 @@ class Enemy extends Phaser.GameObjects.PathFollower {
             from: 0,
             to: 1,
             delay: 0,
-            duration: 2000,
+            duration: 4000,
             ease: 'Linear',
             repeat: -1,
             yoyo: true,
@@ -34,10 +34,11 @@ class Enemy extends Phaser.GameObjects.PathFollower {
         };
 
 
-        this.points1 = [
-            this.x, this.y,
-            this.x - 216, this.y,
-        ];
+        this.points1 = [];//original this.x, this.y, this.x - 216, this.y
+        for(let i = 0; i < 1000; i++) {
+             this.points1.push(this.x - i);
+             this.points1.push(Math.min(60 * Math.sin((this.x-i)/30) + this.y, this.y));         
+        }
         this.curve1 = new Phaser.Curves.Spline(this.points1);
         this.setPath(this.curve1);
         this.startFollow(this.startFollowOBJ1);
@@ -58,10 +59,6 @@ class Enemy extends Phaser.GameObjects.PathFollower {
     }
 
     update() {
-
-        
-
-
     }
 
     changeDir() {
