@@ -295,6 +295,7 @@ class Platformer extends Phaser.Scene {
         my.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         my.keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         my.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+        my.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     //debug key listener (assigned to D key)
         if (game.config.physics.arcade.debug) {
             this.input.keyboard.on('keydown-G', () => {
@@ -489,8 +490,20 @@ class Platformer extends Phaser.Scene {
         //DashMove
             if (Math.abs(my.sprite.player.body.velocity.x) > this.RUNTHRESHOLD) {
                 if(Phaser.Input.Keyboard.JustDown(my.keyE)) {
-                    my.sprite.player.setMaxVelocity(1000000, this.MAXVELOCITYY);
-                    if (cursors.right.isDown || my.keyD.isDown) {
+                    my.sprite.player.setMaxVelocity(1000000, 1000000);
+                    if ((cursors.right.isDown || my.keyD.isDown) && (cursors.up.isDown || my.keySpace.isDown) && !(cursors.down.isDown || my.keyS.isDown)) {
+                        my.sprite.player.setVelocityX(2000);
+                        my.sprite.player.setVelocityY(-1000);
+                    } else if ((cursors.left.isDown || my.keyA.isDown) && (cursors.up.isDown || my.keySpace.isDown) && !(cursors.down.isDown || my.keyS.isDown)) {
+                        my.sprite.player.setVelocityX(-2000);
+                        my.sprite.player.setVelocityY(-1000);
+                    } else if ((cursors.right.isDown || my.keyD.isDown) && !(cursors.up.isDown || my.keySpace.isDown) && (cursors.down.isDown || my.keyS.isDown)) {
+                        my.sprite.player.setVelocityX(2000);
+                        my.sprite.player.setVelocityY(1000);
+                    } else if ((cursors.left.isDown || my.keyA.isDown) && !(cursors.up.isDown || my.keySpace.isDown) && (cursors.down.isDown || my.keyS.isDown)) {
+                        my.sprite.player.setVelocityX(-2000);
+                        my.sprite.player.setVelocityY(1000);
+                    } else if (cursors.right.isDown || my.keyD.isDown) {
                         my.sprite.player.setVelocityX(2000);
                     } else if (cursors.left.isDown || my.keyA.isDown) {
                         my.sprite.player.setVelocityX(-2000);
