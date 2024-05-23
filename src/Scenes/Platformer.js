@@ -266,7 +266,13 @@ class Platformer extends Phaser.Scene {
             
         });
 //-----------------------------------------------
-        
+// Controls-------------------------
+        cursors = this.input.keyboard.createCursorKeys();
+        my.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+        my.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        my.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        my.keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        my.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
     //debug key listener (assigned to D key)
         if (game.config.physics.arcade.debug) {
             this.input.keyboard.on('keydown-G', () => {
