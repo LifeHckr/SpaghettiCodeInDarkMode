@@ -43,11 +43,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     update() {
 
 //SCHMOOVEMENT
-    //Stop if animating/knocking
+    //Ignore input if animating/knocking
         if (this.animating || this.knockback) {
             
     //Explicit behaviour for both pressed and no press
-        } else if ((cursors.left.isDown || my.keyA.isDown) == (cursors.right.isDown || my.keyD.isDown)) {
+        } else if (((cursors.left.isDown || my.keyA.isDown) == (cursors.right.isDown || my.keyD.isDown))) {
                     
             //Set drag and determine if player is still "moving" this is the soul of crazy jumps
             this.body.setAccelerationX(0);
@@ -100,12 +100,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
         
 // PLAYER JUMP
-    // note that we need body.blocked rather than body.touching b/c the former applies to tilemap tiles and the latter to the "ground"
-        //Afraid to remove this, because it doesnt need to be here
-        if (this.animating) {
-            
+    // note that we need body.blocked rather than body.touching b/c the former applies to tilemap tiles and the latter to sprites
         //Player is not blocked below
-        } else if(!this.body.blocked.down) {
+        if(!this.animating && !this.body.blocked.down) {
             if (this.running > 1) {
                 this.anims.play('fastJump');
             } else {
@@ -178,10 +175,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     
 //Jump
         //Disable if knockback
-        if (this.knockback) {
-    
         //As long as a jump is left accept key press
-        } else if((this.air != enumList.NOJUMP /*|| this.doubleJump*/) && (cursors.up.isDown||my.keySpace.isDown)) {
+        if(!this.knockback && (this.air != enumList.NOJUMP /*|| this.doubleJump*/) && (cursors.up.isDown||my.keySpace.isDown)) {
             //If player was just grounded, set to in air, set up velocity, and play anims
             if (this.air == enumList.GROUNDED) {
                 this.scene.sound.play("landSound", {mute: false, volume: .75, rate: .5});
@@ -238,20 +233,20 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 //Dust Particles---------------------------------
         if (this.moving && this.air == enumList.GROUNDED && Math.abs(this.body.velocity.x) > 700) {
             //run particle
-                this.scene.add.particles(this.x, this.y+this.displayHeight/1.9, 'particle', { 
-                    active: true,
-                    speedX: 100,
-                    speedY: -40,
-                    lifespan: (Math.abs(this.body.velocity.x)-500)/5,
-                    quantity: 2,
-                    rotate: { min: 160, max: 200 },
-                    scale: { start: .5, end: 2 },
-                    alpha: { start: .4, end: 0 },
-                    emitting: true,
-                    emitZone: { type: 'edge', source: this, quantity:2 },
-                    duration: 10
-                });
-            }
+            this.scene.add.particles(this.x, this.y+this.displayHeight/1.9, 'particle', { 
+                active: true,
+                speedX: 100,
+                speedY: -40,
+                lifespan: (Math.abs(this.body.velocity.x)-500)/5,
+                quantity: 2,
+                rotate: { min: 160, max: 200 },
+                scale: { start: .5, end: 2 },
+                alpha: { start: .4, end: 0 },
+                emitting: true,
+                emitZone: { type: 'edge', source: this, quantity:2 },
+                duration: 10
+            });
+        }
 //----------------------------------------------------
 
 //Extra Checks------------------------
@@ -265,17 +260,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         } */
 
     //Trigger Running - If over run threshold and not running
-        if (!this.knockback && Math.abs(this.body.velocity.x) > this.RUNTHRESHOLD) {
+        if (!this.knockback && Math.abs(this.body.velocity.x) >= this.RUNTHRESHOLD) {
             this.running = this.RUNMULTI;
-            this.anims.play('fast');
         //Remove Running    
-        } else if (Math.abs(this.body.velocity.x) < this.RUNTHRESHOLD) {
-            if (this.air != enumList.GROUNDED) {
-                this.anims.play('jump');
-            } else {
-                this.anims.play('idle');
-            }
-            
+        } else if (Math.abs(this.body.velocity.x) < this.RUNTHRESHOLD) {            
             this.running = 1;
         }
 //------------------------------------------------------
