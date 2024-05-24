@@ -133,7 +133,6 @@ class Platformer extends Phaser.Scene {
 
             let newEnemy = new Enemy(this, enemy.x, enemy.y, "platformer_characters", "tile_0024.png");
             newEnemy.facing = enumList.LEFT;
-            newEnemy.anims.play("enemyFly");
             this.enemygroup.add(newEnemy);
             enemy.destroy();//Refactor possibility
         });

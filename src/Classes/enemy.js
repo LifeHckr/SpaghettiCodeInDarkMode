@@ -1,5 +1,5 @@
 class Enemy extends Phaser.GameObjects.PathFollower {
-    constructor(scene, x, y, texture, frame) {        
+    constructor(scene, x, y, texture, frame, duration = 4000, pathLength = 500, periods = 4, amplitude = 60, type = 'sine') {        
         super(scene, 'Path', x, y, texture, frame);
         this.visible = true;
         this.active = true;
@@ -13,8 +13,8 @@ class Enemy extends Phaser.GameObjects.PathFollower {
             from: 0,
             to: 1,
             delay: 0,
-            duration: 4000,
-            ease: 'Linear',
+            duration: duration,
+            ease: 'Quadratic',
             repeat: -1,
             yoyo: true,
             onLoop: function (tween, obj) {
@@ -35,10 +35,10 @@ class Enemy extends Phaser.GameObjects.PathFollower {
 
 
         this.points1 = [];//original this.x, this.y, this.x - 216, this.y
-        for(let i = 0; i < 1000; i++) {
-             this.points1.push(this.x - i);
-             this.points1.push(Math.min(60 * Math.sin((this.x-i)/30) + this.y, this.y));         
+        if (type = 'sine') {
+            this.buildSinePath(this.points1, pathLength, periods, amplitude, this.x, this.y);
         }
+        console.log(this.points1);
         this.curve1 = new Phaser.Curves.Spline(this.points1);
         this.setPath(this.curve1);
         this.startFollow(this.startFollowOBJ1);
@@ -53,7 +53,7 @@ class Enemy extends Phaser.GameObjects.PathFollower {
         scene.physics.world.enable(this, Phaser.Physics.Arcade.DYNAMIC_BODY);
         this.body.setAllowGravity(false);
         this.body.setSize(this.displayWidth/3, this.displayHeight/3);
-
+        this.anims.play("enemyFly");
 
         return this;
     }
@@ -76,5 +76,41 @@ class Enemy extends Phaser.GameObjects.PathFollower {
         this.stopFollow();
         this.active =  false;
         this.destroy();
+    }
+
+    //Approximate a sine curve, takes steps at 1/8 period
+    buildSinePath(array, length, numPeriods, amplitude, startX, startY) {
+        /*for(let i = 0; i < length; i += length/numPeriods/8) {
+            array.push(startX - i);
+            array.push(Math.min(amplitude * Math.sin(((i*Math.PI)/(length/numPeriods*.5)) + (Math.PI * .5)) + startY, startY));         
+       }*/
+       for (let i = 0; i<numPeriods; i++) {
+            //Start
+            array.push(startX - i*length/numPeriods);
+            array.push(startY);
+
+            array.push(startX - i*length/numPeriods - length/numPeriods/8);
+            array.push(startY);
+
+            array.push(startX - i*length/numPeriods - 2*length/numPeriods/8);
+            array.push(startY);
+
+            array.push(startX - i*length/numPeriods - 3*length/numPeriods/8);
+            array.push(startY - amplitude/1.4);
+
+            //1/2 period at peak
+            array.push(startX - i*length/numPeriods - 4*length/numPeriods/8);
+            array.push(startY - amplitude);
+
+            array.push(startX - i*length/numPeriods - 5*length/numPeriods/8);
+            array.push(startY - amplitude/1.4);
+
+            array.push(startX - i*length/numPeriods - 6*length/numPeriods/8);
+            array.push(startY);
+
+            array.push(startX - i*length/numPeriods - 7*length/numPeriods/8);
+            array.push(startY);
+            //And repeat
+       }
     }
 }

@@ -27,7 +27,7 @@ class LevelTimer extends Phaser.GameObjects.Text {
         } else {
             my.bgm.rate = my.bgm.rateVar;
             this.setStroke('#FFFFFF', 10);
-            console.log(my.bgm.rate);
+            //console.log(my.bgm.rate);
         }
         if (this.time <= 99) {
             my.bgm.rateVar = 1.5;
