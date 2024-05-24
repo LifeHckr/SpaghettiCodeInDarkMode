@@ -101,8 +101,8 @@
                  "type":"coin",
                  "visible":true,
                  "width":18,
-                 "x":126,
-                 "y":288
+                 "x":288,
+                 "y":342
                 }, 
                 {
                  "gid":152,
@@ -115,6 +115,18 @@
                  "width":18,
                  "x":36,
                  "y":360
+                }, 
+                {
+                 "gid":87,
+                 "height":18,
+                 "id":5,
+                 "name":"Signs are here!",
+                 "rotation":0,
+                 "type":"sign",
+                 "visible":true,
+                 "width":18,
+                 "x":180,
+                 "y":216
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -123,7 +135,7 @@
          "y":0
         }],
  "nextlayerid":6,
- "nextobjectid":6,
+ "nextobjectid":7,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",

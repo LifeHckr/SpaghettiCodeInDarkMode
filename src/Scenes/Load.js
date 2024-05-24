@@ -21,8 +21,11 @@ class Load extends Phaser.Scene {
         this.load.image("meteor1", "spaceMeteors_004.png");
         this.load.image("spackBack", "darkPurple.png");                  
         // Packed tilemap
+
+        //Maps and Rooms
         this.load.tilemapTiledJSON("platformer-level-1", "./rooms/platformer-level-1.tmj");   // Tilemap in JSON
         this.load.tilemapTiledJSON("Room1", "./rooms/roomExample.tmj");
+        this.load.tilemapTiledJSON("Room2", "./rooms/roomExample2.tmj");
 
         //AUDIO
         this.load.audio("bwah", "audio/404775__owlstorm__retro-video-game-sfx-bwah.wav");

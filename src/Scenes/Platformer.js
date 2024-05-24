@@ -23,7 +23,7 @@ class Platformer extends Phaser.Scene {
     create() {
 //SPRITES------------------------------------------------------------
     //xMark for Signs
-        this.sprite.xMark = this.add.sprite(0, 0, "x").setScale(SCALE).setVisible(true).setDepth(1);
+        this.sprite.xMark = this.add.sprite(0, 0, "x").setScale(SCALE).setVisible(true).setDepth(1).setAlpha(0);
     //SignText
         this.signText = this.add.text(30, 70, 'Placeholder', { fontFamily: 'font1', fontSize: '32px', fill: '#000000', wordWrap: {width: 600},  stroke: '#FFFFFF', strokeThickness: 10}).setOrigin(.5, 0).setScrollFactor(0).setDepth(5);
         this.signText.x = 600;
@@ -63,9 +63,9 @@ class Platformer extends Phaser.Scene {
         //this.map = this.createOldRoom("platformer-level-1", 18, 18, 45, 25);
 
         this.room2 = this.createRoom("Room1", 18, 18, 0, -20*18*2);
-        this.room1 = this.createRoom("Room1", 18, 18, 20*18*2, 0);
+        this.room1 = this.createRoom("Room2", 18, 18, 20*18*2, 0);
         this.room3 = this.createRoom("Room1", 18, 18, 0, 0);
-        this.room4 = this.createRoom("Room1", 18, 18, 20*18*2, -20*18*2);
+        this.room4 = this.createRoom("Room2", 18, 18, 20*18*2, -20*18*2);
     
 
     //-----------------------------------------------------------------------------
@@ -312,7 +312,7 @@ class Platformer extends Phaser.Scene {
 //------------------------------------------------------
     }
 
-    createOldRoom(key, tileWidth, tileHeight, width, height) {
+    /* createOldRoom(key, tileWidth, tileHeight, width, height) {
         let map = this.add.tilemap(key, tileWidth, tileHeight, width, height);
         map.addTilesetImage("kenny_tilemap_packed", "tilemap_tiles");
         map.addTilesetImage("tilemap-backgrounds_packed", "background_tiles");
@@ -422,8 +422,7 @@ class Platformer extends Phaser.Scene {
         });
 
         return(map);
-    }
-
+    } */
 
     /*Notes so far:
     Layers have to be known on demand, creating a layer the map doenst have give an error.
@@ -431,8 +430,6 @@ class Platformer extends Phaser.Scene {
 
     Current needs for a room: key, x, y, tile x, tile y,
     Probably will want: room width, room height, spritesheets needed, ?doors?, 
-    
-    
     
     */
     createRoom(key, tileWidth, tileHeight, x, y) {
@@ -496,10 +493,13 @@ class Platformer extends Phaser.Scene {
             type: "sign",
             key: "sign"
         });
+        console.log(signs);
         signs.map((sign) => {
             sign.scale = SCALE;
             sign.x *= SCALE;
             sign.y *= SCALE;
+            sign.x += x;
+            sign.y += y;
             this.physics.world.enable(sign, Phaser.Physics.Arcade.STATIC_BODY);
             this.signGroup.add(sign);
         });

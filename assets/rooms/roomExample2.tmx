@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="18" tileheight="18" infinite="0" nextlayerid="6" nextobjectid="6">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="18" tileheight="18" infinite="0" nextlayerid="6" nextobjectid="7">
  <editorsettings>
-  <export target="roomExample.tmj" format="json"/>
+  <export target="roomExample2.tmj" format="json"/>
  </editorsettings>
  <tileset firstgid="1" name="kenny_tilemap_packed" tilewidth="18" tileheight="18" tilecount="180" columns="20">
   <image source="tilemap_packed.png" width="360" height="162"/>
@@ -327,7 +327,8 @@
  <objectgroup id="4" name="Objects">
   <object id="1" type="player" x="198" y="306" width="18" height="18"/>
   <object id="2" name="1" type="coin" gid="152" x="108" y="288" width="18" height="18"/>
-  <object id="3" name="1" type="coin" gid="152" x="126" y="288" width="18" height="18"/>
+  <object id="3" name="1" type="coin" gid="152" x="288" y="342" width="18" height="18"/>
   <object id="4" name="1" type="coin" gid="152" x="36" y="360" width="18" height="18"/>
+  <object id="5" name="Signs are here!" type="sign" gid="87" x="180" y="216" width="18" height="18"/>
  </objectgroup>
 </map>
