@@ -10,8 +10,8 @@ class Load extends Phaser.Scene {
         this.load.atlas("platformer_characters", "tilemap-characters-packed.png", "tilemap-characters-packed.json");
 
         // Load tilemap information
-        this.load.image("tilemap_tiles", "tilemap_packed.png");
-        this.load.image("background_tiles", "tilemap-backgrounds_packed.png");        
+        this.load.image("tilemap_tiles", "./rooms/tilemap_packed.png");
+        this.load.image("background_tiles", "./rooms/tilemap-backgrounds_packed.png");        
         this.load.image("particle", "tile_0154.png");
         this.load.image("coin", "tile_0152.png"); 
         this.load.image("coin2", "tile_0151.png");
@@ -21,7 +21,8 @@ class Load extends Phaser.Scene {
         this.load.image("meteor1", "spaceMeteors_004.png");
         this.load.image("spackBack", "darkPurple.png");                  
         // Packed tilemap
-        this.load.tilemapTiledJSON("platformer-level-1", "platformer-level-1.tmj");   // Tilemap in JSON
+        this.load.tilemapTiledJSON("platformer-level-1", "./rooms/platformer-level-1.tmj");   // Tilemap in JSON
+        this.load.tilemapTiledJSON("Room1", "./rooms/roomExample.tmj");
 
         //AUDIO
         this.load.audio("bwah", "audio/404775__owlstorm__retro-video-game-sfx-bwah.wav");

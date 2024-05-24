@@ -32,7 +32,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.bumpTimed = false;//did the player bonk
 
         //Physics Set up
-        this.setCollideWorldBounds(true);
+        //this.setCollideWorldBounds(true);
         this.body.setMaxVelocity(this.MAXVELOCITYX, this.MAXVELOCITYY);
 
 

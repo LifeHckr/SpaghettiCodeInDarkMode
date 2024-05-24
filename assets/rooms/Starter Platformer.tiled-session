@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "platformer-level-1.tmx",
+    "activeFile": "roomExample.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -12,11 +12,11 @@
             "scaleInEditor": 4
         },
         "platformer-level-1.tmx": {
-            "scale": 5.5,
+            "scale": 2,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 1901.1818181818182,
-                "y": 441.90909090909093
+                "x": 3088.25,
+                "y": 360.75
             }
         },
         "platformer-level-1.tmx#kenny_tilemap_packed": {
@@ -25,6 +25,17 @@
         "platformer-level-1.tmx#tilemap-backgrounds_packed": {
             "scaleInDock": 2,
             "scaleInEditor": 1
+        },
+        "roomExample.tmx": {
+            "scale": 2,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 135.25,
+                "y": 220.75
+            }
+        },
+        "roomExample.tmx#kenny_tilemap_packed": {
+            "scaleInDock": 1
         }
     },
     "frame.defaultDuration": 400,
@@ -36,11 +47,12 @@
     "map.tileWidth": 18,
     "map.width": 40,
     "openFiles": [
-        "platformer-level-1.tmx"
+        "roomExample.tmx"
     ],
     "project": "Starter Platformer.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "roomExample.tmx",
         "platformer-level-1.tmx"
     ],
     "resizeMap.removeObjects": false,
