@@ -69,8 +69,10 @@ class Platformer extends Phaser.Scene {
 
 // PlayerInit---------------------------------
 
-    this.sprite.player = new Player(this, this.playerSpawn[0].x, this.playerSpawn[0].y, "platformer_characters", "tile_0000.png");
-    this.playerGroup.add(this.sprite.player);
+        this.sprite.player = new Player(this, this.playerSpawn[0].x, this.playerSpawn[0].y, "platformer_characters", "tile_0000.png");
+
+        this.playerGroup.add(this.sprite.player);
+
         //WaterOverlap
         this.physics.add.overlap(this.sprite.player, this.waterPool, (obj1, obj2) => {
             
@@ -231,118 +233,6 @@ class Platformer extends Phaser.Scene {
 
 //------------------------------------------------------
     }
-
-    /* createOldRoom(key, tileWidth, tileHeight, width, height) {
-        let map = this.add.tilemap(key, tileWidth, tileHeight, width, height);
-        map.addTilesetImage("kenny_tilemap_packed", "tilemap_tiles");
-        map.addTilesetImage("tilemap-backgrounds_packed", "background_tiles");
-
-            //groundLayer
-            map.groundLayer = map.createLayer("Ground-n-Platforms", ["kenny_tilemap_packed","tilemap-backgrounds_packed"], 0, 0);
-            map.groundLayer.setScale(SCALE);
-        //topLayer
-            map.topLayer = map.createLayer("Above-Ground", ["kenny_tilemap_packed","tilemap-backgrounds_packed"], 0, 0);
-            map.topLayer.setScale(SCALE);
-            map.topLayer.setAlpha(.8).setDepth(1);
-            this.animatedTiles.init(map);
-        //collision layer
-            map.colLayer = map.createLayer("Collision-Layer", ["kenny_tilemap_packed","tilemap-backgrounds_packed"], 0, 0);
-            map.colLayer.setScale(SCALE);
-            map.colLayer.setAlpha(0);
-            map.colLayer.setCollisionByProperty({
-                collides: true
-            });
-            this.collidesTrue.add(map.colLayer);
-        //oneWay
-            map.oneWLayer = map.createLayer("One-Layer", ["kenny_tilemap_packed","tilemap-backgrounds_packed"], 0, 0);
-            map.oneWLayer.setScale(SCALE);
-            map.oneWLayer.setAlpha(0);
-            map.oneWLayer.setCollisionByProperty({
-                oneWay: true
-            });
-            this.oneWays.add(map.oneWLayer);
-        //Background- --have to change tileset before creating-- JK
-            map.botLayer = map.createLayer("Below-Ground", ["kenny_tilemap_packed","tilemap-backgrounds_packed"], 0, 0);
-            map.botLayer.setScale(5);
-            map.botLayer.setDepth(-1);
-            map.botLayer.setScrollFactor(.2);
-
-    //Collection Layer------------------------------------------------------------------------
-        //COINS
-        let coins = map.createFromObjects("Objects", {
-            type: "coin",
-            key: "coin"
-        });
-
-        coins.map((coin) => {
-            coin.scale = SCALE;
-            coin.setDepth(10);
-            coin.x *= SCALE;
-            coin.y *= SCALE;
-            this.physics.world.enable(coin, Phaser.Physics.Arcade.STATIC_BODY);
-            coin.play('coinTurn');
-            this.coingroup.add(coin);
-        });
-        
-
-        //SIGNS
-        let signs = map.createFromObjects("Objects", {
-            type: "sign",
-            key: "sign"
-        });
-        signs.map((sign) => {
-            sign.scale = SCALE;
-            sign.x *= SCALE;
-            sign.y *= SCALE;
-            this.physics.world.enable(sign, Phaser.Physics.Arcade.STATIC_BODY);
-            this.signGroup.add(sign);
-        });
-
-        //Player Spawn
-        this.playerSpawn = map.createFromObjects("Objects", {
-            type: "player",
-            key: "coin"
-        });
-        this.playerSpawn.map((spawn) => {
-            spawn.scale = SCALE;
-            spawn.x *= SCALE;
-            spawn.y *= SCALE;
-            spawn.visible = false;
-
-        });
-        //Enemy
-        let enemySpawn = map.createFromObjects("Objects", {
-            type: "enemSpawn",
-            key: "platformer_characters",
-            frame: "tile_0024.png",
-        });
-        enemySpawn.map((enemy) => {
-            enemy.scale = SCALE;
-            enemy.x *= SCALE;
-            enemy.y *= SCALE;
-
-            let newEnemy = new Enemy(this, enemy.x, enemy.y, "platformer_characters", "tile_0024.png");
-            newEnemy.facing = enumList.LEFT;
-            this.enemygroup.add(newEnemy);
-            enemy.destroy();//Refactor possibility
-        });
-        //Water
-        this.waterPool = map.createFromObjects("Objects", {
-            type: "waterPool",
-            key: ""
-        });
-        this.waterPool.map((water) => {
-            water.scale = SCALE;
-            water.x *= SCALE;
-            water.y *= SCALE;
-            water.displayHeight = 36;
-            water.displayWidth = 180;
-            water.visible = false;
-            this.physics.world.enable(water, Phaser.Physics.Arcade.STATIC_BODY);
-        });
-
-        return(map);
-    } */
 
     /*Notes so far:
     Layers have to be known on demand, creating a layer the map doenst have give an error. --Got layer by layer stuff working

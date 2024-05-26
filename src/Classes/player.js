@@ -21,6 +21,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.DASHVELOCITY = 2000;
         this.DASHLENGTH = 600; //in ms
         this.FRAMEFUDGE = game.config.physics.arcade.fps / 30;//I wanted to get 60 & 30 fps to work
+        this.HITBOXSIZE = 20; //I noticed there is some jank around corners, this temporarily sort of fixes it
 
     //States
         this.moving = false; //is player "moving"
@@ -104,7 +105,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                             if (this.body.blocked.right || this.body.blocked.left) {
                                 this.running = 1;
                                 this.anims.play('idle');
-                                }
+                            }
                             this.bumpTimed = false;
                         },
                     });
@@ -159,7 +160,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 //More squish when landing from a slightly higher height
                 //Also funny stuff to keep the hitbox from deforming
                     this.scene.tweens.add({
-                        onUpdate: () => {this.setBodySize(24 *(SCALE/this.scaleX), 24*(SCALE/this.scaleY))},
+                        onUpdate: () => {this.setBodySize(this.HITBOXSIZE *(SCALE/this.scaleX), this.HITBOXSIZE*(SCALE/this.scaleY))},
                         targets     : this,
                         scaleY      : 1.3,
                         ease        : 'Quart.Out',
@@ -167,13 +168,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                         yoyo: true,
                         onYoyo: () => {true},
                         onComplete: () => {
-                            this.setBodySize(24, 24); 
+                            this.setBodySize(this.HITBOXSIZE, this.HITBOXSIZE); 
                             this.scale = SCALE;
                         },
                     });
                 } else {
                     this.scene.tweens.add({
-                        onUpdate: () => {this.setBodySize(24 *(SCALE/this.scaleX), 24*(SCALE/this.scaleY))},
+                        onUpdate: () => {this.setBodySize(this.HITBOXSIZE *(SCALE/this.scaleX), this.HITBOXSIZE*(SCALE/this.scaleY))},
                         targets     : this,
                         scaleY      : 1.5,
                         ease        : 'Quart.Out',
@@ -181,7 +182,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                         yoyo: true,
                         onYoyo: () => {true},
                         onComplete: () => {
-                            this.setBodySize(24, 24); 
+                            this.setBodySize(this.HITBOXSIZE, this.HITBOXSIZE); 
                             this.scale = SCALE;
                         },
                     }); 
@@ -220,14 +221,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     
             //Jump Tween
                 this.scene.tweens.add({
-                    onUpdate: () => {this.setBodySize(24 *(SCALE/this.scale), 24*(SCALE/this.scale))},
+                    onUpdate: () => {this.setBodySize(this.HITBOXSIZE *(SCALE/this.scale), this.HITBOXSIZE*(SCALE/this.scale))},
                     targets     : this,
                     scale      : 3,
                     ease        : 'Bounce.In',
                     duration    : 100,
                     yoyo: true,
                     onComplete: () => {
-                        this.setBodySize(24, 24); 
+                        this.setBodySize(this.HITBOXSIZE, this.HITBOXSIZE); 
                         this.scale = SCALE;
                     },
                 });

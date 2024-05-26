@@ -17,21 +17,15 @@ class Enemy extends Phaser.GameObjects.PathFollower {
             ease: 'Quadratic',
             repeat: -1,
             yoyo: true,
-            onLoop: function (tween, obj) {
-                //obj.changeDir();
-            },
             
             onYoyo: () => {
-                //console.log(obj);
                 this.changeDir();
             },
             onRepeat:  () => {
-                //console.log(obj);
                 this.changeDir();
             }
             
         };
-
 
         this.points1 = [];//original this.x, this.y, this.x - 216, this.y
         if (type = 'sine') {
@@ -41,12 +35,6 @@ class Enemy extends Phaser.GameObjects.PathFollower {
         this.curve1 = new Phaser.Curves.Spline(this.points1);
         this.setPath(this.curve1);
         this.startFollow(this.startFollowOBJ1);
-        
-
-
-
-        //this.group.create(Phaser.Math.RND.between(50, 200), 0);
-
 
         scene.add.existing(this);
         scene.physics.world.enable(this, Phaser.Physics.Arcade.DYNAMIC_BODY);
