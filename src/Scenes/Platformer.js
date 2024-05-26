@@ -36,6 +36,9 @@ class Platformer extends Phaser.Scene {
         this.sprite.signBoard.visible = false;
     //Timer Text
         this.timer = new LevelTimer(this, 0, 0, '999', { fontFamily: 'font1', fontSize: '37px', fill: '#FFFFFFF', stroke: '#FFFFFF', strokeThickness: 10 }, 999);
+    //Background
+        this.bg1 = this.add.tileSprite(game.config.width, -500, game.config.width, game.config.height, 'bgGrass').setScale(4).setScrollFactor(.05).setScale(5).setDepth(-10);
+
         
 //----------------------------------------------------------------
 
@@ -210,7 +213,7 @@ class Platformer extends Phaser.Scene {
 //Tweens---------------------------------
 
     //xMark grow/shrink, just constantly on, might technically be performance loss idk
-        this.tweens.add({
+        this.sprite.xMark.tween = this.tweens.add({
             targets     : this.sprite.xMark,
             scale     : 1.5,
             ease        : 'Linear',
@@ -263,12 +266,16 @@ class Platformer extends Phaser.Scene {
             this.sprite.xMark.y = this.sprite.player.signTouch.y - 50;
             this.sprite.xMark.visible = true;
             this.sprite.xMark.alpha = 1;
+            this.sprite.xMark.tween.resume();
         } else {
             this.tweens.add({
                 targets     : this.sprite.xMark,
                 alpha      : 0,
                 ease        : 'Linear',
-                duration    : 180
+                duration    : 180,
+                onComplete: () => {
+                    this.sprite.xMark.tween.pause();
+                }
             });
             this.signText.visible = false;
             this.sprite.signBoard.visible = false;
@@ -436,38 +443,28 @@ class Platformer extends Phaser.Scene {
         let map = this.add.tilemap(key, tileWidth, tileHeight);
         map.addTilesetImage("kenny_tilemap_packed", "tilemap_tiles");
         map.addTilesetImage("tilemap-backgrounds_packed", "background_tiles");
+        map.layers.forEach(layer => {
+        
+            let curLayer = map.createLayer(layer.name, ["kenny_tilemap_packed","tilemap-backgrounds_packed"], x, y);
+            curLayer.setScale(SCALE);
 
-        //groundLayer
-            map.groundLayer = map.createLayer("Ground-n-Platforms", ["kenny_tilemap_packed","tilemap-backgrounds_packed"], x, y);
-            map.groundLayer.setScale(SCALE);
-      /*//topLayer
-            map.topLayer = map.createLayer("Above-Ground", ["kenny_tilemap_packed","tilemap-backgrounds_packed"], 0, 0);
-            map.topLayer.setScale(SCALE);
-            map.topLayer.setAlpha(.8).setDepth(1);
-            this.animatedTiles.init(map); */
-        //collision layer
-            map.colLayer = map.createLayer("Collision-Layer", ["kenny_tilemap_packed","tilemap-backgrounds_packed"], x, y);
-            map.colLayer.setScale(SCALE);
-            map.colLayer.setAlpha(0);
-            map.colLayer.setCollisionByProperty({
-                collides: true
-            });
-            this.collidesTrue.add(map.colLayer);
-        /*oneWay
-            map.oneWLayer = map.createLayer("One-Layer", ["kenny_tilemap_packed","tilemap-backgrounds_packed"], 0, 0);
-            map.oneWLayer.setScale(SCALE);
-            map.oneWLayer.setAlpha(0);
-            map.oneWLayer.setCollisionByProperty({
-                oneWay: true
-            });
-            this.oneWays.add(map.oneWLayer);
-            */
+            if (layer.name == "Collision-Layer") {
+                curLayer.setAlpha(0);
+                curLayer.setCollisionByProperty({
+                    collides: true
+                });
+                this.collidesTrue.add(curLayer);
+                
+            } else if (layer.name == "One-Layer") {
+                curLayer.setAlpha(0);
+                curLayer.setCollisionByProperty({
+                    oneWay: true
+                });
+                this.oneWays.add(map.oneWLayer);
+            }
             
-        /*Background- --have to change tileset before creating-- JK
-            map.botLayer = map.createLayer("Below-Ground", ["kenny_tilemap_packed","tilemap-backgrounds_packed"], 0, 0);
-            map.botLayer.setScale(5);
-            map.botLayer.setDepth(-1);
-            map.botLayer.setScrollFactor(.2);*/
+        });
+        this.animatedTiles.init(map);
 
     //Collection Layer------------------------------------------------------------------------
         //COINS
@@ -493,7 +490,6 @@ class Platformer extends Phaser.Scene {
             type: "sign",
             key: "sign"
         });
-        console.log(signs);
         signs.map((sign) => {
             sign.scale = SCALE;
             sign.x *= SCALE;

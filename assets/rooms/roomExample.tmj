@@ -34,6 +34,7 @@
          "y":0
         }, 
         {
+         "class":"collider",
          "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -59,7 +60,7 @@
          "name":"Collision-Layer",
          "opacity":1,
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":20,
          "x":0,
          "y":0
@@ -250,6 +251,18 @@
                         }]
                 }, 
                 {
+                 "animation":[
+                        {
+                         "duration":300,
+                         "tileid":33
+                        }, 
+                        {
+                         "duration":300,
+                         "tileid":53
+                        }],
+                 "id":33
+                }, 
+                {
                  "id":40,
                  "properties":[
                         {
@@ -311,7 +324,8 @@
                          "type":"bool",
                          "value":true
                         }]
-                }, 
+                },
+            
                 {
                  "id":50,
                  "properties":[
@@ -320,8 +334,7 @@
                          "type":"bool",
                          "value":true
                         }]
-                },
-            
+                }, 
                 {
                  "id":60,
                  "properties":[
@@ -492,7 +505,8 @@
                          "type":"bool",
                          "value":true
                         }]
-                }, 
+                },
+            
                 {
                  "id":114,
                  "properties":[
@@ -501,8 +515,7 @@
                          "type":"bool",
                          "value":true
                         }]
-                },
-            
+                }, 
                 {
                  "id":115,
                  "properties":[
