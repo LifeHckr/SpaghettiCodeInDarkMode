@@ -137,6 +137,32 @@
  "nextlayerid":6,
  "nextobjectid":13,
  "orientation":"orthogonal",
+ "properties":[
+        {
+         "name":"0_type",
+         "type":"string",
+         "value":"enemy"
+        }, 
+        {
+         "name":"1_left",
+         "type":"string",
+         "value":""
+        }, 
+        {
+         "name":"2_top",
+         "type":"string",
+         "value":""
+        }, 
+        {
+         "name":"3_right",
+         "type":"string",
+         "value":""
+        }, 
+        {
+         "name":"4_bottom",
+         "type":"string",
+         "value":""
+        }],
  "renderorder":"right-down",
  "tiledversion":"1.10.2",
  "tileheight":18,

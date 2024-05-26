@@ -40,8 +40,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     //PlayerCollisions
         scene.mapCollider = scene.physics.add.collider(this, scene.collidesTrue);
     //OneWayCollisions- Checks if player is sufficiently above a one way to enable
-        scene.extraCollider = scene.physics.add.collider(this, scene.oneWays, null, function (obj1, obj2) {
-            return((obj1.y + obj1.displayHeight/2) <= (obj2.y*18*SCALE + 5));
+        scene.extraCollider = scene.physics.add.collider(this, scene.oneWays, null, function (player, tile) {
+            //console.log((player.y + player.displayHeight/2));
+            //console.log(tile.layer.tilemapLayer.tileToWorldY(tile.y));
+            //console.log(tile);
+            return((player.y + player.displayHeight/2) <= (tile.layer.tilemapLayer.tileToWorldY(tile.y) + 5));
         });
     //coinoverlap
         scene.physics.add.overlap(this, scene.coingroup, (obj1, obj2) => {

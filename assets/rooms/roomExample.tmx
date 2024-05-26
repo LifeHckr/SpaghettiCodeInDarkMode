@@ -3,6 +3,13 @@
  <editorsettings>
   <export target="roomExample.tmj" format="json"/>
  </editorsettings>
+ <properties>
+  <property name="0_type" value="enemy"/>
+  <property name="1_left" value=""/>
+  <property name="2_top" value=""/>
+  <property name="3_right" value=""/>
+  <property name="4_bottom" value=""/>
+ </properties>
  <tileset firstgid="1" name="kenny_tilemap_packed" tilewidth="18" tileheight="18" tilecount="180" columns="20">
   <image source="tilemap_packed.png" width="360" height="162"/>
   <tile id="0">

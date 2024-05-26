@@ -14,6 +14,10 @@ class Platformer extends Phaser.Scene {
 
         this.camera = this.cameras.main;
         this.sprite = {};
+    //------ETC-----------------------------
+        this.levelMap = new LevelMap(3, 3);
+        //console.log(this.levelMap);
+    //-----------------------------------
     }
 
     preload() {
@@ -61,7 +65,7 @@ class Platformer extends Phaser.Scene {
         this.room2 = this.createRoom("Room1", 18, 18, 0, -20*18*2);
         this.room1 = this.createRoom("Room2", 18, 18, 20*18*2, 0);
         this.room3 = this.createRoom("Room1", 18, 18, 0, 0);
-        this.room4 = this.createRoom("Room2", 18, 18, 20*18*2, -20*18*2);
+        this.room4 = this.createRoom("ORoom", 18, 18, 20*18*2, -20*18*2);
     
 
     //-----------------------------------------------------------------------------
@@ -244,13 +248,16 @@ class Platformer extends Phaser.Scene {
     */
     createRoom(key, tileWidth, tileHeight, x, y) {
         let map = this.add.tilemap(key, tileWidth, tileHeight);
+        //console.log(map);
+        //this.levelMap.createFromMap(map, 0, 0);
+
+
         map.addTilesetImage("kenny_tilemap_packed", "tilemap_tiles");
         map.addTilesetImage("tilemap-backgrounds_packed", "background_tiles");
         map.layers.forEach(layer => {
         
             let curLayer = map.createLayer(layer.name, ["kenny_tilemap_packed","tilemap-backgrounds_packed"], x, y);
             curLayer.setScale(SCALE);
-
             if (layer.name == "Collision-Layer") {
                 curLayer.setAlpha(0);
                 curLayer.setCollisionByProperty({
@@ -263,7 +270,10 @@ class Platformer extends Phaser.Scene {
                 curLayer.setCollisionByProperty({
                     oneWay: true
                 });
-                this.oneWays.add(map.oneWLayer);
+                this.oneWays.add(curLayer);
+
+            } else if (layer.name == "Top-Layer") {
+                curLayer.setAlpha(.8).setDepth(1);
             }
             
         });
