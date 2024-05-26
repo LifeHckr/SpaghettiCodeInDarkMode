@@ -116,6 +116,17 @@
                  "width":18,
                  "x":36,
                  "y":360
+                }, 
+                {
+                 "height":18,
+                 "id":12,
+                 "name":"",
+                 "rotation":0,
+                 "type":"enemSpawn",
+                 "visible":true,
+                 "width":18,
+                 "x":180,
+                 "y":198
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -124,7 +135,7 @@
          "y":0
         }],
  "nextlayerid":6,
- "nextobjectid":6,
+ "nextobjectid":13,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",

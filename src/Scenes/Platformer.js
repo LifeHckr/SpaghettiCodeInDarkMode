@@ -6,7 +6,7 @@ class Platformer extends Phaser.Scene {
     init() {
 
         my.bgm = this.sound.add("music");
-        // variables and settings        
+    // variables and settings        
         this.physics.world.gravity.y = 1900;
         //this.worldBoundsX = SCALE * 18 * (215); //scale = 2, 18 = width of tile, x = num tiles
         //this.worldBoundsY = SCALE * 18 * (40);
@@ -24,16 +24,8 @@ class Platformer extends Phaser.Scene {
 //SPRITES------------------------------------------------------------
     //xMark for Signs
         this.sprite.xMark = this.add.sprite(0, 0, "x").setScale(SCALE).setVisible(true).setDepth(1).setAlpha(0);
-    //SignText
-        this.signText = this.add.text(30, 70, 'Placeholder', { fontFamily: 'font1', fontSize: '32px', fill: '#000000', wordWrap: {width: 600},  stroke: '#FFFFFF', strokeThickness: 10}).setOrigin(.5, 0).setScrollFactor(0).setDepth(5);
-        this.signText.x = 600;
-        this.signText.visible = false;
     //HintText
         this.sprite.hintText = this.add.text(0, 0, 'A and D to move', { fontFamily: 'font1', fontSize: '42px', fill: '#FFFFFFF',  stroke: '#FFFFFF', strokeThickness: 10}).setOrigin(.5).setPosition(game.config.width/2, game.config.height - 160).setDepth(1).setAngle(-20).setScrollFactor(0);
-    //signBoard       
-        this.sprite.signBoard = this.add.sprite(600, 110, "sign").setDepth(4).setScale(50, 15).setScrollFactor(0);
-        this.sprite.signBoard.angle = 180;
-        this.sprite.signBoard.visible = false;
     //Timer Text
         this.timer = new LevelTimer(this, 0, 0, '999', { fontFamily: 'font1', fontSize: '37px', fill: '#FFFFFFF', stroke: '#FFFFFF', strokeThickness: 10 }, 999);
     //Background
@@ -44,7 +36,7 @@ class Platformer extends Phaser.Scene {
 
 //TILEMAP--------------------------------------------------------------
     //initMap
-        this.tempRoomConfig = {
+        this.protoRoomConfig = {
             key: "platformer-level-1",
             tileWidth: 18,
             tileHeight: 18,
@@ -56,8 +48,9 @@ class Platformer extends Phaser.Scene {
             classType: Enemy,
             maxSize: 100,
             // activate update calls
-            runChildUpdate: true,
+            runChildUpdate: true
         });
+        this.playerGroup = this.add.group();
         this.coingroup = this.add.group();
         this.signGroup = this.add.group();
         this.collidesTrue = this.add.group();
@@ -76,83 +69,9 @@ class Platformer extends Phaser.Scene {
 
 // PlayerInit---------------------------------
 
-        this.sprite.player = new Player(this, this.playerSpawn[0].x, this.playerSpawn[0].y, "platformer_characters", "tile_0000.png");
-
-//PlayerCollisions
-        this.mapCollider = this.physics.add.collider(this.sprite.player, this.collidesTrue);
-    //OneWayCollisions- Checks if player is sufficiently above a one way to enable
-        this.extraCollider = this.physics.add.collider(this.sprite.player, this.oneWays, null, function (obj1, obj2) {
-            return((obj1.y + obj1.displayHeight/2) <= (obj2.y*18*SCALE + 5));
-        });
-    //coinoverlap
-        this.physics.add.overlap(this.sprite.player, this.coingroup, (obj1, obj2) => {
-            obj2.destroy();
-            this.sound.play("jingle");
-            let tempText = this.add.text(0, 0, 'Coin GET!!!', { fontFamily: 'font1', fontSize: '42px', fill: '#5ad28c',  stroke: '#FFFFFF', strokeThickness: 15}).setOrigin(.5).setPosition(game.config.width/2, game.config.height/2).setDepth(10).setAngle(20).setScrollFactor(0);
-                this.tweens.add({
-                    targets     : tempText,
-                    alpha     : 0,
-                    ease        : 'Cubic.In',
-                    duration    : 2000,
-            });
-        });
-    //signoverlap
-        this.physics.add.overlap(this.sprite.player, this.signGroup, (obj1, obj2) => {
-            this.sprite.player.signTouch = obj2;
-            if (this.signTouchTimer == undefined) {
-                this.signTouchTimer = this.time.addEvent({
-                    delay: 100
-                });
-            } else {
-                this.signTouchTimer.reset({delay: 100});
-            }
-        });
-    //enemyoverlap
-        this.physics.add.overlap(this.sprite.player, this.enemygroup, (obj1, obj2) => {
-            //Only kill if running and do particles
-            if (obj1.running > 1) {
-                this.add.particles(obj2.x, obj2.y, 'x', { 
-                    angle: { min: 0, max: 360 },
-                    gravityY: 600,
-                    delay: 10,
-                    speed: 100,
-                    lifespan: 300,
-                    quantity: 10,
-                    scale: { start: 2, end: 0 },
-                    emitting: true,
-                    emitZone: { type: 'random', source: this.sprite.player, quantity:10, scale: { start: 2, end: 0 } },
-                    duration: 10
-                });
-                this.sound.play("bwah");
-                obj2.destroy();
-            //Dont reknockback, invince frames
-            } else if (!obj1.knockback) {
-                //Push player away, first remove current momentum, and set flag
-                obj1.body.setAccelerationX(0);
-                obj1.knockback = true;
-                obj1.running = 1;
-                obj1.setAngularVelocity(0);
-                //Determine knockback vector
-                if (obj1.x < obj2.x) {
-                    obj1.body.setVelocity(-900, -600);
-                } else {
-                    obj1.body.setVelocity(900, -600);
-                }
-                //Give player a nudge to slowdown a bit
-                obj1.body.setDragX(this.sprite.player.DRAG);
-                obj1.body.setAccelerationY(10);
-                this.timer.time -= 3;
-                this.sound.play("bwah", { rate: 1.5, detune: 200});
-                //Either remove knockback after timer or on grounded
-                this.time.delayedCall(
-                    475,                // ms
-                    ()=>{
-                        this.sprite.player.knockback = false;
-                });
-            }
-        });
-    //enemyOverlap--------------------------------------------
-    //WaterOverlap
+    this.sprite.player = new Player(this, this.playerSpawn[0].x, this.playerSpawn[0].y, "platformer_characters", "tile_0000.png");
+    this.playerGroup.add(this.sprite.player);
+        //WaterOverlap
         this.physics.add.overlap(this.sprite.player, this.waterPool, (obj1, obj2) => {
             
             if (this.timer.timerTimer) {
@@ -192,8 +111,8 @@ class Platformer extends Phaser.Scene {
         
     //Signbutton- Set signtext, toggle sign text visibility
         this.input.keyboard.on('keydown-X', () => {
-            this.signText.text = this.sprite.player.signTouch.name;
-            this.signText.visible = !this.signText.visible;
+            this.sprite.signText.text = this.sprite.player.signTouch.name;
+            this.sprite.signText.visible = !this.sprite.signText.visible;
             this.sprite.signBoard.visible = !this.sprite.signBoard.visible;
         }, this);
 //--------------------------------------
@@ -202,8 +121,6 @@ class Platformer extends Phaser.Scene {
         this.camera.startFollow(this.sprite.player, true, .1, .1);
         this.camera.width = game.config.width;
         this.camera.height = game.config.height;
-        //doesnt work this.displayHeight = this.camera.height;
-        //this.displayWidth = this.camera.Width;
         this.camera.setViewport(0, 0, game.config.width, game.config.height);
         //this.camera.setBounds(0, 0, this.worldBoundsX, this.worldBoundsY);
         this.camera.setZoom(game.config.width/1200 * 1.20, game.config.height/700 * 1.20);
@@ -251,11 +168,7 @@ class Platformer extends Phaser.Scene {
 
     update() {
 
-    this.sprite.player.update();         
-        
-
-    
-//----------------------------------------------        
+    this.sprite.player.update();            
 
 //Extra Checks------------------------
 
@@ -277,7 +190,7 @@ class Platformer extends Phaser.Scene {
                     this.sprite.xMark.tween.pause();
                 }
             });
-            this.signText.visible = false;
+            this.sprite.signText.visible = false;
             this.sprite.signBoard.visible = false;
         }
 
@@ -432,7 +345,7 @@ class Platformer extends Phaser.Scene {
     } */
 
     /*Notes so far:
-    Layers have to be known on demand, creating a layer the map doenst have give an error.
+    Layers have to be known on demand, creating a layer the map doenst have give an error. --Got layer by layer stuff working
     Objects are NOT the same, if an object doesn't exist, its fine to check anyways.
 
     Current needs for a room: key, x, y, tile x, tile y,
@@ -454,7 +367,7 @@ class Platformer extends Phaser.Scene {
                     collides: true
                 });
                 this.collidesTrue.add(curLayer);
-                
+
             } else if (layer.name == "One-Layer") {
                 curLayer.setAlpha(0);
                 curLayer.setCollisionByProperty({
@@ -491,13 +404,15 @@ class Platformer extends Phaser.Scene {
             key: "sign"
         });
         signs.map((sign) => {
-            sign.scale = SCALE;
+            sign.setScale(SCALE);
             sign.x *= SCALE;
             sign.y *= SCALE;
             sign.x += x;
             sign.y += y;
-            this.physics.world.enable(sign, Phaser.Physics.Arcade.STATIC_BODY);
-            this.signGroup.add(sign);
+
+            let newSign = new Sign(this, sign.x, sign.y, "sign", undefined, sign.name);
+            this.signGroup.add(newSign);
+            sign.destroy();
         });
 
         //Player Spawn
@@ -532,7 +447,7 @@ class Platformer extends Phaser.Scene {
             let newEnemy = new Enemy(this, enemy.x, enemy.y, "platformer_characters", "tile_0024.png");
             newEnemy.facing = enumList.LEFT;
             this.enemygroup.add(newEnemy);
-            enemy.destroy();//Refactor possibility
+            enemy.destroy();
         });
         //Water
         this.waterPool = map.createFromObjects("Objects", {

@@ -1,13 +1,14 @@
 class Player extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, texture, frame) {
         super(scene, x, y, texture, frame);
+        
         this.setScale(SCALE);
         this.scene = scene;
 
         scene.add.existing(this);
         scene.physics.add.existing(this);
 
-        //Init Vars
+    //Init Vars
         this.ACCELERATION = 80;
         this.DRAG = 1500;    // DRAG < ACCELERATION = icy slide
         this.RUNTHRESHOLD = 500;
@@ -21,7 +22,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.DASHLENGTH = 600; //in ms
         this.FRAMEFUDGE = game.config.physics.arcade.fps / 30;//I wanted to get 60 & 30 fps to work
 
-        //States
+    //States
         this.moving = false; //is player "moving"
         this.running = 1;//running acceleration multiplyer, running should always be >1
         this.facing = enumList.RIGHT;//direction facing
@@ -31,9 +32,28 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.knockback = false;//is player under enemy knockback
         this.bumpTimed = false;//did the player bonk
 
-        //Physics Set up
+    //Physics Set up
         //this.setCollideWorldBounds(true);
         this.body.setMaxVelocity(this.MAXVELOCITYX, this.MAXVELOCITYY);
+
+    //PlayerCollisions
+        scene.mapCollider = scene.physics.add.collider(this, scene.collidesTrue);
+    //OneWayCollisions- Checks if player is sufficiently above a one way to enable
+        scene.extraCollider = scene.physics.add.collider(this, scene.oneWays, null, function (obj1, obj2) {
+            return((obj1.y + obj1.displayHeight/2) <= (obj2.y*18*SCALE + 5));
+        });
+    //coinoverlap
+        scene.physics.add.overlap(this, scene.coingroup, (obj1, obj2) => {
+            obj2.destroy();
+            scene.sound.play("jingle");
+            let tempText = scene.add.text(0, 0, 'Coin GET!!!', { fontFamily: 'font1', fontSize: '42px', fill: '#5ad28c',  stroke: '#FFFFFF', strokeThickness: 15}).setOrigin(.5).setPosition(game.config.width/2, game.config.height/2).setDepth(10).setAngle(20).setScrollFactor(0);
+                scene.tweens.add({
+                    targets     : tempText,
+                    alpha     : 0,
+                    ease        : 'Cubic.In',
+                    duration    : 2000,
+            });
+        });
 
 
 

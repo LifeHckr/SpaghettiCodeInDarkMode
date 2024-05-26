@@ -48,11 +48,57 @@ class Enemy extends Phaser.GameObjects.PathFollower {
         //this.group.create(Phaser.Math.RND.between(50, 200), 0);
 
 
-        scene.add.existing(this);
+
         scene.physics.world.enable(this, Phaser.Physics.Arcade.DYNAMIC_BODY);
         this.body.setAllowGravity(false);
         this.body.setSize(this.displayWidth/3, this.displayHeight/3);
         this.anims.play("enemyFly");
+
+    //enemyoverlap
+        scene.physics.add.overlap(scene.playerGroup, this, (obj1, obj2) => {
+            //Only kill if running and do particles
+            if (obj1.running > 1) {
+                scene.add.particles(obj2.x, obj2.y, 'x', { 
+                    angle: { min: 0, max: 360 },
+                    gravityY: 600,
+                    delay: 10,
+                    speed: 100,
+                    lifespan: 300,
+                    quantity: 10,
+                    scale: { start: 2, end: 0 },
+                    emitting: true,
+                    emitZone: { type: 'random', source: scene.sprite.player, quantity:10, scale: { start: 2, end: 0 } },
+                    duration: 10
+                });
+                scene.sound.play("bwah");
+                obj2.destroy();
+            //Dont reknockback, invince frames
+            } else if (!obj1.knockback) {
+                //Push player away, first remove current momentum, and set flag
+                obj1.body.setAccelerationX(0);
+                obj1.knockback = true;
+                obj1.running = 1;
+                obj1.setAngularVelocity(0);
+                //Determine knockback vector
+                if (obj1.x < obj2.x) {
+                    obj1.body.setVelocity(-900, -600);
+                } else {
+                    obj1.body.setVelocity(900, -600);
+                }
+                //Give player a nudge to slowdown a bit
+                obj1.body.setDragX(scene.sprite.player.DRAG);
+                obj1.body.setAccelerationY(10);
+                scene.timer.time -= 3;
+                scene.sound.play("bwah", { rate: 1.5, detune: 200});
+                //Either remove knockback after timer or on grounded
+                scene.time.delayedCall(
+                    475,                // ms
+                    ()=>{
+                        scene.sprite.player.knockback = false;
+                });
+            }
+        });
+    //enemyOverlap--------------------------------------------
 
         return this;
     }
