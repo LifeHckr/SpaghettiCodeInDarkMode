@@ -48,7 +48,7 @@ class Enemy extends Phaser.GameObjects.PathFollower {
         //this.group.create(Phaser.Math.RND.between(50, 200), 0);
 
 
-
+        scene.add.existing(this);
         scene.physics.world.enable(this, Phaser.Physics.Arcade.DYNAMIC_BODY);
         this.body.setAllowGravity(false);
         this.body.setSize(this.displayWidth/3, this.displayHeight/3);
