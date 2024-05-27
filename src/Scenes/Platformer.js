@@ -15,8 +15,8 @@ class Platformer extends Phaser.Scene {
         this.camera = this.cameras.main;
         this.sprite = {};
     //------ETC-----------------------------
-        this.levelMap = new LevelMap(5, 3);
-        this.levelMap.generateLevel();
+        this.levelMap = new LevelMap(experimental.width, experimental.height);
+        this.levelMap.generateLevel(5, 9, experimental.branches);
         console.log(this.levelMap);
     //-----------------------------------
     }

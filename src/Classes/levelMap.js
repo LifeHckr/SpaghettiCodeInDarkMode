@@ -298,7 +298,7 @@ class LevelMap {
             }
 
         }
-        this.adjustPaths();
+        this.pathify();
 
 
     }
@@ -424,8 +424,12 @@ class LevelMap {
         return accTile;
     }
 
-    adjustPaths() {
+    pathify() {
+        this.pathInit();
 
     }
 
+    pathInit() {
+
+    }
 }

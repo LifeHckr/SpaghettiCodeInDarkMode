@@ -40,6 +40,11 @@ let config = {
 }
 
 var cursors;
+var experimental = {
+    width: -1,
+    height: -1,
+    branches: -1
+}
 const SCALE = 2.0;
 var my = {sprite: {}, text: {}};
 const enumList = {

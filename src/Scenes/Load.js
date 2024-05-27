@@ -111,10 +111,30 @@ class Load extends Phaser.Scene {
 
 
          // ...and pass to the next Scene
-         this.scene.start("platformerScene");
+         
+         this.texty = this.add.text(0, 0, 'Type 3 numbers: width, height, maxbranches', { fontFamily: 'font1', fontSize: '42px', fill: '#FFFFFFF',  stroke: '#FFFFFF', strokeThickness: 10}).setOrigin(.5).setPosition(game.config.width/2, game.config.height - 400).setDepth(1).setAngle(-30).setScrollFactor(0);
+         
+
+         this.input.keyboard.on('keyup', function (event) {
+            if (experimental.width == -1) {
+                experimental.width = parseInt(event.key);
+                console.log(experimental.width);  
+            } else if (experimental.height == -1) {
+                experimental.height = parseInt(event.key);
+                console.log(experimental.height);
+            } else if (experimental.height != -1 && experimental.branches == -1) {
+                experimental.branches = parseInt(event.key);
+                console.log(experimental.branches);
+            }
+         });
     }
 
     // Never get here since a new scene is started in create()
     update() {
+
+        if (experimental.branches != -1) {
+            this.scene.start("platformerScene");
+        }
+
     }
 }
