@@ -84,6 +84,9 @@ class Enemy extends Phaser.GameObjects.PathFollower {
                     ()=>{
                         scene.sprite.player.knockback = false;
                 });
+                this.scene.cameras.main.shake(75, 0.01);
+                this.scene.cameras.main.setZoom(game.config.width/1200 * 1.20 + 0.2, game.config.height/700 * 1.20 + 0.2);
+                this.scene.cameras.main.zoomTo(game.config.width/1200 * 1.20, 500);
             }
         });
     //enemyOverlap--------------------------------------------
