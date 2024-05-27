@@ -15,8 +15,9 @@ class Platformer extends Phaser.Scene {
         this.camera = this.cameras.main;
         this.sprite = {};
     //------ETC-----------------------------
-        this.levelMap = new LevelMap(3, 3);
-        //console.log(this.levelMap);
+        this.levelMap = new LevelMap(5, 3);
+        this.levelMap.generateLevel();
+        console.log(this.levelMap);
     //-----------------------------------
     }
 
@@ -110,8 +111,8 @@ class Platformer extends Phaser.Scene {
                 this.physics.world.debugGraphic.clear()
             }, this);
             this.input.keyboard.on('keydown-L', () => {
-                this.timer.time = 0;
                 this.sprite.player.y = 0;
+                this.sprite.player.x = 0;
             }, this);
         }
         
@@ -169,12 +170,14 @@ class Platformer extends Phaser.Scene {
         )
         my.bgm.rateVar = 1;
 
+        this.drawLevel(this.levelMap);
+
 //-------------------------------------    
     }
 
     update() {
-
-    this.sprite.player.update();            
+        
+        this.sprite.player.update();            
 
 //Extra Checks------------------------
 
@@ -367,6 +370,31 @@ class Platformer extends Phaser.Scene {
         });
 
         return(map);
+    }
+
+    drawLevel(levelMap) {
+        let rectWidth = 60;
+        for (let i = 0; i < levelMap.height; i++) { //y val
+            for (let j = 0; j < levelMap.width; j++) { //x val
+                let curTile = levelMap.getTile(j, i);
+                let temp = this.add.rectangle(j * (rectWidth + 10), i * (rectWidth + 10), rectWidth+10, rectWidth+10, '#000000').setOrigin(0, 0);
+                let color = Math.floor(Math.random() * 9999999999 + 99999);
+                let temp5 = this.add.text(j * (rectWidth + 10), i * (rectWidth + 10), curTile.pathSize, {color: "#fff", fontSize: '48px', fontFamily: 'font1'}).setDepth(3);
+                if (curTile.left == "closed") {
+                    console.log("test");
+                    let temp1 = this.add.rectangle(j * (rectWidth+10), i * (rectWidth+10), 5, rectWidth,color ).setOrigin(0, 0);
+                }
+                if (curTile.top == "closed") {
+                    let temp2 = this.add.rectangle(j * (rectWidth+10), i * (rectWidth+10), rectWidth, 5, color).setOrigin(0, 0);
+                }
+                if (curTile.right == "closed") {
+                    let temp3 = this.add.rectangle((j+1) * (rectWidth+10), i * (rectWidth+10), -5, rectWidth, color).setOrigin(0, 0);
+                }
+                if (curTile.bottom == "closed") {
+                    let temp4 = this.add.rectangle(j * (rectWidth+10), (i+1) * (rectWidth+10), rectWidth, -5, color).setOrigin(0, 0);
+                }
+            }
+        }
     }
  
 }
