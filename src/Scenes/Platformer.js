@@ -13,6 +13,7 @@ class Platformer extends Phaser.Scene {
         //this.physics.world.setBounds(0, 0, this.worldBoundsX, this.worldBoundsY, 64, true, true, false, true);
 
         this.camera = this.cameras.main;
+        this.minimap;
         this.sprite = {};
     //------ETC-----------------------------
         this.levelMap = new LevelMap(experimental.width, experimental.height);
@@ -111,13 +112,26 @@ class Platformer extends Phaser.Scene {
                 this.physics.world.drawDebug = this.physics.world.drawDebug ? false : true
                 this.physics.world.debugGraphic.clear()
             }, this);
-            this.input.keyboard.on('keydown-L', () => {
+            this.input.keyboard.on('keydown-P', () => {
                 this.sprite.player.y = -1000;
                 this.sprite.player.x = -1000;
 
             }, this);
         }
-        
+
+    //Temp
+        this.input.keyboard.on('keydown-J', () => {
+            this.minimap.scrollX -= 5;
+        }, this);
+        this.input.keyboard.on('keydown-K', () => {
+            this.minimap.scrollY += 5;
+        }, this);
+        this.input.keyboard.on('keydown-I', () => {
+            this.minimap.scrollY -= 5;
+        }, this);
+        this.input.keyboard.on('keydown-L', () => {
+            this.minimap.scrollX += 5;
+        }, this);
     //Signbutton- Set signtext, toggle sign text visibility
         this.input.keyboard.on('keydown-X', () => {
             this.sprite.signText.text = this.sprite.player.signTouch.name;
@@ -413,7 +427,7 @@ class Platformer extends Phaser.Scene {
     }
 
     drawLevel(levelMap) {
-        let rectWidth = 60;
+        let rectWidth = 70;
         let offset = -1000;
         for (let i = 0; i < levelMap.height; i++) { //y val
             for (let j = 0; j < levelMap.width; j++) { //x val
@@ -431,24 +445,28 @@ class Platformer extends Phaser.Scene {
                 if (curTile.type == "treasure") {
                     color = 0xCD7F32;
                 }
-                let temp = this.add.rectangle(j * (rectWidth + 10) + offset, i * (rectWidth + 10)+ offset, rectWidth+10, rectWidth+10, color).setOrigin(0, 0);
+                let temp = this.add.rectangle(j * (rectWidth) + offset, i * (rectWidth)+ offset, rectWidth, rectWidth, color).setOrigin(0, 0);
                 color = Math.floor(Math.random() * 9999999999 + 99999);
-                let temp5 = this.add.text(j * (rectWidth + 10)+ offset, i * (rectWidth + 10)+ offset, curTile.section, {color: "#fff", fontSize: '48px', fontFamily: 'font1'}).setDepth(3);
+                let temp5 = this.add.text(j * (rectWidth)+ offset, i * (rectWidth)+ offset, curTile.section, {color: "#fff", fontSize: '48px', fontFamily: 'font1'}).setDepth(3);
                 if (curTile.left == "closed") {
                     //console.log("test");
-                    let temp1 = this.add.rectangle(j * (rectWidth+10)+ offset, i * (rectWidth+10)+ offset, 5, rectWidth,color ).setOrigin(0, 0);
+                    let temp1 = this.add.rectangle(j * (rectWidth)+ offset, i * (rectWidth)+ offset, 5, rectWidth,color ).setOrigin(0, 0);
                 }
                 if (curTile.top == "closed") {
-                    let temp2 = this.add.rectangle(j * (rectWidth+10)+ offset, i * (rectWidth+10)+ offset, rectWidth, 5, color).setOrigin(0, 0);
+                    let temp2 = this.add.rectangle(j * (rectWidth)+ offset, i * (rectWidth)+ offset, rectWidth, 5, color).setOrigin(0, 0);
                 }
                 if (curTile.right == "closed") {
-                    let temp3 = this.add.rectangle((j+1) * (rectWidth+10)+ offset, i * (rectWidth+10)+ offset, -5, rectWidth, color).setOrigin(0, 0);
+                    let temp3 = this.add.rectangle((j+1) * (rectWidth)+ offset, i * (rectWidth)+ offset, -5, rectWidth, color).setOrigin(0, 0);
                 }
                 if (curTile.bottom == "closed") {
-                    let temp4 = this.add.rectangle(j * (rectWidth+10)+ offset, (i+1) * (rectWidth+10)+ offset, rectWidth, -5, color).setOrigin(0, 0);
+                    let temp4 = this.add.rectangle(j * (rectWidth)+ offset, (i+1) * (rectWidth)+ offset, rectWidth, -5, color).setOrigin(0, 0);
                 }
             }
         }
+        this.minimap = this.cameras.add(0, 0, this.levelMap.width * rectWidth * .3, this.levelMap.height * rectWidth * .3).setZoom(.4).setName('mini');
+        this.minimap.scrollX = -1000;
+        this.minimap.scrollY = -1000;
+        this.minimap.setBounds(-1000, -1000, this.levelMap.width * rectWidth, this.levelMap.height * rectWidth)
     }
  
 }
