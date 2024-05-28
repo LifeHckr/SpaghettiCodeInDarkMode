@@ -69,25 +69,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }, this);
 
 
-        this.gun = new Gun(this.scene, this.x, this.y, "particle");
-        this.gun.target = 0;
-        this.scene.input.on('pointermove', (pointer) => {
-            this.gun.target = Phaser.Math.Angle.Between(this.gun.x, this.gun.y, pointer.worldX, pointer.worldY);
-            console.log((Math.abs(this.gun.target) < Math.PI/2));
-            
-        });
+        this.gun = new Gun(this.scene, this.x, this.y, "platformer_characters", "tile_0000.png" , this.body);
+        this.gun.scaleY = (.75);
+        this.gun.scaleX = (1.5);
+
         return this;
     }
 
     update() {
-
-        //Gun
-        this.gun.x = this.body.center.x;
-        this.gun.y = this.body.center.y;
-        this.gun.rotation = this.gun.target;
-        this.gun.flipY = Math.abs(this.gun.target) > Math.PI/2;
-        this.gun.setOrigin(0, .5);
-
 
         //console.log(game.config.width/2 - game.input.mousePointer.x * 10, game.config.height/2 - game.input.mousePointer.y * 10);
         
@@ -316,17 +305,22 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         } else if (Math.abs(this.body.velocity.x) < this.RUNTHRESHOLD) {            
             this.running = 1;
         }
+
+        this.gun.update();
 //------------------------------------------------------
 
-    }
+    }//close update
 
     //WIP
     doDash() {
         this.knockback = true;
         this.setAccelerationX(0);
         this.setMaxVelocity(this.RUNMULTI * this.MAXVELOCITYX, this.MAXVELOCITYY);
-        let tempVec = new Phaser.Math.Vector2(1, (1 * (cursors.down.isDown || my.keyS.isDown)) - (1 * (cursors.up.isDown || my.keySpace.isDown))).normalize().setLength(Math.abs(this.body.velocity.x) * this.RUNMULTI); //Hi Thomas
-        this.setVelocity(this.facing * tempVec.x, tempVec.y);
+
+        let tempVec = new Phaser.Math.Vector2((1 * (cursors.right.isDown || my.keyD.isDown)) - (1 * (cursors.left.isDown || my.keyA.isDown)), 
+        (1 * (cursors.down.isDown || my.keyS.isDown)) - (1 * (cursors.up.isDown || my.keySpace.isDown))).normalize().setLength((Math.abs(this.body.velocity.x)) * this.RUNMULTI); //Hi Thomas
+
+        this.setVelocity(tempVec.x, tempVec.y);
 
         this.scene.tweens.add({
             targets: this.body.velocity,
@@ -383,6 +377,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         //Otherwise the lack of acceleration acts as recoil
         if (this.facing == enumList.SHOOTING && Math.sign(this.body.velocity.x) == Math.sign(moveDir)) {
             this.body.setAccelerationX(moveDir * this.ACCELERATION * this.running);
+            this.facing = moveDir;
         }
     }
 }
