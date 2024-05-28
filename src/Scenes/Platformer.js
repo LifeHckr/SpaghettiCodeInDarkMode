@@ -16,7 +16,7 @@ class Platformer extends Phaser.Scene {
         this.sprite = {};
     //------ETC-----------------------------
         this.levelMap = new LevelMap(experimental.width, experimental.height);
-        this.levelMap.generateLevel(5, 9, experimental.branches);
+        this.levelMap.generateLevel(5, 7, experimental.branches);
         console.log(this.levelMap);
     //-----------------------------------
     }
@@ -376,12 +376,25 @@ class Platformer extends Phaser.Scene {
         let rectWidth = 60;
         for (let i = 0; i < levelMap.height; i++) { //y val
             for (let j = 0; j < levelMap.width; j++) { //x val
+                let color = 0xFF0000;
                 let curTile = levelMap.getTile(j, i);
-                let temp = this.add.rectangle(j * (rectWidth + 10), i * (rectWidth + 10), rectWidth+10, rectWidth+10, '#000000').setOrigin(0, 0);
-                let color = Math.floor(Math.random() * 9999999999 + 99999);
-                let temp5 = this.add.text(j * (rectWidth + 10), i * (rectWidth + 10), curTile.pathSize, {color: "#fff", fontSize: '48px', fontFamily: 'font1'}).setDepth(3);
+                if (curTile.section == levelMap.mainSection.number) {
+                    color = 0x000000;
+                }
+                if (curTile == levelMap.startRoom) {
+                    color = 0x00FF00;
+                }
+                if (curTile == levelMap.endRoom) {
+                    color = 0x0000FF;
+                }
+                if (curTile.type == "treasure") {
+                    color = 0xCD7F32;
+                }
+                let temp = this.add.rectangle(j * (rectWidth + 10), i * (rectWidth + 10), rectWidth+10, rectWidth+10, color).setOrigin(0, 0);
+                color = Math.floor(Math.random() * 9999999999 + 99999);
+                let temp5 = this.add.text(j * (rectWidth + 10), i * (rectWidth + 10), curTile.section, {color: "#fff", fontSize: '48px', fontFamily: 'font1'}).setDepth(3);
                 if (curTile.left == "closed") {
-                    console.log("test");
+                    //console.log("test");
                     let temp1 = this.add.rectangle(j * (rectWidth+10), i * (rectWidth+10), 5, rectWidth,color ).setOrigin(0, 0);
                 }
                 if (curTile.top == "closed") {
