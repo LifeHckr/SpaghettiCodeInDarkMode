@@ -252,10 +252,16 @@ class LevelMap {
     /*An attempt at wave function collapse, note: Javascript is not made for this kinda thing
     Error if: size is < 1x2
     */
-    generateLevel(minLength = (this.width + this.height - 2), maxLength = (this.width + this.height - 2), branches = 2, maxRooms = -1, treasures = 2, openWeight = .75, closedWeight = .05) {
+    generateLevel(minLength = (this.width + this.height - 2), maxLength = (this.width + this.height - 2), branches = 2, maxRooms = -1, treasures = 2, openWeight = .75, closedWeight = .05, seed = null) {
         //Go across rows then next column
         //All levels need a start, an end, a start to end path
         //Optional: special rooms, branches, maxRooms
+        if (seed == null) {
+            this.seed = [(Date.now() * Math.random()).toString()];
+        } else {
+            this.seed = seed;
+        }
+        this.rand = new Phaser.Math.RandomDataGenerator(this.seed);
         this.levelMinLength = Math.max(1, minLength);
         this.levelMaxLength = Math.min(this.rooms, maxLength);
         this.openWeight = openWeight;
@@ -265,7 +271,7 @@ class LevelMap {
         } else {
             this.levelMaxRooms = Math.min(Math.max(maxRooms, 2), this.rooms); //clamp, thing to clamp, min, max
         }
-        this.levelPathLen = Math.floor((Math.random() * this.levelMaxLength) + this.levelMinLength);
+        this.levelPathLen = Math.floor((this.rand.frac() * this.levelMaxLength) + this.levelMinLength);
         console.log(this.levelMinLength);
         console.log(this.levelMaxLength);
         console.log(this.levelPathLen);
@@ -304,7 +310,7 @@ class LevelMap {
         this.sectionCount = 0;
         while (this.completeRooms < this.rooms) {
             this.roomsToComplete = [];
-            let curTile = this.getTile(Math.floor(Math.random() * this.width), Math.floor(Math.random() * this.height));
+            let curTile = this.getTile(Math.floor(this.rand.frac() * this.width), Math.floor(this.rand.frac() * this.height));
             if (curTile.type == 'unfinished') {
                 this.roomsToComplete.push(curTile);
                 curTile.type = "queued";
@@ -339,8 +345,8 @@ class LevelMap {
             let attempts = 0;
             while(wallNum < 2 - this.branchCounter ) {
                 let open = ["left", "right", "top", "bottom"].filter((entry) => room[entry] != "closed");
-                let wall = open[Math.floor(Math.random()*open.length)];
-                if (Math.random() < .5) {
+                let wall = open[Math.floor(this.rand.frac()*open.length)];
+                if (this.rand.frac() < .5) {
                     if (this.getNeighbor(room, wall).type != "done" || attempts > 8) {
                         room[wall] = "closed";
                         wallNum++;
@@ -356,7 +362,7 @@ class LevelMap {
         //Randomly decide whether to close or open an undef wall or not
         for (let key in room) {
             if (room[key] == "undef") {
-                if (Math.random() * (this.openWeight + this.closedWeight) <= this.closedWeight) {
+                if (this.rand.frac() * (this.openWeight + this.closedWeight) <= this.closedWeight) {
                     room[key] = "closed"
                     //console.log("here");
                 } else {
@@ -644,7 +650,7 @@ class LevelMap {
 
         //Pick Start Room
         if (levelSection.deadEnds.length > 0) {
-            this.startRoom = levelSection.deadEnds[Math.floor(Math.random() * levelSection.deadEnds.length)];
+            this.startRoom = levelSection.deadEnds[Math.floor(this.rand.frac() * levelSection.deadEnds.length)];
         } else {
             this.startRoom = levelSection.tiles[levelSection.tiles.length -1];
         }
@@ -673,7 +679,7 @@ class LevelMap {
         let checkDist = this.width + this.height;
         while (treasureCount > 0) {
             //First check deadends
-            let checkTile = levelSection.deadEnds[Math.floor(Math.random() * levelSection.deadEnds.length)];
+            let checkTile = levelSection.deadEnds[Math.floor(this.rand.frac() * levelSection.deadEnds.length)];
             if(levelSection.deadEnds.length > 0 && checkTile != this.endRoom && checkTile != this.startRoom && checkTile.type != "treasure") {
                 treasureCount--;
                 checkTile.type = "treasure";
