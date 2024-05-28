@@ -62,6 +62,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.scene.input.on('pointerdown', function (pointer)
         {
             this.setVelocity((game.config.width/2 - game.input.mousePointer.x) * 10, (game.config.height/2 - game.input.mousePointer.y) * 10);
+            this.facing = enumList.SHOOTING;
         }, this);
 
 
@@ -348,16 +349,21 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     //Do Horizontal movement
     doRizMove(moveDir) {
         //If the move direction is different than facing do a turn
-        if (this.facing != moveDir && this.moving) {
+        if (this.facing == moveDir * -1 && this.moving) {
             this.facing = moveDir;
             this.doTurn();
         //Else if current velo is < startVelo give starting velo
         }else if (Math.abs(this.body.velocity.x) <= Math.abs(this.STARTVELOCITY)) {
             this.facing = moveDir;
             this.body.setVelocityX(this.facing  * this.STARTVELOCITY);
-        }
+        } 
+
         //Finally apply accelration and correct flip
         this.body.setAccelerationX(this.facing * this.ACCELERATION * this.running);
         this.setFlip(moveDir == enumList.RIGHT, false); //facing left = default 
+
+        if (this.facing == enumList.SHOOTING && Math.sign(this.body.velocity.x) == Math.sign(moveDir)) {
+            this.body.setAccelerationX(moveDir * this.ACCELERATION * this.running);
+        }
     }
 }

@@ -467,8 +467,9 @@ class Platformer extends Phaser.Scene {
                 }
             }
         }
-        this.minimap = this.cameras.add(0, 0, 150, 150).setName('mini');
-        this.minimap.setZoom(150/(3*rectWidth));
+        this.minimap = this.cameras.add(0, 0, 200, 200).setName('mini');
+        this.minimap.setZoom(200/(3*rectWidth));
+        this.minimap.setAlpha(.5)
         this.minimap.centerOn(startX, startY);
         this.minimap.setBounds(-1000, -1000, this.levelMap.width * rectWidth, this.levelMap.height * rectWidth)
     }
