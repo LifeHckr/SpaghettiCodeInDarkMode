@@ -66,6 +66,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     update() {
 
+        console.log(game.config.width/2 - game.input.mousePointer.x * 10, game.config.height/2 - game.input.mousePointer.y * 10);
+        
+
 //SCHMOOVEMENT
     //Ignore input if animating/knocking
         if (this.animating || this.knockback) {

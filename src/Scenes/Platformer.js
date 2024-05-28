@@ -172,6 +172,11 @@ class Platformer extends Phaser.Scene {
 
         this.drawLevel(this.levelMap);
 
+        this.input.on('pointerdown', function (pointer)
+        {
+            this.sprite.player.setVelocity((game.config.width/2 - game.input.mousePointer.x) * 10, (game.config.height/2 - game.input.mousePointer.y) * 10);
+        }, this);
+
 //-------------------------------------    
     }
 
