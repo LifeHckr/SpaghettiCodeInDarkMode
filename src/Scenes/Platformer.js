@@ -429,6 +429,8 @@ class Platformer extends Phaser.Scene {
     drawLevel(levelMap) {
         let rectWidth = 70;
         let offset = -1000;
+        let startX = 0;
+        let startY = 0;
         for (let i = 0; i < levelMap.height; i++) { //y val
             for (let j = 0; j < levelMap.width; j++) { //x val
                 let color = 0xFF0000;
@@ -438,6 +440,8 @@ class Platformer extends Phaser.Scene {
                 }
                 if (curTile == levelMap.startRoom) {
                     color = 0x00FF00;
+                    startX = j * (rectWidth) + offset + (rectWidth/2);
+                    startY = i * (rectWidth)+ offset+(rectWidth/2);
                 }
                 if (curTile == levelMap.endRoom) {
                     color = 0x0000FF;
@@ -463,9 +467,9 @@ class Platformer extends Phaser.Scene {
                 }
             }
         }
-        this.minimap = this.cameras.add(0, 0, this.levelMap.width * rectWidth * .3, this.levelMap.height * rectWidth * .3).setZoom(.4).setName('mini');
-        this.minimap.scrollX = -1000;
-        this.minimap.scrollY = -1000;
+        this.minimap = this.cameras.add(0, 0, 150, 150).setName('mini');
+        this.minimap.setZoom(150/(3*rectWidth));
+        this.minimap.centerOn(startX, startY);
         this.minimap.setBounds(-1000, -1000, this.levelMap.width * rectWidth, this.levelMap.height * rectWidth)
     }
  
