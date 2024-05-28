@@ -408,7 +408,7 @@ class Platformer extends Phaser.Scene {
 
     levelFromLevel(tileArr){
         for(let tile of tileArr) {
-            this.createRoom(tile.name, 18, 18, tile.x * 20 * 2 * 18, tile.y * 20 * 2 * 18, tile.type);
+            this.createRoom(tile.name, 18, 18, tile.x * 20 * SCALE * 18, tile.y * 20 * 2 * 18, tile.type);
         }
     }
 

@@ -213,20 +213,59 @@ class LevelTile {
         this.walls = 0;
     }
     
-}
+} //end of levelTile
 
 class LevelMap {
     constructor(width = 1, height = 2) {
+        //Force size to be valid
         this.width = Math.max(width, 1);
         this.height = Math.max(height, 2);
-        if (this.height == 2) {
-            this.width = 1;
-        }
-        this.data = Array.apply(null, Array(this.height)).map(e => Array(this.width));
+        //Creates the arrays, sets everything to null
+        this.data = Array.apply(null, Array(this.height)).map(e => Array(this.width));//x by y arrays
         this.rooms = this.width * this.height;
+
+        //Directions
+        this.directions = ["left", "top", "bottom", "right"];
+
+        //Properties For Level Generation
+        this.seed;
+        this.rand;
+        this.levelMinLength;
+        this.levelMaxLength;
+        this.openWeight;
+        this.closedWeight;
+        this.levelMaxRooms;
+        this.levelPathLen;
+        this.completeRooms = 0;
+        this.startRoom = null;
+        this.endRoom = null;
+        this.branches;
+        this.branchCounter;
+        this.sectionCount = 0;
+        this.treasureRooms;
+        this.roomsToComplete;
+
+        //Sections
+        this.mainSection; //The designated section to draw a level from
+        this.sections; // An array to hold the generated sections  
+        /*
+        Section construction:
+        Should make a class lol
+        this.sections[i] = {}; //Holding object
+        this.sections[i].number = i; //Index/id
+        this.sections[i].branches = 0; //Number of branches, post checked for accuracy
+        this.sections[i].count = 0; //Num of tiles
+        this.sections[i].tiles = []; //Array of tiles in section
+        this.sections[i].deadEnds = []; //Array of deadends, may be empty
+        */        
+
+
+
         return this;
     }
 
+    //Will not currently work with overall level generation
+    //From a tiled tilemap, populates a tiles properties
     createFromMap(tileMap, x, y) {
         let newTile = new LevelTile();
         if (tileMap.properties) {
@@ -239,46 +278,59 @@ class LevelMap {
         this.setTile(x, y, newTile);
     }
 
+    //Setter, sets what is held at x,y
     setTile(x, y, data = new LevelTile()) {
         data.x = x;
         data.y = y;
         this.data[y][x] = data;
     }
 
+    //Getter
     getTile(x, y) {
         return this.data[y][x];
     }
 
-    /*An attempt at wave function collapse, note: Javascript is not made for this kinda thing
-    Error if: size is < 1x2
+    /*Peviously was an attempt at wave function collapse
+        Initializes room, assumes a fresh levelMap
     */
     generateLevel(minLength = (this.width + this.height - 2), maxLength = (this.width + this.height - 2), branches = 2, maxRooms = -1, treasures = 2, openWeight = .75, closedWeight = .05, seed = null) {
         //Go across rows then next column
         //All levels need a start, an end, a start to end path
         //Optional: special rooms, branches, maxRooms
+
+        //Create the rng
         if (seed == null) {
             this.seed = [(Date.now() * Math.random()).toString()];
         } else {
             this.seed = seed;
         }
         this.rand = new Phaser.Math.RandomDataGenerator(this.seed);
+
+        //Generate the estimate for the level path length
+        //Length is square distance, not actual path distance
         this.levelMinLength = Math.max(1, minLength);
         this.levelMaxLength = Math.min(this.rooms, maxLength);
+        this.levelPathLen = Math.floor((this.rand.frac() * this.levelMaxLength) + this.levelMinLength);
+
+        //Weights for prioritizing opening or closing doors
         this.openWeight = openWeight;
         this.closedWeight = closedWeight;
+
+        //Max rooms in level
+        //Level may end up much less
         if (maxRooms == -1) {
             this.levelMaxRooms = this.rooms;
         } else {
             this.levelMaxRooms = Math.min(Math.max(maxRooms, 2), this.rooms); //clamp, thing to clamp, min, max
         }
-        this.levelPathLen = Math.floor((this.rand.frac() * this.levelMaxLength) + this.levelMinLength);
+
+
         console.log(this.levelMinLength);
         console.log(this.levelMaxLength);
         console.log(this.levelPathLen);
-        this.completeRooms = 0;
-        this.startRoom = false;
-        this.endRoom = false;
-        this.path = -1;
+        this.path = -1; //Placeholder
+
+        //Init special categories
         this.branches = branches;
         this.branchCounter = branches;
         this.treasureRooms = treasures;
@@ -307,7 +359,13 @@ class LevelMap {
             }
         }
 
-        this.sectionCount = 0;
+
+        //Start generating rooms
+        //While there are remaining rooms
+        //Section:  A self-contained section of a level map
+        //1. pick a random tile
+        //2. From the random tile queue tiles open to it, and generate those next
+        //3. When a new random is picked, the section is walled, so get new tile and increase section counter
         while (this.completeRooms < this.rooms) {
             this.roomsToComplete = [];
             let curTile = this.getTile(Math.floor(this.rand.frac() * this.width), Math.floor(this.rand.frac() * this.height));
@@ -326,14 +384,19 @@ class LevelMap {
                 //this.updateNeighbors(curTile);
 
             }
-
-
         }
         this.sectionify();
-
-
     }
 
+
+    //Decide whether a room's undef walls should be open or closed
+    //1st. Make sure branches haven't been exceeded.
+        //Draw walls first to make sure branches stay 0 <= x <= branches
+        //Initially prioritize only closing undef walls in neighbors that aren't done
+        //If that can't be done, prioritize keeping branches below max, so close an already finished neighbor
+    //2nd. Based on open and closed weight randomly open or close remaining undef walls
+    //3rd. If max room tiles has been hit, close all remaining walls.
+    //4th. Finalize the tile
     collapseRoom(room = null) {
 
         //branch manager
@@ -360,7 +423,7 @@ class LevelMap {
         room.observeTile();
 
         //Randomly decide whether to close or open an undef wall or not
-        for (let key in room) {
+        for (let key of this.directions) {
             if (room[key] == "undef") {
                 if (this.rand.frac() * (this.openWeight + this.closedWeight) <= this.closedWeight) {
                     room[key] = "closed"
@@ -377,7 +440,7 @@ class LevelMap {
         if (room.walls == 4 || this.completeRooms >= this.levelMaxRooms) {
             //delete room.list;
             room.type = "done";
-            room.pathSize = 1;
+            //room.pathSize = 1;
             room.closeAll();
             this.completeRooms++;
             return;
@@ -388,17 +451,17 @@ class LevelMap {
             //room.name = room.list[0];
             room.type = "done";
             this.completeRooms++;
-            this.pathSize = 1;
+            //this.pathSize = 1;
             if (room.walls < 2) {
                 this.branchCounter -= (2 - room.walls);
             }
             //delete room.list;
             return;
         }
-
-
     }
 
+
+    //Update neighbors' wall types and queue if needed
     updateNeighbors(room) {
         //Update Top
         if (room.y > 0) {
@@ -449,6 +512,7 @@ class LevelMap {
         }
     }
 
+    //Get neighbor at direction, verifies that neighbor exists, else returns null
     getNeighbor(room, direction = "top") {
         let accTile = null;
         if (direction == "top") {
@@ -474,8 +538,14 @@ class LevelMap {
         return accTile;
     }
 
+    //Checks if two tiles are neighbors, and returns the direction, or null
     isNeighbor(tile1, tile2) {
-        if (this.getNeighbor(tile1, "top") == tile2) {
+        for (let dir of this.directions) {
+            if (this.getNeighbor(tile1, dir) == tile2) {
+                return dir;
+            }
+        }
+        /*if (this.getNeighbor(tile1, "top") == tile2) {
             return "top";
         } else if (this.getNeighbor(tile1, "right") == tile2) {
             return "right";
@@ -483,10 +553,13 @@ class LevelMap {
             return "bottom";
         } else if (this.getNeighbor(tile1, "left") == tile2) {
             return "left";
-        }
+        }*/
         return null;
     }
 
+    //Gets "square distance" between 2 tiles
+    //Square dist is change in x + change in y
+    //Very inaccrurate for actual path distance, but can approximate minimum distance 2 tiles are
     getSquareDistBetween(tile1, tile2) {
         let dist = -1;
         if (tile1 != null && tile2 != null) {
@@ -510,7 +583,7 @@ class LevelMap {
     //Maybe One day
     gPDHelper(curTile, target, traversed, curDist) {
         let dist = curDist;
-        for (let prop in curTile) {
+        for (let prop of this.directions) {
             if (curTile[prop] == "open") {
                 let newTile = this.getNeighbor(startTile, prop);
                 dist++;
@@ -527,6 +600,13 @@ class LevelMap {
     }
 
     //Section Corp
+    //Branch Manager sometimes gets overzealous and closes a previously allowed branch
+    //Or breaks sections apart
+    //Sectionify 1. initializes the sections of a level map
+    //2. Picks a main section, prioritizing the largest and most branching section
+    //3. Checks if Branch manager broke the section, if it did rejoins the sections, breaking the fewest walls
+        //This can sometimes push branches over maxbranches
+    //4. Assigns rooms, currently: Start, end, and treasure
     sectionify() {
         this.sectionInit();
         let bestWeight = -1;
@@ -539,12 +619,15 @@ class LevelMap {
             }
         }
         this.mainSection = this.sections[designatedSection];
-        this.validateSection();
+        this.validateSection(this.mainSection);
         //AssignRooms
         this.assignRooms(this.mainSection);
     }
 
+    //From a generated tilemap gets sections, based on the tile's section value
+    //Requires *this* to have generated a level first
     sectionInit() {
+        //Gets tiles based on their assigned section at birth (asab) value, does not open adjacency validate
         this.sections = [];
         for (let i = 1; i <= this.sectionCount; i++) {
             this.sections[i] = {};
@@ -571,16 +654,20 @@ class LevelMap {
     }
 
     //trickyCounter = 0;
-    validateSection() {
+    //Checks the given section for any walled off subsections
+    //If one is found, finds the seperated sections, and joins them to the larger section
+    //Only does this by breaking neighboring walls, to minimize walls broken
+    //If subsections are seperated by more then a neighboring wall will not join them
+    validateSection(section) {
         //Start with any tile
-        let startTile = this.mainSection.tiles[0];
+        let startTile = section.tiles[0];
         //Traverse every tile it is open to
         let touchedTiles = [];
         this.getTilesInSection(startTile, touchedTiles);
         console.log(touchedTiles);
         //Find any remaining
-        if (touchedTiles.length != this.mainSection.tiles.length) {
-            let difference = this.mainSection.tiles.filter(x => !touchedTiles.includes(x));
+        if (touchedTiles.length != section.tiles.length) {
+            let difference = section.tiles.filter(x => !touchedTiles.includes(x));
             console.log(difference);
             //Draw paths to remaining
             difference.some(difTile => {
@@ -588,13 +675,13 @@ class LevelMap {
                     if (this.getSquareDistBetween(difTile, mainTile) == 1) {
                         let direction = this.isNeighbor(difTile, mainTile);
                         difTile[direction] = "open";
-                        console.log(difTile);
-                        console.log(mainTile);
-                        console.log(direction);
+                        //console.log(difTile);
+                        //console.log(mainTile);
+                        //console.log(direction);
                         this.updateNeighbors(difTile);
                         //this.trickyCounter++;
                         //if (this.trickyCounter < 5) {
-                            this.validateSection();
+                            this.validateSection(section);
                             //console.log(this.trickyCounter);
                         //}
                         return true;
@@ -602,15 +689,16 @@ class LevelMap {
                 })
             });
         }
-
-
-        //If longer path is needed, bulldoze other tiles
+        //TODO maybe: If longer path is needed, bulldoze other tiles
     }
 
+    //Get tiles by adjacency
+    //Populates tileSection with all tiles openly connected to startTile
+    //Ignores assigned sections at birth
     getTilesInSection(startTile, tileSection) {
         if (!tileSection.includes(startTile) && startTile != null) {
             tileSection.push(startTile);
-            for (let prop in startTile) {
+            for (let prop of this.directions) {
                 if (startTile[prop] == "open") {
                     this.getTilesInSection(this.getNeighbor(startTile, prop),tileSection);
                 }
@@ -618,8 +706,10 @@ class LevelMap {
         }
     }
 
+    //Gives tile its name
+    //And determines if it will be a start, end, or (treasure) tile
     assignRooms(levelSection) { //Name :lefttoprightbottom
-        console.log(levelSection.tiles);
+        console.log(levelSection.tiles);//e.g. CCCO : only bottom is open
         for (let tile of levelSection.tiles) {
             let name = "";
             if (tile.left == "closed") {
@@ -648,15 +738,22 @@ class LevelMap {
             tile.name = name;
         }
 
-        //Pick Start Room
-        if (levelSection.deadEnds.length > 0) {
-            this.startRoom = levelSection.deadEnds[Math.floor(this.rand.frac() * levelSection.deadEnds.length)];
-        } else {
-            this.startRoom = levelSection.tiles[levelSection.tiles.length -1];
+        //Pick Start Room if one is not already assigned
+        //Prioritizes a random deadend
+        //Else picks last tile in levelSection
+            //This is generally tiles towards the bottom and right
+        if (this.startRoom == null) {
+            if (levelSection.deadEnds.length > 0) {
+                this.startRoom = levelSection.deadEnds[Math.floor(this.rand.frac() * levelSection.deadEnds.length)];
+            } else {
+                this.startRoom = levelSection.tiles[levelSection.tiles.length -1];
+            }
+            this.startRoom.type = "startRoom";
         }
-        this.startRoom.type = "startRoom";
 
         //Pick Final Room
+        //Prioritizes making the end room a tile that is levelPathLen sq. dist away
+        //If there are no tiles at that distance puts it at the first found tile at the farthest sq. dist
         let maxLen = 0;
         let backupTile = null;
         for (let tile of levelSection.tiles) {
@@ -675,6 +772,9 @@ class LevelMap {
 
 
         //Pick Treasure Rooms
+        //Can't also be start/end room
+        //Currently: Treasure rooms prioritize dead ends, then rooms in descending square dist order from start
+        //Treasure rooms cannot be adjacent, neither along an open nor closed wall.
         let treasureCount = this.treasureRooms;
         let checkDist = this.width + this.height;
         while (treasureCount > 0) {
@@ -691,7 +791,7 @@ class LevelMap {
                     let isValid = true;
 
                     //No adjacent open treasure rooms
-                    for (let key in tile) {
+                    for (let key of this.directions) {
                         if (tile[key] == "open" || tile[key] == "closed") {
                             let neighbor = this.getNeighbor(tile, key);
                             if (neighbor != null && neighbor.type == "treasure") {
@@ -717,7 +817,5 @@ class LevelMap {
                 treasureCount--;
             }
         }
-        
-        
     }
-}
+} //end of class declaration: levelMap
