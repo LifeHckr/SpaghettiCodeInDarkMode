@@ -59,6 +59,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             });
         });
 
+        this.scene.input.on('pointerdown', function (pointer)
+        {
+            this.setVelocity((game.config.width/2 - game.input.mousePointer.x) * 10, (game.config.height/2 - game.input.mousePointer.y) * 10);
+        }, this);
+
 
 
         return this;
@@ -260,7 +265,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 //Dust Particles---------------------------------
         if (this.moving && this.air == enumList.GROUNDED && Math.abs(this.body.velocity.x) > 700) {
             //run particle
-            this.scene.add.particles(this.x, this.y+this.displayHeight/1.9, 'particle', { 
+            this.scene.add.particles(this.x, this.y+this.displayHeight/2.2, 'particle', { 
                 active: true,
                 speedX: 100,
                 speedY: -40,

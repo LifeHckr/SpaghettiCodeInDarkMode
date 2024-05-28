@@ -174,11 +174,6 @@ class Platformer extends Phaser.Scene {
 
         this.drawLevel(this.levelMap);
 
-        this.input.on('pointerdown', function (pointer)
-        {
-            this.sprite.player.setVelocity((game.config.width/2 - game.input.mousePointer.x) * 10, (game.config.height/2 - game.input.mousePointer.y) * 10);
-        }, this);
-
 //-------------------------------------    
     }
 
@@ -269,17 +264,25 @@ class Platformer extends Phaser.Scene {
         map.addTilesetImage("tilemap-backgrounds_packed", "background_tiles");
         map.layers.forEach(layer => {
         
-            let curLayer = map.createLayer(layer.name, ["kenny_tilemap_packed","tilemap-backgrounds_packed"], x, y);
+            let curLayer = map.createLayer(layer.name, ["kenny_tilemap_packed","tilemap-backgrounds_packed"], x, y, null, true);
             curLayer.setScale(SCALE);
+            //curLayer.active = false; //doesnt change anything
             if (layer.name == "Collision-Layer") {
-                curLayer.setAlpha(0);
+                curLayer.visible = false;
                 curLayer.setCollisionByProperty({
                     collides: true
                 });
                 this.collidesTrue.add(curLayer);
+                /*curLayer.setActive(false);
+                curLayer.tilemap.active = false;
+                console.log(curLayer.active);//curLayer.tilemap
+                curLayer.removeFromUpdateList(true);//curLayer.layer.data
+                curLayer.layer.data.forEach((array) => array.forEach((tile) => tile.collides = false));
+                console.log(curLayer);
+                console.log(curLayer.active);*/
 
             } else if (layer.name == "One-Layer") {
-                curLayer.setAlpha(0);
+                curLayer.visible = false;
                 curLayer.setCollisionByProperty({
                     oneWay: true
                 });
