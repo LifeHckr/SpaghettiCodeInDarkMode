@@ -612,7 +612,7 @@ class LevelMap {
         }
     }
 
-    assignRooms(levelSection) {
+    assignRooms(levelSection) { //Name :lefttoprightbottom
         console.log(levelSection.tiles);
         for (let tile of levelSection.tiles) {
             let name = "";
@@ -648,6 +648,7 @@ class LevelMap {
         } else {
             this.startRoom = levelSection.tiles[levelSection.tiles.length -1];
         }
+        this.startRoom.type = "startRoom";
 
         //Pick Final Room
         let maxLen = 0;
@@ -664,6 +665,7 @@ class LevelMap {
             }
         }
         this.endRoom = backupTile;
+        this.endRoom.type = "endRoom";
 
 
         //Pick Treasure Rooms

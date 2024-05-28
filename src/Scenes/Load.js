@@ -29,6 +29,25 @@ class Load extends Phaser.Scene {
         this.load.tilemapTiledJSON("ORoom", "./rooms/ORoom.tmj");
         this.load.image("bgGrass", "bgmap1.png");  
 
+        //Load Spam
+        this.load.tilemapTiledJSON("OOOO", "./rooms/OOOO.tmj");
+        this.load.tilemapTiledJSON("OOOC", "./rooms/OOOC.tmj");
+        this.load.tilemapTiledJSON("OOCO", "./rooms/OOCO.tmj");
+        this.load.tilemapTiledJSON("OOCC", "./rooms/OOCC.tmj");
+        this.load.tilemapTiledJSON("OCOO", "./rooms/OCOO.tmj");
+        this.load.tilemapTiledJSON("OCOC", "./rooms/OCOC.tmj");
+        this.load.tilemapTiledJSON("OCCO", "./rooms/OCCO.tmj");
+        this.load.tilemapTiledJSON("OCCC", "./rooms/OCCC.tmj");
+        //Second Half
+        this.load.tilemapTiledJSON("COOO", "./rooms/COOO.tmj");
+        this.load.tilemapTiledJSON("COOC", "./rooms/COOC.tmj");
+        this.load.tilemapTiledJSON("COCO", "./rooms/COCO.tmj");
+        this.load.tilemapTiledJSON("COCC", "./rooms/COCC.tmj");
+        this.load.tilemapTiledJSON("CCOO", "./rooms/CCOO.tmj");
+        this.load.tilemapTiledJSON("CCOC", "./rooms/CCOC.tmj");
+        this.load.tilemapTiledJSON("CCCO", "./rooms/CCCO.tmj");
+        this.load.tilemapTiledJSON("CCCC", "./rooms/CCCC.tmj");
+
         //AUDIO
         this.load.audio("bwah", "audio/404775__owlstorm__retro-video-game-sfx-bwah.wav");
         this.load.audio("jingle", "audio/448261__henryrichard__sfx-begin.wav");

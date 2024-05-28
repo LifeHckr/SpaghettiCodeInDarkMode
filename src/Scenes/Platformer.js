@@ -63,10 +63,11 @@ class Platformer extends Phaser.Scene {
 
         //this.map = this.createOldRoom("platformer-level-1", 18, 18, 45, 25);
 
-        this.room2 = this.createRoom("Room1", 18, 18, 0, -20*18*2);
-        this.room1 = this.createRoom("Room2", 18, 18, 20*18*2, 0);
-        this.room3 = this.createRoom("Room1", 18, 18, 0, 0);
-        this.room4 = this.createRoom("ORoom", 18, 18, 20*18*2, -20*18*2);
+        //this.room2 = this.createRoom("Room1", 18, 18, 0, -20*18*2);
+        //this.room1 = this.createRoom("Room2", 18, 18, 20*18*2, 0);
+        //this.room3 = this.createRoom("Room1", 18, 18, 0, 0);
+        //this.room4 = this.createRoom("ORoom", 18, 18, 20*18*2, -20*18*2);
+        this.levelFromLevel(this.levelMap.mainSection.tiles);
     
 
     //-----------------------------------------------------------------------------
@@ -111,8 +112,9 @@ class Platformer extends Phaser.Scene {
                 this.physics.world.debugGraphic.clear()
             }, this);
             this.input.keyboard.on('keydown-L', () => {
-                this.sprite.player.y = 0;
-                this.sprite.player.x = 0;
+                this.sprite.player.y = -1000;
+                this.sprite.player.x = -1000;
+
             }, this);
         }
         
@@ -204,8 +206,11 @@ class Platformer extends Phaser.Scene {
                     this.sprite.xMark.tween.pause();
                 }
             });
-            this.sprite.signText.visible = false;
-            this.sprite.signBoard.visible = false;
+            if (this.sprite.signText) {
+                this.sprite.signText.visible = false;
+                this.sprite.signBoard.visible = false;
+            }
+
         }
 
     //Remove hint once move
@@ -254,7 +259,7 @@ class Platformer extends Phaser.Scene {
     Probably will want: room width, room height, spritesheets needed, ?doors?, 
     
     */
-    createRoom(key, tileWidth, tileHeight, x, y) {
+    createRoom(key, tileWidth, tileHeight, x, y, type) {
         let map = this.add.tilemap(key, tileWidth, tileHeight);
         //console.log(map);
         //this.levelMap.createFromMap(map, 0, 0);
@@ -289,6 +294,23 @@ class Platformer extends Phaser.Scene {
 
     //Collection Layer------------------------------------------------------------------------
         //COINS
+        if (type == "treasure") {
+            let coins = map.createFromObjects("Objects", {
+                type: "spawner",
+                key: "coin"
+            });
+            
+            coins.map((coin) => {
+                coin.scale = SCALE;
+                coin.x *= SCALE;
+                coin.y *= SCALE;
+                coin.x += x;
+                coin.y += y;
+                this.physics.world.enable(coin, Phaser.Physics.Arcade.STATIC_BODY);
+                coin.play('coinTurn');
+                this.coingroup.add(coin);
+            });
+        }
         let coins = map.createFromObjects("Objects", {
             type: "coin",
             key: "coin"
@@ -324,20 +346,22 @@ class Platformer extends Phaser.Scene {
         });
 
         //Player Spawn
-        if (!this.playerSpawn){
-            this.playerSpawn = map.createFromObjects("Objects", {
-                type: "player",
-                key: "coin"
-            });
-            this.playerSpawn.map((spawn) => {
-                spawn.scale = SCALE;
-                spawn.x *= SCALE;
-                spawn.y *= SCALE;
-                spawn.x += x;
-                spawn.y += y;
-                spawn.visible = false;
-    
-            });
+        if (type == "startRoom") {
+            if (!this.playerSpawn){
+                this.playerSpawn = map.createFromObjects("Objects", {
+                    type: "spawner",
+                    key: "coin"
+                });
+                this.playerSpawn.map((spawn) => {
+                    spawn.scale = SCALE;
+                    spawn.x *= SCALE;
+                    spawn.y *= SCALE;
+                    spawn.x += x;
+                    spawn.y += y;
+                    spawn.visible = false;
+        
+                });
+            }
         }
         //Enemy
         let enemySpawn = map.createFromObjects("Objects", {
@@ -358,27 +382,36 @@ class Platformer extends Phaser.Scene {
             enemy.destroy();
         });
         //Water
-        this.waterPool = map.createFromObjects("Objects", {
-            type: "waterPool",
-            key: ""
-        });
-        this.waterPool.map((water) => {
-            water.scale = SCALE;
-            water.x *= SCALE;
-            water.y *= SCALE;
-            water.x += x;
-            water.y += y;
-            water.displayHeight = 36;
-            water.displayWidth = 180;
-            water.visible = false;
-            this.physics.world.enable(water, Phaser.Physics.Arcade.STATIC_BODY);
-        });
+        if (type == "endRoom") {
+            this.waterPool = map.createFromObjects("Objects", {
+                type: "spawner",
+                key: ""
+            });
+            this.waterPool.map((water) => {
+                water.scale = SCALE;
+                water.x *= SCALE;
+                water.y *= SCALE;
+                water.x += x;
+                water.y += y;
+                water.displayHeight = 36;
+                water.displayWidth = 180;
+                water.visible = false;
+                this.physics.world.enable(water, Phaser.Physics.Arcade.STATIC_BODY);
+            });
+        }
 
         return(map);
     }
 
+    levelFromLevel(tileArr){
+        for(let tile of tileArr) {
+            this.createRoom(tile.name, 18, 18, tile.x * 20 * 2 * 18, tile.y * 20 * 2 * 18, tile.type);
+        }
+    }
+
     drawLevel(levelMap) {
         let rectWidth = 60;
+        let offset = -1000;
         for (let i = 0; i < levelMap.height; i++) { //y val
             for (let j = 0; j < levelMap.width; j++) { //x val
                 let color = 0xFF0000;
@@ -395,21 +428,21 @@ class Platformer extends Phaser.Scene {
                 if (curTile.type == "treasure") {
                     color = 0xCD7F32;
                 }
-                let temp = this.add.rectangle(j * (rectWidth + 10), i * (rectWidth + 10), rectWidth+10, rectWidth+10, color).setOrigin(0, 0);
+                let temp = this.add.rectangle(j * (rectWidth + 10) + offset, i * (rectWidth + 10)+ offset, rectWidth+10, rectWidth+10, color).setOrigin(0, 0);
                 color = Math.floor(Math.random() * 9999999999 + 99999);
-                let temp5 = this.add.text(j * (rectWidth + 10), i * (rectWidth + 10), curTile.section, {color: "#fff", fontSize: '48px', fontFamily: 'font1'}).setDepth(3);
+                let temp5 = this.add.text(j * (rectWidth + 10)+ offset, i * (rectWidth + 10)+ offset, curTile.section, {color: "#fff", fontSize: '48px', fontFamily: 'font1'}).setDepth(3);
                 if (curTile.left == "closed") {
                     //console.log("test");
-                    let temp1 = this.add.rectangle(j * (rectWidth+10), i * (rectWidth+10), 5, rectWidth,color ).setOrigin(0, 0);
+                    let temp1 = this.add.rectangle(j * (rectWidth+10)+ offset, i * (rectWidth+10)+ offset, 5, rectWidth,color ).setOrigin(0, 0);
                 }
                 if (curTile.top == "closed") {
-                    let temp2 = this.add.rectangle(j * (rectWidth+10), i * (rectWidth+10), rectWidth, 5, color).setOrigin(0, 0);
+                    let temp2 = this.add.rectangle(j * (rectWidth+10)+ offset, i * (rectWidth+10)+ offset, rectWidth, 5, color).setOrigin(0, 0);
                 }
                 if (curTile.right == "closed") {
-                    let temp3 = this.add.rectangle((j+1) * (rectWidth+10), i * (rectWidth+10), -5, rectWidth, color).setOrigin(0, 0);
+                    let temp3 = this.add.rectangle((j+1) * (rectWidth+10)+ offset, i * (rectWidth+10)+ offset, -5, rectWidth, color).setOrigin(0, 0);
                 }
                 if (curTile.bottom == "closed") {
-                    let temp4 = this.add.rectangle(j * (rectWidth+10), (i+1) * (rectWidth+10), rectWidth, -5, color).setOrigin(0, 0);
+                    let temp4 = this.add.rectangle(j * (rectWidth+10)+ offset, (i+1) * (rectWidth+10)+ offset, rectWidth, -5, color).setOrigin(0, 0);
                 }
             }
         }
