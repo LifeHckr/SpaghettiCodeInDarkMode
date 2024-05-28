@@ -60,19 +60,36 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         });
 
         this.scene.input.on('pointerdown', function (pointer)
-        {
-            this.setVelocity((game.config.width/2 - game.input.mousePointer.x) * 10, (game.config.height/2 - game.input.mousePointer.y) * 10);
-            this.facing = enumList.SHOOTING;
+        {      
+            let tempVec = new Phaser.Math.Vector2((game.config.width/2 - game.input.mousePointer.x), (game.config.height/2 - game.input.mousePointer.y)).normalize();
+            this.setVelocity(tempVec.x * this.MAXVELOCITYX * 2, tempVec.y * this.MAXVELOCITYY);
+            this.facing = enumList.SHOOTING; 
+
+
         }, this);
 
 
-
+        this.gun = new Gun(this.scene, this.x, this.y, "particle");
+        this.gun.target = 0;
+        this.scene.input.on('pointermove', (pointer) => {
+            this.gun.target = Phaser.Math.Angle.Between(this.gun.x, this.gun.y, pointer.worldX, pointer.worldY);
+            console.log((Math.abs(this.gun.target) < Math.PI/2));
+            
+        });
         return this;
     }
 
     update() {
 
-        console.log(game.config.width/2 - game.input.mousePointer.x * 10, game.config.height/2 - game.input.mousePointer.y * 10);
+        //Gun
+        this.gun.x = this.body.center.x;
+        this.gun.y = this.body.center.y;
+        this.gun.rotation = this.gun.target;
+        this.gun.flipY = Math.abs(this.gun.target) > Math.PI/2;
+        this.gun.setOrigin(0, .5);
+
+
+        //console.log(game.config.width/2 - game.input.mousePointer.x * 10, game.config.height/2 - game.input.mousePointer.y * 10);
         
 
 //SCHMOOVEMENT
@@ -362,6 +379,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.body.setAccelerationX(this.facing * this.ACCELERATION * this.running);
         this.setFlip(moveDir == enumList.RIGHT, false); //facing left = default 
 
+        //If player is shooting, only apply acceleration if moving in the same direction as input
+        //Otherwise the lack of acceleration acts as recoil
         if (this.facing == enumList.SHOOTING && Math.sign(this.body.velocity.x) == Math.sign(moveDir)) {
             this.body.setAccelerationX(moveDir * this.ACCELERATION * this.running);
         }
