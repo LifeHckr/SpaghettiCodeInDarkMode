@@ -19,7 +19,8 @@ class Load extends Phaser.Scene {
         this.load.image("x", "x.png");
         //Game Over
         this.load.image("meteor1", "spaceMeteors_004.png");
-        this.load.image("spackBack", "darkPurple.png");                  
+        this.load.image("spackBack", "darkPurple.png"); 
+        this.load.image("pizza", "pizza.png");                 
         // Packed tilemap
 
         //Maps and Rooms
