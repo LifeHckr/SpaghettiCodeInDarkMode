@@ -65,7 +65,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.setVelocity(tempVec.x * this.MAXVELOCITYX * 2, tempVec.y * this.MAXVELOCITYY);
             this.facing = enumList.SHOOTING; 
 
-
+            this.scene.sound.play("blast");
         }, this);
 
 

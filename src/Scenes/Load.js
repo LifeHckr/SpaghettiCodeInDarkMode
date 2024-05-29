@@ -55,6 +55,7 @@ class Load extends Phaser.Scene {
         this.load.audio("music", "audio/335571__magntron__gamemusic.mp3");
         //this.load.audio("jumpSound", "audio/383240__jofae__bounce.wav");
         this.load.audio("landSound", "audio/701084__8bitmyketison__multimedia-water-drop-lo-fi.wav");
+        this.load.audio("blast", "audio/footstep_snow_004.ogg");
 
     }
 
@@ -74,18 +75,28 @@ class Load extends Phaser.Scene {
 
         this.anims.create({
             key: 'idle',
+            /*
             defaultTextureKey: "platformer_characters",
             frames: [
                 { frame: "tile_0000.png" }
+            ],
+            */
+            frames: [
+                { key: 'pizza', frame: null }
             ],
             repeat: -1
         });
 
         this.anims.create({
             key: 'jump',
+            /*
             defaultTextureKey: "platformer_characters",
             frames: [
                 { frame: "tile_0001.png" }
+            ],
+            */
+            frames: [
+                { key: 'pizza', frame: null }
             ],
         });
 
