@@ -67,21 +67,21 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 let bullet = this.scene.bulletGroup.getFirstDead();
                 if (bullet != null) {
                     this.BULLETFIREREADY = false;
+
+                    //Time till player can shoot again
                     this.scene.time.addEvent({
                         delay: 250,                // ms
                         callback: () =>  {
                             this.BULLETFIREREADY = true;
                         },
                     });
+
                     bullet.makeActive();
                     bullet.x = this.x;
                     bullet.y = this.y;
-                    this.scene.time.addEvent({
-                        delay: 1000,                // ms
-                        callback: () =>  {
-                            bullet.makeInactive();
-                        },
-                    });
+
+                    bullet.fire(pointer.worldX, pointer.worldY);
+
                     let tempVec = new Phaser.Math.Vector2((game.config.width/2 - game.input.mousePointer.x), (game.config.height/2 - game.input.mousePointer.y)).normalize();
                     this.setVelocity(tempVec.x * this.MAXVELOCITYX * 2, tempVec.y * this.MAXVELOCITYY);
                     this.facing = enumList.SHOOTING; 
