@@ -7,7 +7,18 @@ class Bullet extends Phaser.Physics.Arcade.Sprite {
         scene.add.existing(this);
         scene.physics.add.existing(this);
         this.body.gravity.y = -this.scene.physics.world.gravity.y;
-        scene.mapCollider = scene.physics.add.collider(this, scene.collidesTrue);
+        //scene.mapCollider = scene.physics.add.collider(this, scene.collidesTrue);
+        console.log(scene.collidesTrue);
+        /*
+        scene.physics.add.overlap(this, scene.collidesTrue, (obj1, obj2) => {
+            obj1.makeInactive();
+        });
+        */
+        scene.physics.add.collider(this, scene.collidesTrue, () => {
+            this.makeInactive();
+            this.x = 10000000;
+            this.y = 10000000;
+        });
         return this;
     }
 
@@ -24,7 +35,7 @@ class Bullet extends Phaser.Physics.Arcade.Sprite {
     }
 
     fire(pointerX, pointerY) {
-        this.body.setVelocity((pointerX - this.x) * 3.5, (pointerY - this.y) * 3.5);
+        this.body.setVelocity((pointerX - this.x) * 0.5, (pointerY - this.y) * 0.5);
     }
 
     makeActive() {
