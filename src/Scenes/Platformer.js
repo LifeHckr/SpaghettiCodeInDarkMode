@@ -13,10 +13,11 @@ class Platformer extends Phaser.Scene {
         //this.physics.world.setBounds(0, 0, this.worldBoundsX, this.worldBoundsY, 64, true, true, false, true);
 
         this.camera = this.cameras.main;
+        this.minimap;
         this.sprite = {};
     //------ETC-----------------------------
         this.levelMap = new LevelMap(experimental.width, experimental.height);
-        this.levelMap.generateLevel(5, 9, experimental.branches);
+        this.levelMap.generateLevel(5, 7, experimental.branches);
         console.log(this.levelMap);
     //-----------------------------------
     }
@@ -63,10 +64,11 @@ class Platformer extends Phaser.Scene {
 
         //this.map = this.createOldRoom("platformer-level-1", 18, 18, 45, 25);
 
-        this.room2 = this.createRoom("Room1", 18, 18, 0, -20*18*2);
-        this.room1 = this.createRoom("Room2", 18, 18, 20*18*2, 0);
-        this.room3 = this.createRoom("Room1", 18, 18, 0, 0);
-        this.room4 = this.createRoom("ORoom", 18, 18, 20*18*2, -20*18*2);
+        //this.room2 = this.createRoom("Room1", 18, 18, 0, -20*18*2);
+        //this.room1 = this.createRoom("Room2", 18, 18, 20*18*2, 0);
+        //this.room3 = this.createRoom("Room1", 18, 18, 0, 0);
+        //this.room4 = this.createRoom("ORoom", 18, 18, 20*18*2, -20*18*2);
+        this.levelFromLevel(this.levelMap.mainSection.tiles);
     
 
     //-----------------------------------------------------------------------------
@@ -110,12 +112,26 @@ class Platformer extends Phaser.Scene {
                 this.physics.world.drawDebug = this.physics.world.drawDebug ? false : true
                 this.physics.world.debugGraphic.clear()
             }, this);
-            this.input.keyboard.on('keydown-L', () => {
-                this.sprite.player.y = 0;
-                this.sprite.player.x = 0;
+            this.input.keyboard.on('keydown-P', () => {
+                this.sprite.player.y = -1000;
+                this.sprite.player.x = -1000;
+
             }, this);
         }
-        
+
+    //Temp
+        this.input.keyboard.on('keydown-J', () => {
+            this.minimap.scrollX -= 5;
+        }, this);
+        this.input.keyboard.on('keydown-K', () => {
+            this.minimap.scrollY += 5;
+        }, this);
+        this.input.keyboard.on('keydown-I', () => {
+            this.minimap.scrollY -= 5;
+        }, this);
+        this.input.keyboard.on('keydown-L', () => {
+            this.minimap.scrollX += 5;
+        }, this);
     //Signbutton- Set signtext, toggle sign text visibility
         this.input.keyboard.on('keydown-X', () => {
             this.sprite.signText.text = this.sprite.player.signTouch.name;
@@ -172,11 +188,6 @@ class Platformer extends Phaser.Scene {
 
         this.drawLevel(this.levelMap);
 
-        this.input.on('pointerdown', function (pointer)
-        {
-            this.sprite.player.setVelocity((game.config.width/2 - game.input.mousePointer.x) * 10, (game.config.height/2 - game.input.mousePointer.y) * 10);
-        }, this);
-
 //-------------------------------------    
     }
 
@@ -204,8 +215,11 @@ class Platformer extends Phaser.Scene {
                     this.sprite.xMark.tween.pause();
                 }
             });
-            this.sprite.signText.visible = false;
-            this.sprite.signBoard.visible = false;
+            if (this.sprite.signText) {
+                this.sprite.signText.visible = false;
+                this.sprite.signBoard.visible = false;
+            }
+
         }
 
     //Remove hint once move
@@ -254,7 +268,7 @@ class Platformer extends Phaser.Scene {
     Probably will want: room width, room height, spritesheets needed, ?doors?, 
     
     */
-    createRoom(key, tileWidth, tileHeight, x, y) {
+    createRoom(key, tileWidth, tileHeight, x, y, type) {
         let map = this.add.tilemap(key, tileWidth, tileHeight);
         //console.log(map);
         //this.levelMap.createFromMap(map, 0, 0);
@@ -264,17 +278,25 @@ class Platformer extends Phaser.Scene {
         map.addTilesetImage("tilemap-backgrounds_packed", "background_tiles");
         map.layers.forEach(layer => {
         
-            let curLayer = map.createLayer(layer.name, ["kenny_tilemap_packed","tilemap-backgrounds_packed"], x, y);
+            let curLayer = map.createLayer(layer.name, ["kenny_tilemap_packed","tilemap-backgrounds_packed"], x, y, null, true);
             curLayer.setScale(SCALE);
+            //curLayer.active = false; //doesnt change anything
             if (layer.name == "Collision-Layer") {
-                curLayer.setAlpha(0);
+                curLayer.visible = false;
                 curLayer.setCollisionByProperty({
                     collides: true
                 });
                 this.collidesTrue.add(curLayer);
+                /*curLayer.setActive(false);
+                curLayer.tilemap.active = false;
+                console.log(curLayer.active);//curLayer.tilemap
+                curLayer.removeFromUpdateList(true);//curLayer.layer.data
+                curLayer.layer.data.forEach((array) => array.forEach((tile) => tile.collides = false));
+                console.log(curLayer);
+                console.log(curLayer.active);*/
 
             } else if (layer.name == "One-Layer") {
-                curLayer.setAlpha(0);
+                curLayer.visible = false;
                 curLayer.setCollisionByProperty({
                     oneWay: true
                 });
@@ -289,6 +311,23 @@ class Platformer extends Phaser.Scene {
 
     //Collection Layer------------------------------------------------------------------------
         //COINS
+        if (type == "treasure") {
+            let coins = map.createFromObjects("Objects", {
+                type: "spawner",
+                key: "coin"
+            });
+            
+            coins.map((coin) => {
+                coin.scale = SCALE;
+                coin.x *= SCALE;
+                coin.y *= SCALE;
+                coin.x += x;
+                coin.y += y;
+                this.physics.world.enable(coin, Phaser.Physics.Arcade.STATIC_BODY);
+                coin.play('coinTurn');
+                this.coingroup.add(coin);
+            });
+        }
         let coins = map.createFromObjects("Objects", {
             type: "coin",
             key: "coin"
@@ -324,20 +363,22 @@ class Platformer extends Phaser.Scene {
         });
 
         //Player Spawn
-        if (!this.playerSpawn){
-            this.playerSpawn = map.createFromObjects("Objects", {
-                type: "player",
-                key: "coin"
-            });
-            this.playerSpawn.map((spawn) => {
-                spawn.scale = SCALE;
-                spawn.x *= SCALE;
-                spawn.y *= SCALE;
-                spawn.x += x;
-                spawn.y += y;
-                spawn.visible = false;
-    
-            });
+        if (type == "startRoom") {
+            if (!this.playerSpawn){
+                this.playerSpawn = map.createFromObjects("Objects", {
+                    type: "spawner",
+                    key: "coin"
+                });
+                this.playerSpawn.map((spawn) => {
+                    spawn.scale = SCALE;
+                    spawn.x *= SCALE;
+                    spawn.y *= SCALE;
+                    spawn.x += x;
+                    spawn.y += y;
+                    spawn.visible = false;
+        
+                });
+            }
         }
         //Enemy
         let enemySpawn = map.createFromObjects("Objects", {
@@ -358,48 +399,79 @@ class Platformer extends Phaser.Scene {
             enemy.destroy();
         });
         //Water
-        this.waterPool = map.createFromObjects("Objects", {
-            type: "waterPool",
-            key: ""
-        });
-        this.waterPool.map((water) => {
-            water.scale = SCALE;
-            water.x *= SCALE;
-            water.y *= SCALE;
-            water.x += x;
-            water.y += y;
-            water.displayHeight = 36;
-            water.displayWidth = 180;
-            water.visible = false;
-            this.physics.world.enable(water, Phaser.Physics.Arcade.STATIC_BODY);
-        });
+        if (type == "endRoom") {
+            this.waterPool = map.createFromObjects("Objects", {
+                type: "spawner",
+                key: ""
+            });
+            this.waterPool.map((water) => {
+                water.scale = SCALE;
+                water.x *= SCALE;
+                water.y *= SCALE;
+                water.x += x;
+                water.y += y;
+                water.displayHeight = 36;
+                water.displayWidth = 180;
+                water.visible = false;
+                this.physics.world.enable(water, Phaser.Physics.Arcade.STATIC_BODY);
+            });
+        }
 
         return(map);
     }
 
+    levelFromLevel(tileArr){
+        for(let tile of tileArr) {
+            this.createRoom(tile.name, 18, 18, tile.x * 20 * SCALE * 18, tile.y * 20 * 2 * 18, tile.type);
+        }
+    }
+
     drawLevel(levelMap) {
-        let rectWidth = 60;
+        let rectWidth = 70;
+        let offset = -1000;
+        let startX = 0;
+        let startY = 0;
         for (let i = 0; i < levelMap.height; i++) { //y val
             for (let j = 0; j < levelMap.width; j++) { //x val
+                let color = 0xFF0000;
                 let curTile = levelMap.getTile(j, i);
-                let temp = this.add.rectangle(j * (rectWidth + 10), i * (rectWidth + 10), rectWidth+10, rectWidth+10, '#000000').setOrigin(0, 0);
-                let color = Math.floor(Math.random() * 9999999999 + 99999);
-                let temp5 = this.add.text(j * (rectWidth + 10), i * (rectWidth + 10), curTile.pathSize, {color: "#fff", fontSize: '48px', fontFamily: 'font1'}).setDepth(3);
+                if (curTile.section == levelMap.mainSection.number) {
+                    color = 0x000000;
+                }
+                if (curTile == levelMap.startRoom) {
+                    color = 0x00FF00;
+                    startX = j * (rectWidth) + offset + (rectWidth/2);
+                    startY = i * (rectWidth)+ offset+(rectWidth/2);
+                }
+                if (curTile == levelMap.endRoom) {
+                    color = 0x0000FF;
+                }
+                if (curTile.type == "treasure") {
+                    color = 0xCD7F32;
+                }
+                let temp = this.add.rectangle(j * (rectWidth) + offset, i * (rectWidth)+ offset, rectWidth, rectWidth, color).setOrigin(0, 0);
+                color = Math.floor(Math.random() * 9999999999 + 99999);
+                let temp5 = this.add.text(j * (rectWidth)+ offset, i * (rectWidth)+ offset, curTile.section, {color: "#fff", fontSize: '48px', fontFamily: 'font1'}).setDepth(3);
                 if (curTile.left == "closed") {
-                    console.log("test");
-                    let temp1 = this.add.rectangle(j * (rectWidth+10), i * (rectWidth+10), 5, rectWidth,color ).setOrigin(0, 0);
+                    //console.log("test");
+                    let temp1 = this.add.rectangle(j * (rectWidth)+ offset, i * (rectWidth)+ offset, 5, rectWidth,color ).setOrigin(0, 0);
                 }
                 if (curTile.top == "closed") {
-                    let temp2 = this.add.rectangle(j * (rectWidth+10), i * (rectWidth+10), rectWidth, 5, color).setOrigin(0, 0);
+                    let temp2 = this.add.rectangle(j * (rectWidth)+ offset, i * (rectWidth)+ offset, rectWidth, 5, color).setOrigin(0, 0);
                 }
                 if (curTile.right == "closed") {
-                    let temp3 = this.add.rectangle((j+1) * (rectWidth+10), i * (rectWidth+10), -5, rectWidth, color).setOrigin(0, 0);
+                    let temp3 = this.add.rectangle((j+1) * (rectWidth)+ offset, i * (rectWidth)+ offset, -5, rectWidth, color).setOrigin(0, 0);
                 }
                 if (curTile.bottom == "closed") {
-                    let temp4 = this.add.rectangle(j * (rectWidth+10), (i+1) * (rectWidth+10), rectWidth, -5, color).setOrigin(0, 0);
+                    let temp4 = this.add.rectangle(j * (rectWidth)+ offset, (i+1) * (rectWidth)+ offset, rectWidth, -5, color).setOrigin(0, 0);
                 }
             }
         }
+        this.minimap = this.cameras.add(0, 0, 200, 200).setName('mini');
+        this.minimap.setZoom(200/(3*rectWidth));
+        this.minimap.setAlpha(.5)
+        this.minimap.centerOn(startX, startY);
+        this.minimap.setBounds(-1000, -1000, this.levelMap.width * rectWidth, this.levelMap.height * rectWidth)
     }
  
 }

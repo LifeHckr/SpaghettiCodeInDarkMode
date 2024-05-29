@@ -59,14 +59,26 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             });
         });
 
+        this.scene.input.on('pointerdown', function (pointer)
+        {      
+            let tempVec = new Phaser.Math.Vector2((game.config.width/2 - game.input.mousePointer.x), (game.config.height/2 - game.input.mousePointer.y)).normalize();
+            this.setVelocity(tempVec.x * this.MAXVELOCITYX * 2, tempVec.y * this.MAXVELOCITYY);
+            this.facing = enumList.SHOOTING; 
 
+
+        }, this);
+
+
+        this.gun = new Gun(this.scene, this.x, this.y, "platformer_characters", "tile_0000.png" , this.body);
+        this.gun.scaleY = (.75);
+        this.gun.scaleX = (1.5);
 
         return this;
     }
 
     update() {
 
-        console.log(game.config.width/2 - game.input.mousePointer.x * 10, game.config.height/2 - game.input.mousePointer.y * 10);
+        //console.log(game.config.width/2 - game.input.mousePointer.x * 10, game.config.height/2 - game.input.mousePointer.y * 10);
         
 
 //SCHMOOVEMENT
@@ -260,7 +272,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 //Dust Particles---------------------------------
         if (this.moving && this.air == enumList.GROUNDED && Math.abs(this.body.velocity.x) > 700) {
             //run particle
-            this.scene.add.particles(this.x, this.y+this.displayHeight/1.9, 'particle', { 
+            this.scene.add.particles(this.x, this.y+this.displayHeight/2.2, 'particle', { 
                 active: true,
                 speedX: 100,
                 speedY: -40,
@@ -293,17 +305,22 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         } else if (Math.abs(this.body.velocity.x) < this.RUNTHRESHOLD) {            
             this.running = 1;
         }
+
+        this.gun.update();
 //------------------------------------------------------
 
-    }
+    }//close update
 
     //WIP
     doDash() {
         this.knockback = true;
         this.setAccelerationX(0);
         this.setMaxVelocity(this.RUNMULTI * this.MAXVELOCITYX, this.MAXVELOCITYY);
-        let tempVec = new Phaser.Math.Vector2(1, (1 * (cursors.down.isDown || my.keyS.isDown)) - (1 * (cursors.up.isDown || my.keySpace.isDown))).normalize().setLength(Math.abs(this.body.velocity.x) * this.RUNMULTI); //Hi Thomas
-        this.setVelocity(this.facing * tempVec.x, tempVec.y);
+
+        let tempVec = new Phaser.Math.Vector2((1 * (cursors.right.isDown || my.keyD.isDown)) - (1 * (cursors.left.isDown || my.keyA.isDown)), 
+        (1 * (cursors.down.isDown || my.keyS.isDown)) - (1 * (cursors.up.isDown || my.keySpace.isDown))).normalize().setLength((Math.abs(this.body.velocity.x)) * this.RUNMULTI); //Hi Thomas
+
+        this.setVelocity(tempVec.x, tempVec.y);
 
         this.scene.tweens.add({
             targets: this.body.velocity,
@@ -343,16 +360,24 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     //Do Horizontal movement
     doRizMove(moveDir) {
         //If the move direction is different than facing do a turn
-        if (this.facing != moveDir && this.moving) {
+        if (this.facing == moveDir * -1 && this.moving) {
             this.facing = moveDir;
             this.doTurn();
         //Else if current velo is < startVelo give starting velo
         }else if (Math.abs(this.body.velocity.x) <= Math.abs(this.STARTVELOCITY)) {
             this.facing = moveDir;
             this.body.setVelocityX(this.facing  * this.STARTVELOCITY);
-        }
+        } 
+
         //Finally apply accelration and correct flip
         this.body.setAccelerationX(this.facing * this.ACCELERATION * this.running);
         this.setFlip(moveDir == enumList.RIGHT, false); //facing left = default 
+
+        //If player is shooting, only apply acceleration if moving in the same direction as input
+        //Otherwise the lack of acceleration acts as recoil
+        if (this.facing == enumList.SHOOTING && Math.sign(this.body.velocity.x) == Math.sign(moveDir)) {
+            this.body.setAccelerationX(moveDir * this.ACCELERATION * this.running);
+            this.facing = moveDir;
+        }
     }
 }

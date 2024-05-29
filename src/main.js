@@ -50,6 +50,7 @@ var my = {sprite: {}, text: {}};
 const enumList = {
     RIGHT: 1,
     LEFT: -1,
+    SHOOTING: 0,
     JUMPING: 2,
     GROUNDED: 3,
     INAIR: 4,
