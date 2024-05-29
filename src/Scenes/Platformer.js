@@ -21,11 +21,6 @@ class Platformer extends Phaser.Scene {
         this.levelMap.generateLevel(5, 7, experimental.branches);
         console.log(this.levelMap);
     //-----------------------------------
-
-        this.sprite.BULLETS = [];
-        this.BULLETCD = 3;
-        this.STARTBULLETS = 2;
-        this.BULLETSPEED = 5;
     }
 
     preload() {
@@ -74,12 +69,29 @@ class Platformer extends Phaser.Scene {
         //this.room1 = this.createRoom("Room2", 18, 18, 20*18*2, 0);
         //this.room3 = this.createRoom("Room1", 18, 18, 0, 0);
         //this.room4 = this.createRoom("ORoom", 18, 18, 20*18*2, -20*18*2);
+        //comment
         this.levelFromLevel(this.levelMap.mainSection.tiles);
     
 
     //-----------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------
+//BulletInit---------------------------------
+        this.bulletGroup = this.add.group({
+            active: true,
+            defaultKey: "x",
+            maxSize: 2,
+            runChildUpdate: true
+            }
+        )
 
+        this.bulletGroup.createMultiple({
+            classType: Bullet,
+            active: false,
+            key: this.bulletGroup.defaultKey,
+            repeat: this.bulletGroup.maxSize-1
+        });
+        this.bulletGroup.propertyValueSet("speed", 1);
+//-----------------------------------------------
 // PlayerInit---------------------------------
 
         this.sprite.player = new Player(this, this.playerSpawn[0].x, this.playerSpawn[0].y, "platformer_characters", "tile_0000.png");
@@ -195,30 +207,7 @@ class Platformer extends Phaser.Scene {
 
         this.drawLevel(this.levelMap);
 
-//-------------------------------------    
-
-        this.sprite.bulletGroup = this.add.group({
-            active: true,
-            defaultKey: "blast",
-            maxSize: 10,
-            runChildUpdate: true
-            }
-        )
-
-        this.sprite.bulletGroup.createMultiple({
-            classType: Bullet,
-            active: false,
-            key: my.sprite.bulletGroup.defaultKey,
-            repeat: my.sprite.bulletGroup.maxSize-1
-        });
-
-        my.sprite.bulletGroup.propertyValueSet("speed", this.BULLETSPEED);
-
-        for (let i=0; i < this.STARTBULLETS; i++) {
-            this.sprite.BULLETS.push(this.add.sprite(-100000, -100000, "blast"));
-            this.sprite.BULLETS[i].visible = false;
-        }
-
+//------------------------------------- 
     }
 
     update() {
