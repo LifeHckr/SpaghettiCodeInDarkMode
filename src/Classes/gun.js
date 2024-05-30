@@ -5,6 +5,12 @@ class Gun extends Phaser.GameObjects.Sprite {
         this.shootCooldown = 500; //ms
         this.onCooldown = false;
         this.shootSignal = scene.events;
+        this.startingAmmo = 2;
+        this.currentAmmo = this.startingAmmo;
+        this.maxAmmo = this.currentAmmo;
+        this.reloadLength = 1000 //ticks
+        this.ammoBuffer = this.currentAmmo;
+        this.reloadTimer = 0;
 
         this.setOrigin(0, .5);
         this.target = 0;
@@ -50,10 +56,18 @@ class Gun extends Phaser.GameObjects.Sprite {
         this.rotation = this.target;
         this.flipY = Math.abs(this.target) > Math.PI/2;
 
+        if(this.currentAmmo != this.maxAmmo) {
+            this.reloadTimer += 1;
+            if (this.reloadTimer >= this.reloadLength) {
+                this.currentAmmo += 1;
+                this.reloadTimer = 0;
+                console.log("reloaded");
+            }
+        }
     }
 
     shoot(pointer) {
-        if (!this.onCooldown) {
+        if (!this.onCooldown && this.currentAmmo > 0) {
             //let bullet = this.bulletGroup.getFirstDead();
             let bullet = this.bulletGroup.create(this.x,this.y);
             if (bullet != null) {
@@ -83,6 +97,8 @@ class Gun extends Phaser.GameObjects.Sprite {
                 //Shoot Particles
                 this.doParticle(tempVec);
                 this.scene.sound.play("blast");
+
+                this.currentAmmo -= 1;
             }
         }
     }
