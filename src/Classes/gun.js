@@ -74,24 +74,33 @@ class Gun extends Phaser.GameObjects.Sprite {
 
                 this.player.setVelocity(tempVec.x * this.player.MAXVELOCITYX * 2, tempVec.y * this.player.MAXVELOCITYY);
 
+                //signals:
+                //Make a var: (thing) = scene.events;
+                //Emit: (thing).emit("name", any parameters, , ...);
+                //Listen: (thing).on("name", (any params, ...) => {code});
                 this.shootSignal.emit("hasShot", this);
 
-                this.scene.add.particles(this.getRightCenter().x, this.getRightCenter().y, "texturesAtlas", {
-                    frame: ["tile_0153.png", "tile_0155.png"], 
-                    delay: 10,
-                    active: true,
-                    angle: { min: -45, max: 45 },
-                    speedY: {random: [(-1 * tempVec.y * 300) - 100, (-1 * tempVec.y * 300) + 100]},
-                    speedX: {random: [(-1 * tempVec.x * 300) - 100, (-1 * tempVec.x * 300) + 100]},
-                    lifespan: 300,
-                    quantity: { min: 3, max: 5 },
-                    rotate: this.angle,//TODO: Make these flip
-                    scale: { start: 1, end: 0, ease: "Quad.easeIn" },
-                    duration: 10,
-
-                });
+                //Shoot Particles
+                this.doParticle(tempVec);
                 this.scene.sound.play("blast");
             }
         }
+    }
+
+    doParticle(directionVec) {
+        this.scene.add.particles(this.getRightCenter().x, this.getRightCenter().y, "texturesAtlas", {
+            frame: ["tile_0153.png", "tile_0155.png"], 
+            delay: 10,
+            active: true,
+            angle: { min: -45, max: 45 },
+            speedY: {random: [(-1 * directionVec.y * 300) - 100, (-1 * directionVec.y * 300) + 100]},
+            speedX: {random: [(-1 * directionVec.x * 300) - 100, (-1 * directionVec.x * 300) + 100]},
+            lifespan: 300,
+            quantity: { min: 3, max: 5 },
+            rotate: this.angle,//TODO: Make these flip
+            scale: { start: 1, end: 0, ease: "Quad.easeIn" },
+            duration: 10,
+
+        });
     }
 }

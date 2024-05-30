@@ -6,8 +6,6 @@ class Bullet extends Phaser.Physics.Arcade.Sprite {
         scene.add.existing(this);
         scene.physics.add.existing(this);
 
-        this.visible = false;
-        this.active = false;
         this.body.setAllowGravity(false);
         
         scene.physics.add.collider(this, scene.collidesTrue, () => {
@@ -33,11 +31,8 @@ class Bullet extends Phaser.Physics.Arcade.Sprite {
     }
 
     makeInactive() {
-        this.body.setVelocity(0, 0);
-        this.x = -9000;
-        this.y = -9000;
-        this.visible = false;
-        this.active = false;
+        //this.visible = false;
+        //this.active = false;
         this.destroy();
     }
 
