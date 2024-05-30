@@ -5,6 +5,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.setScale(SCALE);
         this.scene = scene;
 
+        this.signals = scene.events;
+
         scene.add.existing(this);
         scene.physics.add.existing(this);
 
@@ -22,7 +24,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.DASHLENGTH = 600; //in ms
         this.FRAMEFUDGE = game.config.physics.arcade.fps / 30;//I wanted to get 60 & 30 fps to work
         this.HITBOXSIZE = 20; //I noticed there is some jank around corners, this temporarily sort of fixes it
-        this.BULLETFIREREADY = true;
 
     //States
         this.moving = false; //is player "moving"
@@ -60,66 +61,20 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             });
         });
 
-        this.scene.input.on('pointerdown', function (pointer)
-        {      
 
-            if (this.BULLETFIREREADY) {
-                let bullet = this.scene.bulletGroup.getFirstDead();
-                if (bullet != null) {
-                    this.BULLETFIREREADY = false;
-
-                    //Time till player can shoot again
-                    this.scene.time.addEvent({
-                        delay: 250,                // ms
-                        callback: () =>  {
-                            this.BULLETFIREREADY = true;
-                        },
-                    });
-
-                    bullet.makeActive();
-                    bullet.x = this.x;
-                    bullet.y = this.y;
-
-                    bullet.fire(pointer.worldX, pointer.worldY);
-
-                    let tempVec = new Phaser.Math.Vector2((game.config.width/2 - game.input.mousePointer.x), (game.config.height/2 - game.input.mousePointer.y)).normalize();
-                    this.setVelocity(tempVec.x * this.MAXVELOCITYX * 2, tempVec.y * this.MAXVELOCITYY);
-                    this.facing = enumList.SHOOTING;
-
-            this.scene.add.particles(this.gun.getRightCenter().x, this.gun.getRightCenter().y, "texturesAtlas", {
-                frame: ["tile_0153.png", "tile_0155.png"], 
-                delay: 10,
-                active: true,
-                angle: { min: -45, max: 45 },
-                speedY: {random: [(-1 * tempVec.y * 300) - 100, (-1 * tempVec.y * 300) + 100]},
-                speedX: {random: [(-1 * tempVec.x * 300) - 100, (-1 * tempVec.x * 300) + 100]},
-                lifespan: 300,
-                quantity: { min: 3, max: 7 },
-                rotate: this.gun.angle,//TODO: Make these flip
-                scale: { start: 1.2, end: 0, ease: "Quad.easeIn" },
-                duration: 10,
-
-            });
-                    this.scene.sound.play("blast");
-                }
-            }
-        }, this);
-
-
-
-
-        this.gun = new Gun(this.scene, this.x, this.y, "platformer_characters", "tile_0000.png" , this.body);
+    //Shooting listener
+        this.signals.on("hasShot", (firedGun) => {
+            this.facing = enumList.SHOOTING;
+        });
+    //gun init
+        this.gun = new Gun(this.scene, this.x, this.y, "platformer_characters", "tile_0000.png" , this);
         this.gun.scaleY = (.75);
         this.gun.scaleX = (1.5);
         
         return this;
     }
 
-    update() {
-
-
-        //console.log(game.config.width/2 - game.input.mousePointer.x * 10, game.config.height/2 - game.input.mousePointer.y * 10);
-        
+    update() {       
 
 //SCHMOOVEMENT
     //Ignore input if animating/knocking

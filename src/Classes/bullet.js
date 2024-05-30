@@ -1,41 +1,30 @@
 class Bullet extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y, texture, frame) {        
+    constructor(scene, x, y, texture, frame, speed = 300) {        
         super(scene, x, y, texture, frame);
-        this.visible = false;
-        this.active = false;
         this.scene = scene;
+        this.speed = speed;
         scene.add.existing(this);
         scene.physics.add.existing(this);
-        this.body.gravity.y = -this.scene.physics.world.gravity.y;
-        //scene.mapCollider = scene.physics.add.collider(this, scene.collidesTrue);
-        console.log(scene.collidesTrue);
-        /*
-        scene.physics.add.overlap(this, scene.collidesTrue, (obj1, obj2) => {
-            obj1.makeInactive();
-        });
-        */
+
+        this.visible = false;
+        this.active = false;
+        this.body.setAllowGravity(false);
+        
         scene.physics.add.collider(this, scene.collidesTrue, () => {
             this.makeInactive();
-            this.x = 10000000;
-            this.y = 10000000;
+
         });
         return this;
     }
 
     update() {
-        if (this.active) {
-            
-            /*
-            this.y -= this.speed;
-            if (this.y < -(this.displayHeight/2)) {
-                this.makeInactive();
-            }
-            */
-        }
     }
 
-    fire(pointerX, pointerY) {
-        this.body.setVelocity((pointerX - this.x) * 0.5, (pointerY - this.y) * 0.5);
+    fire(trajectoryVector, pos) {
+        this.makeActive();
+        this.x = pos.x;
+        this.y = pos.y;
+        this.body.setVelocity(trajectoryVector.x * -1 * this.speed, trajectoryVector.y * -1 * this.speed);
     }
 
     makeActive() {
@@ -44,8 +33,12 @@ class Bullet extends Phaser.Physics.Arcade.Sprite {
     }
 
     makeInactive() {
+        this.body.setVelocity(0, 0);
+        this.x = -9000;
+        this.y = -9000;
         this.visible = false;
         this.active = false;
+        this.destroy();
     }
 
 }

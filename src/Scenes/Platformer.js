@@ -77,23 +77,6 @@ class Platformer extends Phaser.Scene {
 
     //-----------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------
-//BulletInit---------------------------------
-        this.bulletGroup = this.add.group({
-            active: true,
-            defaultKey: "x",
-            maxSize: 2,
-            runChildUpdate: true
-            }
-        )
-
-        this.bulletGroup.createMultiple({
-            classType: Bullet,
-            active: false,
-            key: this.bulletGroup.defaultKey,
-            repeat: this.bulletGroup.maxSize-1
-        });
-        this.bulletGroup.propertyValueSet("speed", 1);
-//-----------------------------------------------
 // PlayerInit---------------------------------
 
         this.sprite.player = new Player(this, this.playerSpawn[0].x, this.playerSpawn[0].y, "platformer_characters", "tile_0000.png");
