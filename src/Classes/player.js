@@ -18,7 +18,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.STARTVELOCITY = 300;
         this.MAXVELOCITYX = 1000;
         this.MAXVELOCITYY = 1000;
-        this.JUMP_VELOCITY = -650;
+        this.JUMP_VELOCITY = -675;
         this.TEMP_JUMPVELOCITY = -1975;
         this.DASHVELOCITY = 2000;
         this.DASHLENGTH = 600; //in ms
