@@ -63,8 +63,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
 
     //Shooting listener
-        this.signals.on("hasShot", (firedGun) => {
+        this.signals.on("hasShot", (firedGun, tempVec) => {
             this.facing = enumList.SHOOTING;
+            this.setVelocity(tempVec.x * this.MAXVELOCITYX * 2, tempVec.y * this.MAXVELOCITYY);
         });
     //gun init
         this.gun = new Gun(this.scene, this.x, this.y, "platformer_characters", "tile_0000.png" , this);
@@ -138,7 +139,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         //Player is not blocked below
         if(!this.animating && !this.body.blocked.down) {
             if (this.running > 1) {
-                this.anims.play('fastJump');
+                //this.anims.play('fastJump');
             } else {
                 this.anims.play('jump');
             }
@@ -162,7 +163,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         if(this.body.blocked.down) {
         //If player was just in air play fall tween
             if (this.running > 1) {
-                this.anims.play('fast');
+                //this.anims.play('fast');
             } else {
                 this.anims.play('idle');
             }

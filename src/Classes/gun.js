@@ -5,12 +5,13 @@ class Gun extends Phaser.GameObjects.Sprite {
         this.shootCooldown = 500; //ms
         this.onCooldown = false;
         this.shootSignal = scene.events;
-        this.startingAmmo = 2;
+
+        this.startingAmmo = 5;
         this.currentAmmo = this.startingAmmo;
         this.maxAmmo = this.currentAmmo;
-        this.reloadLength = 1000 //ticks
-        this.ammoBuffer = this.currentAmmo;
+        this.reloadLength = 60 //ticks ms = #/60 * 1000
         this.reloadTimer = 0;
+        this.interruptReload = false;
 
         this.setOrigin(0, .5);
         this.target = 0;
@@ -43,7 +44,13 @@ class Gun extends Phaser.GameObjects.Sprite {
             this.shoot(pointer); 
         }, this);
 
-    //------------------------------------------------
+    //Create Ammo Sprites----------------------------------------
+        //Ammo Sprites
+        this.scene.sprite.ammo = [];
+        for (let i = 0; i < this.maxAmmo; i++) {
+            this.scene.sprite.ammo.push(this.scene.add.sprite(150 + (50 * i), 600, "sign").setDepth(10).setScrollFactor(0).setScale(SCALE + .5));
+        }
+    //-----------------------------------------------
 
         this.scene.add.existing(this);
         return this;
@@ -60,10 +67,14 @@ class Gun extends Phaser.GameObjects.Sprite {
             this.reloadTimer += 1;
             if (this.reloadTimer >= this.reloadLength) {
                 this.currentAmmo += 1;
+                for (let i = 0; i < this.currentAmmo; i++) {
+                    this.scene.sprite.ammo[i].visible = true;
+                }
                 this.reloadTimer = 0;
                 console.log("reloaded");
             }
         }
+
     }
 
     shoot(pointer) {
@@ -86,19 +97,21 @@ class Gun extends Phaser.GameObjects.Sprite {
 
                 bullet.fire(tempVec, this.getRightCenter());
 
-                this.player.setVelocity(tempVec.x * this.player.MAXVELOCITYX * 2, tempVec.y * this.player.MAXVELOCITYY);
-
                 //signals:
                 //Make a var: (thing) = scene.events;
                 //Emit: (thing).emit("name", any parameters, , ...);
                 //Listen: (thing).on("name", (any params, ...) => {code});
-                this.shootSignal.emit("hasShot", this);
+                this.shootSignal.emit("hasShot", this, tempVec);
 
                 //Shoot Particles
                 this.doParticle(tempVec);
                 this.scene.sound.play("blast");
 
                 this.currentAmmo -= 1;
+                this.scene.sprite.ammo[this.currentAmmo].visible = false;
+                if (this.interruptReload) {
+                    this.reloadTimer = 0;
+                }
             }
         }
     }

@@ -22,7 +22,6 @@ class Platformer extends Phaser.Scene {
         this.levelMap = new LevelMap(experimental.width, experimental.height);
         this.levelMap.generateLevel(5, 7, experimental.branches);
         console.log(this.levelMap);
-        this.sprite.ammo = [];
     //-----------------------------------
     }
 
@@ -40,6 +39,7 @@ class Platformer extends Phaser.Scene {
         this.timer = new LevelTimer(this, 0, 0, '999', { fontFamily: 'font1', fontSize: '37px', fill: '#FFFFFFF', stroke: '#FFFFFF', strokeThickness: 10 }, 999);
     //Background
         this.bg1 = this.add.tileSprite(game.config.width, -500, game.config.width, game.config.height, 'bgGrass').setScale(4).setScrollFactor(.05).setScale(5).setDepth(-10);
+
 
         
 //----------------------------------------------------------------
@@ -193,12 +193,7 @@ class Platformer extends Phaser.Scene {
 
         this.drawLevel(this.levelMap);
 
-//------------------------------------- 
-        for (let i = 0; i < this.sprite.player.gun.maxAmmo; i++) {
-            console.log(game.config.height/2);
-            this.sprite.ammo.push(this.add.sprite(150 + (50 * i), 600, "sign").setDepth(10).setScrollFactor(0).setScale(2.5))
-            this.sprite.ammo[i].visible = true;
-        }
+
     }
 
     update() {
@@ -268,18 +263,6 @@ class Platformer extends Phaser.Scene {
         this.timer.update();
 
 //------------------------------------------------------
-        if (this.sprite.player.gun.ammoBuffer != this.sprite.player.gun.currentAmmo) {
-            for (let i = this.sprite.player.gun.currentAmmo; i < this.sprite.player.gun.maxAmmo; i++) {
-                this.sprite.ammo[i].visible = false;
-            }
-            console.log(this.sprite.player.gun.currentAmmo, this.sprite.player.gun.ammoBuffer);
-            for (let i = this.sprite.player.gun.currentAmmo; i > this.sprite.player.gun.ammoBuffer; i--) {
-                console.log("i =" + i);
-                this.sprite.ammo[i-1].visible = true;
-            }
-            this.sprite.player.gun.ammoBuffer = this.sprite.player.gun.currentAmmo;
-        }
-        
     }
 
     /*Notes so far:
