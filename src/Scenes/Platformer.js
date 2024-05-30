@@ -1,6 +1,7 @@
 class Platformer extends Phaser.Scene {
     constructor() {
         super("platformerScene");
+        
     }
 
     init() {
@@ -70,15 +71,33 @@ class Platformer extends Phaser.Scene {
         //this.room1 = this.createRoom("Room2", 18, 18, 20*18*2, 0);
         //this.room3 = this.createRoom("Room1", 18, 18, 0, 0);
         //this.room4 = this.createRoom("ORoom", 18, 18, 20*18*2, -20*18*2);
+        //comment
         this.levelFromLevel(this.levelMap.mainSection.tiles);
     
 
     //-----------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------
+//BulletInit---------------------------------
+        this.bulletGroup = this.add.group({
+            active: true,
+            defaultKey: "x",
+            maxSize: 2,
+            runChildUpdate: true
+            }
+        )
 
+        this.bulletGroup.createMultiple({
+            classType: Bullet,
+            active: false,
+            key: this.bulletGroup.defaultKey,
+            repeat: this.bulletGroup.maxSize-1
+        });
+        this.bulletGroup.propertyValueSet("speed", 1);
+//-----------------------------------------------
 // PlayerInit---------------------------------
 
         this.sprite.player = new Player(this, this.playerSpawn[0].x, this.playerSpawn[0].y, "platformer_characters", "tile_0000.png");
+        //this.sprite.player = new Player(this, this.playerSpawn[0].x, this.playerSpawn[0].y, "pizza.png");
 
         this.playerGroup.add(this.sprite.player);
 
@@ -190,7 +209,7 @@ class Platformer extends Phaser.Scene {
 
         this.drawLevel(this.levelMap);
 
-//-------------------------------------    
+//------------------------------------- 
     }
 
     update() {
