@@ -16,6 +16,8 @@ class Platformer extends Phaser.Scene {
         this.minimap;
         this.sprite = {};
     //------ETC-----------------------------
+        this.roomWidth = 20;
+        this.roomHeight = 20;
         this.levelMap = new LevelMap(experimental.width, experimental.height);
         this.levelMap.generateLevel(5, 7, experimental.branches);
         console.log(this.levelMap);
@@ -103,7 +105,7 @@ class Platformer extends Phaser.Scene {
         my.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         my.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         my.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-        my.keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        my.keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         my.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
     //debug key listener (assigned to D key)
         if (game.config.physics.arcade.debug) {
@@ -223,7 +225,7 @@ class Platformer extends Phaser.Scene {
         }
 
     //Remove hint once move
-        if (this.sprite.hintText && (this.sprite.player.moving || (cursors.up.isDown||my.keySpace.isDown))) {
+        if (this.sprite.hintText && (Math.abs(this.sprite.player.body.velocity.x) > 0 || (cursors.up.isDown||my.keySpace.isDown))) {
             if (this.timer.timerTimer.paused == true) {
                 this.timer.timerTimer.paused = false;
             }
@@ -422,7 +424,7 @@ class Platformer extends Phaser.Scene {
 
     levelFromLevel(tileArr){
         for(let tile of tileArr) {
-            this.createRoom(tile.name, 18, 18, tile.x * 20 * SCALE * 18, tile.y * 20 * 2 * 18, tile.type);
+            this.createRoom(tile.name, 18, 18, tile.x * this.roomWidth * SCALE * 18, tile.y * this.roomHeight * SCALE * 18, tile.type);
         }
     }
 
@@ -433,13 +435,16 @@ class Platformer extends Phaser.Scene {
         let startY = 0;
         for (let i = 0; i < levelMap.height; i++) { //y val
             for (let j = 0; j < levelMap.width; j++) { //x val
-                let color = 0xFF0000;
+                let color = 0x000000;//0xFF0000;
+                let alpha = .5;
                 let curTile = levelMap.getTile(j, i);
                 if (curTile.section == levelMap.mainSection.number) {
                     color = 0x000000;
+                    alpha = 1;
                 }
                 if (curTile == levelMap.startRoom) {
                     color = 0x00FF00;
+                    this.playerRect = this.add.text(j * (rectWidth) + offset + (rectWidth/2), i * (rectWidth)+ offset+(rectWidth/2), "._.", { fontFamily: 'font1', fontSize: '30px', fill: '#FFFFFFF',  stroke: '#FFFFFF', strokeThickness: 10}).setDepth(3).setOrigin(.5, .5);
                     startX = j * (rectWidth) + offset + (rectWidth/2);
                     startY = i * (rectWidth)+ offset+(rectWidth/2);
                 }
@@ -449,29 +454,29 @@ class Platformer extends Phaser.Scene {
                 if (curTile.type == "treasure") {
                     color = 0xCD7F32;
                 }
-                let temp = this.add.rectangle(j * (rectWidth) + offset, i * (rectWidth)+ offset, rectWidth, rectWidth, color).setOrigin(0, 0);
+                let temp = this.add.rectangle(j * (rectWidth) + offset, i * (rectWidth)+ offset, rectWidth, rectWidth, color, alpha).setOrigin(0, 0);
                 color = Math.floor(Math.random() * 9999999999 + 99999);
-                let temp5 = this.add.text(j * (rectWidth)+ offset, i * (rectWidth)+ offset, curTile.section, {color: "#fff", fontSize: '48px', fontFamily: 'font1'}).setDepth(3);
-                if (curTile.left == "closed") {
+                //let temp5 = this.add.text(j * (rectWidth)+ offset, i * (rectWidth)+ offset, curTile.section, {color: "#fff", fontSize: '48px', fontFamily: 'font1'}).setDepth(3);
+                if (curTile.left == "closed" && curTile.section == levelMap.mainSection.number) {
                     //console.log("test");
                     let temp1 = this.add.rectangle(j * (rectWidth)+ offset, i * (rectWidth)+ offset, 5, rectWidth,color ).setOrigin(0, 0);
                 }
-                if (curTile.top == "closed") {
+                if (curTile.top == "closed" && curTile.section == levelMap.mainSection.number) {
                     let temp2 = this.add.rectangle(j * (rectWidth)+ offset, i * (rectWidth)+ offset, rectWidth, 5, color).setOrigin(0, 0);
                 }
-                if (curTile.right == "closed") {
+                if (curTile.right == "closed" && curTile.section == levelMap.mainSection.number) {
                     let temp3 = this.add.rectangle((j+1) * (rectWidth)+ offset, i * (rectWidth)+ offset, -5, rectWidth, color).setOrigin(0, 0);
                 }
-                if (curTile.bottom == "closed") {
+                if (curTile.bottom == "closed" && curTile.section == levelMap.mainSection.number) {
                     let temp4 = this.add.rectangle(j * (rectWidth)+ offset, (i+1) * (rectWidth)+ offset, rectWidth, -5, color).setOrigin(0, 0);
                 }
             }
         }
         this.minimap = this.cameras.add(0, 0, 200, 200).setName('mini');
         this.minimap.setZoom(200/(3*rectWidth));
-        this.minimap.setAlpha(.5)
+        this.minimap.setAlpha(.75);
         this.minimap.centerOn(startX, startY);
-        this.minimap.setBounds(-1000, -1000, this.levelMap.width * rectWidth, this.levelMap.height * rectWidth)
+        this.minimap.setBounds(-1000, -1000, this.levelMap.width * rectWidth, this.levelMap.height * rectWidth).ignore(this.bg1);
     }
  
 }

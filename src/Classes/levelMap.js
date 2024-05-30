@@ -664,11 +664,11 @@ class LevelMap {
         //Traverse every tile it is open to
         let touchedTiles = [];
         this.getTilesInSection(startTile, touchedTiles);
-        console.log(touchedTiles);
+        //console.log(touchedTiles);
         //Find any remaining
         if (touchedTiles.length != section.tiles.length) {
             let difference = section.tiles.filter(x => !touchedTiles.includes(x));
-            console.log(difference);
+            //console.log(difference);
             //Draw paths to remaining
             difference.some(difTile => {
                 return touchedTiles.some(mainTile => {
@@ -709,7 +709,7 @@ class LevelMap {
     //Gives tile its name
     //And determines if it will be a start, end, or (treasure) tile
     assignRooms(levelSection) { //Name :lefttoprightbottom
-        console.log(levelSection.tiles);//e.g. CCCO : only bottom is open
+        //console.log(levelSection.tiles);//e.g. CCCO : only bottom is open
         for (let tile of levelSection.tiles) {
             let name = "";
             if (tile.left == "closed") {

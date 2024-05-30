@@ -22,5 +22,6 @@ class Gun extends Phaser.GameObjects.Sprite {
 
         this.rotation = this.target;
         this.flipY = Math.abs(this.target) > Math.PI/2;
+
     }
 }

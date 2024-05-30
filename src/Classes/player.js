@@ -63,10 +63,26 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         {      
             let tempVec = new Phaser.Math.Vector2((game.config.width/2 - game.input.mousePointer.x), (game.config.height/2 - game.input.mousePointer.y)).normalize();
             this.setVelocity(tempVec.x * this.MAXVELOCITYX * 2, tempVec.y * this.MAXVELOCITYY);
-            this.facing = enumList.SHOOTING; 
+            this.facing = enumList.SHOOTING;
 
+            this.scene.add.particles(this.gun.getRightCenter().x, this.gun.getRightCenter().y, "texturesAtlas", {
+                frame: ["tile_0153.png", "tile_0155.png"], 
+                delay: 10,
+                active: true,
+                angle: { min: -45, max: 45 },
+                speedY: {random: [(-1 * tempVec.y * 300) - 100, (-1 * tempVec.y * 300) + 100]},
+                speedX: {random: [(-1 * tempVec.x * 300) - 100, (-1 * tempVec.x * 300) + 100]},
+                lifespan: 300,
+                quantity: { min: 3, max: 7 },
+                rotate: this.gun.angle,//TODO: Make these flip
+                scale: { start: 1.2, end: 0, ease: "Quad.easeIn" },
+                duration: 10,
+
+            });
 
         }, this);
+
+
 
 
         this.gun = new Gun(this.scene, this.x, this.y, "platformer_characters", "tile_0000.png" , this.body);
@@ -77,6 +93,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     update() {
+
 
         //console.log(game.config.width/2 - game.input.mousePointer.x * 10, game.config.height/2 - game.input.mousePointer.y * 10);
         

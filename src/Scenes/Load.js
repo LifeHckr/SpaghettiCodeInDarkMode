@@ -8,20 +8,27 @@ class Load extends Phaser.Scene {
 
         // Load characters spritesheet
         this.load.atlas("platformer_characters", "tilemap-characters-packed.png", "tilemap-characters-packed.json");
+        this.load.atlas("texturesAtlas", "platformer_spritesheet.png", "tilemap-background.json");
+        this.load.spritesheet('textures', 'platformer_spritesheet.png', { frameWidth: 18, frameHeight: 18 });
 
         // Load tilemap information
         this.load.image("tilemap_tiles", "./rooms/tilemap_packed.png");
-        this.load.image("background_tiles", "./rooms/tilemap-backgrounds_packed.png");        
+        this.load.image("background_tiles", "./rooms/tilemap-backgrounds_packed.png");
+
+        //General Sprites     
         this.load.image("particle", "tile_0154.png");
         this.load.image("coin", "tile_0152.png"); 
         this.load.image("coin2", "tile_0151.png");
         this.load.image("sign", "sign.png");   
         this.load.image("x", "x.png");
+        this.load.image("c1", "cloud1.png");
+        this.load.image("c2", "cloud2.png");
+
         //Game Over
         this.load.image("meteor1", "spaceMeteors_004.png");
-        this.load.image("spackBack", "darkPurple.png");                  
-        // Packed tilemap
+        this.load.image("spackBack", "darkPurple.png");  
 
+        // Packed tilemap
         //Maps and Rooms
         this.load.tilemapTiledJSON("platformer-level-1", "./rooms/platformer-level-1.tmj");   // Tilemap in JSON
         this.load.tilemapTiledJSON("Room1", "./rooms/roomExample.tmj");
