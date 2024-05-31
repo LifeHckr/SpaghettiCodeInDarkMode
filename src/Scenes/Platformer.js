@@ -17,8 +17,8 @@ class Platformer extends Phaser.Scene {
         this.minimap;
         this.sprite = {};
     //------ETC-----------------------------
-        this.roomWidth = 20;
-        this.roomHeight = 20;
+        this.roomWidth = 60;
+        this.roomHeight = 30;
         this.levelMap = new LevelMap(experimental.width, experimental.height);
         this.levelMap.generateLevel(5, 7, experimental.branches);
         console.log(this.levelMap);
