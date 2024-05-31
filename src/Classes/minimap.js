@@ -87,7 +87,7 @@ class Minimap extends Phaser.Cameras.Scene2D.Camera {
 
     renderTile(x, y) {
         let tile = this.tiles[y][x];
-        if (tile) {
+        if (tile != null) {
             tile.render();
         }
     }
@@ -111,6 +111,15 @@ class Minimap extends Phaser.Cameras.Scene2D.Camera {
             this.renderTile(x, y+1);
         }
 
+    }
+
+    //Debug only
+    renderAll() {
+        for (let i = 0; i < this.heightInTiles; i++) { //y val
+            for (let j = 0; j < this.widthInTiles; j++) { //x val
+                this.renderTile(j, i);
+            }
+        }
     }
 
     mapUpdate(x, y) {

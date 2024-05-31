@@ -116,8 +116,7 @@ class Platformer extends Phaser.Scene {
                 this.sprite.player.setDepth(0);
                 this.physics.world.drawDebug = this.physics.world.drawDebug ? false : true
                 this.physics.world.debugGraphic.clear();
-
-                this.doPlayerMapUpdate();
+                this.minimap.renderAll();
                 console.log(this.sprite.player.mapX);
                 console.log(this.sprite.player.mapY);
             }, this);
