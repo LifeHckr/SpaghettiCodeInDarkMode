@@ -103,7 +103,7 @@ class Platformer extends Phaser.Scene {
             
         });
 //-----------------------------------------------
-// Controls-------------------------
+// Controls--------------------------
         cursors = this.input.keyboard.createCursorKeys();
         my.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         my.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);

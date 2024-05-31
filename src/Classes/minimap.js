@@ -87,27 +87,31 @@ class Minimap extends Phaser.Cameras.Scene2D.Camera {
 
     renderTile(x, y) {
         let tile = this.tiles[y][x];
-        if (tile != null) {
+        if (tile != null) { 
             tile.render();
         }
     }
 
     renderAroundTile(x, y) {
         this.renderTile(x, y);
-
-        if (this.tiles[y][x].wallIsOpen("left")) {
+        console.log(x);
+        console.log(y);
+        if (this.tiles[y][x] == null) {
+            return;
+        }
+        if (x > 0 && this.tiles[y][x].wallIsOpen("left")) {
             this.renderTile(x-1, y);
         }
 
-        if (this.tiles[y][x].wallIsOpen("right")) {
+        if (x < this.widthInTiles && this.tiles[y][x].wallIsOpen("right")) {
             this.renderTile(x+1, y);
         }
 
-        if (this.tiles[y][x].wallIsOpen("top")) {
+        if (y > 0 && this.tiles[y][x].wallIsOpen("top")) {
             this.renderTile(x, y-1);
         }
 
-        if (this.tiles[y][x].wallIsOpen("bottom")) {
+        if (y < this.heightInTiles && this.tiles[y][x].wallIsOpen("bottom")) {
             this.renderTile(x, y+1);
         }
 
