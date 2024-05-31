@@ -128,7 +128,7 @@ class Gun extends Phaser.GameObjects.Sprite {
     }
 
     doParticle(directionVec) {
-        let emitter = this.scene.add.particles(this.getRightCenter().x, this.getRightCenter().y, "texturesAtlas", {
+        this.scene.add.particles(this.getRightCenter().x, this.getRightCenter().y, "texturesAtlas", {
             frame: ["tile_0153.png", "tile_0155.png"], 
             delay: 10,
             active: true,

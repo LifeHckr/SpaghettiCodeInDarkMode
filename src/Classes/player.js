@@ -3,6 +3,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         super(scene, x, y, texture, frame);
         this.setScale(SCALE);
         this.scene = scene;
+        this.mapX;
+        this.mapY;
 
         this.signals = scene.events;
 
@@ -33,6 +35,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.signTouch = false;//false = init, otherwise is last touched sign
         this.knockback = false;//is player under enemy knockback
         this.bumpTimed = false;//did the player bonk
+
+        this.mapX = -1;
+        this.mapY = -1;
 
     //Physics Set up
         //this.setCollideWorldBounds(true);
@@ -73,7 +78,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     update() {       
-
+        this.doMapUpdate();
 //SCHMOOVEMENT
     //Ignore input if animating/knocking
         if (this.animating || this.knockback) {
@@ -378,4 +383,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.facing = moveDir;
         }
     }
+
+    doMapUpdate() {
+        if (this.y < this.scene.roomHeight * SCALE * 18 * this.mapY || this.y > this.scene.roomHeight * SCALE * 18 * (this.mapY+1)) {
+            this.mapY = Math.floor(this.y / this.scene.roomHeight / SCALE / 18);
+            this.scene.minimap.mapUpdate(this.mapX, this.mapY);
+        } else if (this.x < this.scene.roomWidth * SCALE * 18 * this.mapX || this.x > this.scene.roomWidth * SCALE * 18 * (this.mapX+1)) {
+            this.mapX = Math.floor(this.x / this.scene.roomWidth / SCALE / 18);
+            this.scene.minimap.mapUpdate(this.mapX, this.mapY);
+
+        }
+    }
 }
+
