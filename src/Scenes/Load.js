@@ -23,11 +23,13 @@ class Load extends Phaser.Scene {
         this.load.image("x", "x.png");
         this.load.image("c1", "cloud1.png");
         this.load.image("c2", "cloud2.png");
+        this.load.image("fondoodler", "cheesegun.png");
+        this.load.image("pizza", "pizza.png");
+        this.load.image("pizza-face", "pizza-face.png");
 
         //Game Over
         this.load.image("meteor1", "spaceMeteors_004.png");
-        this.load.image("spackBack", "darkPurple.png"); 
-        this.load.image("pizza", "pizza.png");                 
+        this.load.image("spackBack", "darkPurple.png");                  
         // Packed tilemap
 
         // Packed tilemap
@@ -110,9 +112,8 @@ class Load extends Phaser.Scene {
 
         this.anims.create({
             key: 'fast',
-            defaultTextureKey: "platformer_characters",
             frames: [
-                { frame: "tile_0006.png" }
+                { key: "pizza-face", frame: null }
             ],
             repeat: -1
         });

@@ -2,18 +2,19 @@ class Gun extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, texture, frame, attachedSprite) {
         super(scene, x, y, texture, frame);
         this.player = attachedSprite;
-        this.shootCooldown = 500; //ms
+        this.shootCooldown = 750; //ms
         this.onCooldown = false;
         this.shootSignal = scene.events;
 
-        this.startingAmmo = 5;
+        this.startingAmmo = 3;
         this.currentAmmo = this.startingAmmo;
         this.maxAmmo = this.currentAmmo;
-        this.reloadLength = 60 //ticks ms = #/60 * 1000
+        this.reloadLength = 90 //ticks ms = #/60 * 1000
         this.reloadTimer = 0;
         this.interruptReload = false;
 
-        this.setOrigin(0, .5);
+        this.newOriginY = 1;
+        this.setOrigin(0, 1);
         this.target = 0;
 
         //Mouse move listener
@@ -62,7 +63,16 @@ class Gun extends Phaser.GameObjects.Sprite {
 
         this.rotation = this.target;
         this.flipY = Math.abs(this.target) > Math.PI/2;
+        
 
+        this.setOrigin(0, this.newOriginY);
+        this.scene.tweens.add({
+            targets     : this,
+            newOriginY: (1 * !(Math.abs(this.target) > Math.PI/2)),
+            ease        : 'Linear.In',
+            duration    : 30
+        });
+        
         if(this.currentAmmo != this.maxAmmo) {
             this.reloadTimer += 1;
             if (this.reloadTimer >= this.reloadLength) {
@@ -81,6 +91,7 @@ class Gun extends Phaser.GameObjects.Sprite {
         if (!this.onCooldown && this.currentAmmo > 0) {
             //let bullet = this.bulletGroup.getFirstDead();
             let bullet = this.bulletGroup.create(this.x,this.y);
+            bullet.setTint(0xffc524);
             if (bullet != null) {
                 this.onCooldown = true;
 
@@ -117,7 +128,7 @@ class Gun extends Phaser.GameObjects.Sprite {
     }
 
     doParticle(directionVec) {
-        this.scene.add.particles(this.getRightCenter().x, this.getRightCenter().y, "texturesAtlas", {
+        let emitter = this.scene.add.particles(this.getRightCenter().x, this.getRightCenter().y, "texturesAtlas", {
             frame: ["tile_0153.png", "tile_0155.png"], 
             delay: 10,
             active: true,
@@ -126,6 +137,7 @@ class Gun extends Phaser.GameObjects.Sprite {
             speedX: {random: [(-1 * directionVec.x * 300) - 100, (-1 * directionVec.x * 300) + 100]},
             lifespan: 300,
             quantity: { min: 3, max: 5 },
+            tint: 0xffc524,
             rotate: this.angle,//TODO: Make these flip
             scale: { start: 1, end: 0, ease: "Quad.easeIn" },
             duration: 10,

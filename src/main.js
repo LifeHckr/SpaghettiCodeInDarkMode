@@ -15,14 +15,14 @@
 // game config
 let config = {
     parent: 'phaser-game',
-    type: Phaser.CANVAS,
+    //type: Phaser.CANVAS,
+    type: Phaser.WEBGL,
     render: {
         pixelArt: true  // prevent pixel art from getting blurred when scaled
     },
     //fps: { forceSetTimeOut: true, target: 30 },
     physics: {
         default: 'arcade',
-        //type: Phaser.WEBGL,
         arcade: {
             debug: true,
             fps: 60,//I am officially leaving this at 60

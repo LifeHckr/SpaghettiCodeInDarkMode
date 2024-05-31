@@ -1,7 +1,6 @@
 class Player extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, texture, frame) {
         super(scene, x, y, texture, frame);
-        
         this.setScale(SCALE);
         this.scene = scene;
 
@@ -18,8 +17,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.STARTVELOCITY = 300;
         this.MAXVELOCITYX = 1000;
         this.MAXVELOCITYY = 1000;
-        this.JUMP_VELOCITY = -675;
-        this.TEMP_JUMPVELOCITY = -1975;
+        this.JUMP_VELOCITY = -605;
+        this.TEMP_JUMPVELOCITY = -2700;
         this.DASHVELOCITY = 2000;
         this.DASHLENGTH = 600; //in ms
         this.FRAMEFUDGE = game.config.physics.arcade.fps / 30;//I wanted to get 60 & 30 fps to work
@@ -53,11 +52,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             obj2.destroy();
             scene.sound.play("jingle");
             let tempText = scene.add.text(0, 0, 'Coin GET!!!', { fontFamily: 'font1', fontSize: '42px', fill: '#5ad28c',  stroke: '#FFFFFF', strokeThickness: 15}).setOrigin(.5).setPosition(game.config.width/2, game.config.height/2).setDepth(10).setAngle(20).setScrollFactor(0);
-                scene.tweens.add({
-                    targets     : tempText,
-                    alpha     : 0,
-                    ease        : 'Cubic.In',
-                    duration    : 2000,
+            scene.tweens.add({
+                targets     : tempText,
+                alpha     : 0,
+                ease        : 'Cubic.In',
+                duration    : 2000,
             });
         });
 
@@ -68,9 +67,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.setVelocity(tempVec.x * this.MAXVELOCITYX * 2, tempVec.y * this.MAXVELOCITYY);
         });
     //gun init
-        this.gun = new Gun(this.scene, this.x, this.y, "platformer_characters", "tile_0000.png" , this);
-        this.gun.scaleY = (.75);
-        this.gun.scaleX = (1.5);
+        this.gun = new Gun(this.scene, this.x, this.y, "fondoodler", null , this).setScale(SCALE);
         
         return this;
     }
@@ -139,7 +136,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         //Player is not blocked below
         if(!this.animating && !this.body.blocked.down) {
             if (this.running > 1) {
-                //this.anims.play('fastJump');
+                this.anims.play('fast');
             } else {
                 this.anims.play('jump');
             }
@@ -163,7 +160,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         if(this.body.blocked.down) {
         //If player was just in air play fall tween
             if (this.running > 1) {
-                //this.anims.play('fast');
+                this.anims.play('fast');
             } else {
                 this.anims.play('idle');
             }
