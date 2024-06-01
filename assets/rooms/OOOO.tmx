@@ -10,8 +10,8 @@
   <property name="3_right" value="open"/>
   <property name="4_bottom" value="open"/>
  </properties>
- <tileset firstgid="1" name="kenny_tilemap_packed" tilewidth="18" tileheight="18" tilecount="180" columns="20">
-  <image source="tilemap_packed.png" width="360" height="162"/>
+ <tileset firstgid="1" name="kenny_tilemap_packed" tilewidth="18" tileheight="18" tilecount="1320" columns="20">
+  <image source="tilemap_packed.png" width="360" height="1188"/>
   <tile id="0">
    <properties>
     <property name="collides" type="bool" value="true"/>
