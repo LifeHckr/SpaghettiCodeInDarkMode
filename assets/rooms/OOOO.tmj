@@ -272,12 +272,12 @@
          "columns":20,
          "firstgid":1,
          "image":"tilemap_packed.png",
-         "imageheight":162,
+         "imageheight":1188,
          "imagewidth":360,
          "margin":0,
          "name":"kenny_tilemap_packed",
          "spacing":0,
-         "tilecount":180,
+         "tilecount":1320,
          "tileheight":18,
          "tiles":[
                 {
