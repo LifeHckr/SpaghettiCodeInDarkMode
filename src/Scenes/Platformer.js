@@ -21,7 +21,8 @@ class Platformer extends Phaser.Scene {
         this.roomWidth = 60;
         this.roomHeight = 30;
         this.levelMap = new LevelMap(experimental.width, experimental.height);
-        this.levelMap.generateLevel(5, 7, experimental.branches);
+        this.levelMap.generateLevel(5, 7, experimental.branches, undefined, undefined, undefined, undefined, "hello");
+        this.itemPool = new ItemPool((this.levelMap.rand));
 
         //debug
         if(game.config.physics.arcade.debug){
@@ -71,6 +72,7 @@ class Platformer extends Phaser.Scene {
         this.collidesTrue = this.add.group();
         this.oneWays = this.add.group();
         this.lockWallGroup = this.add.group();
+        this.treasureGroup = this.add.group();
         this.keyGroup = this.add.group();
         this.activeKeyGroup = this.add.group({
             runChildUpdate: true
@@ -130,14 +132,6 @@ class Platformer extends Phaser.Scene {
         my.keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         my.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
 
-        //Signbutton- Set signtext, toggle sign text visibility
-        this.input.keyboard.on('keydown-X', () => {
-            if (this.signInit) {
-                this.sprite.signText.text = this.sprite.player.signTouch.name;
-                this.sprite.signText.visible = !this.sprite.signText.visible;
-                this.sprite.signBoard.visible = !this.sprite.signBoard.visible;
-            }
-        }, this);
 
 
 //--------------------------------------
@@ -204,6 +198,30 @@ class Platformer extends Phaser.Scene {
             console.log("DB: Gun cooldown disabled");
             this.sprite.player.gun.reloadLength = 0;
             this.sprite.player.gun.shootCooldown = 0;
+        }, this);
+
+        //O key to spawn a key
+        this.input.keyboard.on('keydown-O', () => {
+            //return if not debug
+            if (!game.config.physics.arcade.debug) {
+                return;
+            }
+
+            let newKey = new Key(this, 0, 0, "texturesAtlas", 'tile_0027.png', this.sprite.player);
+            this.sprite.player.keys.push(newKey);
+            this.activeKeyGroup.add(newKey);
+            console.log("DB: Key Spawned");
+        }, this);
+
+        //0 key to reduce timer
+        this.input.keyboard.on('keydown-ZERO', () => {
+            //return if not debug
+            if (!game.config.physics.arcade.debug) {
+                return;
+            }
+
+            this.timer.time -= 75;
+            console.log("DB: Timer reduced by 75");
         }, this);
 
 //--------------------------------------
@@ -426,6 +444,24 @@ class Platformer extends Phaser.Scene {
             lockWall.unlocking = false;
             this.physics.world.enable(lockWall, Phaser.Physics.Arcade.STATIC_BODY);
             this.lockWallGroup.add(lockWall);
+        });
+
+        //treasure
+        let treasure = map.createFromObjects("Objects", {
+            type: "treasure",
+            key: "kenny-chest"
+        });
+
+        treasure.map((treasure) => {
+            treasure.scale = SCALE;
+            treasure.x *= SCALE;
+            treasure.y *= SCALE;
+            treasure.x += x;
+            treasure.y += y;
+            let newTreasure = new Sign(this, treasure.x, treasure.y, "kenny-chest", undefined, null, "chest");
+            this.physics.world.enable(newTreasure, Phaser.Physics.Arcade.STATIC_BODY);
+            this.treasureGroup.add(newTreasure);
+            treasure.destroy();
         });
 
         let coins = map.createFromObjects("Objects", {

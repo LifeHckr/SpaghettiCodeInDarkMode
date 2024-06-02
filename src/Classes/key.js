@@ -5,6 +5,8 @@ class Key extends Phaser.GameObjects.Sprite {
         this.scene = scene;
         this.followCD = 10;
         this.followTimer = 0;
+        this.offsetX = Math.floor(Math.random()*60) - 30;
+        this.offsetY = Math.floor(Math.random()*40) - 20;
         this.closeTween = this.scene.tweens.add({
             targets: this,
             x: this.x,
@@ -28,8 +30,8 @@ class Key extends Phaser.GameObjects.Sprite {
             this.closeTween.stop();
             this.farTween = this.scene.tweens.add({
                 targets     : this,
-                x:  this.following.body.x,
-                y: this.following.body.y,
+                x:  this.following.body.x + this.offsetX,
+                y: this.following.body.y + this.offsetY,
                 ease        : 'Linear.Out',
                 duration    : 10000/dist
             });
@@ -67,9 +69,9 @@ class Key extends Phaser.GameObjects.Sprite {
                     x:  wall.x - 50,
                     y: wall.y,
                     ease        : 'Linear.Out',
-                    duration    : 100,
+                    duration    : 60,
                     onComplete: () => {
-                        this.scene.tweens.add({
+                        this.scene.tweens.add(  {
                             targets     : wall,
                             x:  wall.x - 2000,
                             y: wall.y,
@@ -79,10 +81,10 @@ class Key extends Phaser.GameObjects.Sprite {
                                 wall.angle += 20;
                             },
                             onComplete: () => {
-                                this.destroy();
                                 wall.destroy();
                             }
                         });
+                        this.destroy();
                     }
                 });
             }
