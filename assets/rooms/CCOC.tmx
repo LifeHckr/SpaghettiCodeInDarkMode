@@ -323,6 +323,13 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup id="4" name="Objects">
+  <object id="13" name="1" type="coin" gid="152" x="432" y="144" width="18" height="18"/>
+  <object id="14" name="spawner" type="spawner" x="72" y="126" width="18" height="18"/>
+  <object id="15" name="keySpawn" type="keySpawn" x="36" y="486" width="18" height="18"/>
+  <object id="17" name="treasure" type="treasure" x="918" y="450" width="18" height="18"/>
+  <object id="18" name="lockWall" type="lockWall" gid="29" x="792" y="486" width="18" height="72"/>
+ </objectgroup>
  <layer id="1" name="Ground-n-Platforms" width="60" height="30">
   <data encoding="csv">
 5,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,143,6,
@@ -425,13 +432,6 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="4" name="Objects">
-  <object id="13" name="1" type="coin" gid="152" x="432" y="144" width="18" height="18"/>
-  <object id="14" name="spawner" type="spawner" x="72" y="126" width="18" height="18"/>
-  <object id="15" name="keySpawn" type="keySpawn" x="36" y="486" width="18" height="18"/>
-  <object id="17" name="treasure" type="treasure" x="918" y="450" width="18" height="18"/>
-  <object id="18" name="lockWall" type="lockWall" gid="29" x="792" y="486" width="18" height="72"/>
- </objectgroup>
  <layer id="7" name="Top-Layer" width="60" height="30" opacity="0.75">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

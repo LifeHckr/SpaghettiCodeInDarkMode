@@ -45,6 +45,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     //PlayerCollisions
         scene.mapCollider = scene.physics.add.collider(this, scene.collidesTrue);
+    //LockWallcollider
+        scene.lockWallCollider = scene.physics.add.collider(this, scene.lockWallGroup);
     //OneWayCollisions- Checks if player is sufficiently above a one way to enable
         scene.extraCollider = scene.physics.add.collider(this, scene.oneWays, null, function (player, tile) {
             //console.log(tile);

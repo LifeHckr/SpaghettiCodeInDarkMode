@@ -1,0 +1,52 @@
+class Key extends Phaser.GameObjects.Sprite {
+    constructor(scene, x, y, texture, frame, attachedSprite) {
+        super(scene, x, y, texture, frame);
+        this.following = attachedSprite;
+        this.scene = scene;
+        this.followCD = 10;
+        this.followTimer = 0;
+        this.closeTween = this.scene.tweens.add({
+            targets: this,
+            x: this.x,
+            duration: 1
+        });
+        this.farTween = this.scene.tweens.add({
+            targets: this,
+            x: this.x,
+            duration: 1
+        });
+
+        scene.add.existing(this);
+        return this;
+    }
+
+    update() {
+        this.followTimer--;
+        let dist = Phaser.Math.Distance.Between(this.following.body.x, this.following.body.y, this.x, this.y);
+        if (dist > 70) {
+            //this.moving = "far";
+            this.closeTween.stop();
+            this.farTween = this.scene.tweens.add({
+                targets     : this,
+                x:  this.following.body.x,
+                y: this.following.body.y,
+                ease        : 'Linear.Out',
+                duration    : 10000/dist
+            });
+        } else if (this.followTimer <= 0) {
+            this.followTimer = this.followCD;
+            //this.moving = "close";
+            this.farTween.stop();
+            this.closeTween.stop();
+            this.closeTween = this.scene.tweens.add({
+                targets     : this,
+                x:  (this.following.body.x - 30) + Math.    floor(Math.random()*90),
+                y: (this.following.body.y - 40) + Math.floor(Math.random()*20),
+                ease        : 'Linear.Out',
+                duration    : 10000/dist,
+                });
+        }
+
+
+    }
+}

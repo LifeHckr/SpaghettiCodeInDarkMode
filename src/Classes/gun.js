@@ -9,8 +9,11 @@ class Gun extends Phaser.GameObjects.Sprite {
         this.startingAmmo = 3;
         this.currentAmmo = this.startingAmmo;
         this.maxAmmo = this.currentAmmo;
-        this.reloadLength = 90 //ticks ms = #/60 * 1000
-        this.reloadTimer = 0;
+        this.reloadLength = 1500; //ticks ms = #/60 * 1000
+        this.reloadTimer = scene.time.addEvent({
+            delay: this.reloadLength,
+            paused: true
+        });
         this.interruptReload = false;
 
         this.newOriginY = 1;
@@ -72,17 +75,22 @@ class Gun extends Phaser.GameObjects.Sprite {
             ease        : 'Linear.In',
             duration    : 30
         });
-        
-        if(this.currentAmmo != this.maxAmmo) {
-            this.reloadTimer += 1;
-            if (this.reloadTimer >= this.reloadLength) {
+
+        if(this.currentAmmo !== this.maxAmmo) {
+            this.reloadTimer.paused = false;
+            if (this.reloadTimer.getRemaining() == 0) {
                 this.currentAmmo += 1;
                 for (let i = 0; i < this.currentAmmo; i++) {
                     this.scene.sprite.ammo[i].visible = true;
                 }
-                this.reloadTimer = 0;
-                console.log("reloaded");
+                this.reloadTimer.reset({
+                    delay: this.reloadLength,
+                });
             }
+        }
+
+        if (this.currentAmmo === this.maxAmmo) {
+            this.reloadTimer.paused = true;
         }
 
     }
@@ -122,7 +130,9 @@ class Gun extends Phaser.GameObjects.Sprite {
                 this.currentAmmo -= 1;
                 this.scene.sprite.ammo[this.currentAmmo].visible = false;
                 if (this.interruptReload) {
-                    this.reloadTimer = 0;
+                    this.reloadTimer.reset({
+                        delay: this.reloadLength
+                    });
                 }
             }
         }
