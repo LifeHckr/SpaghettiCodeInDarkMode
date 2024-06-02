@@ -73,7 +73,7 @@ class Platformer extends Phaser.Scene {
         //this.room3 = this.createRoom("Room1", 18, 18, 0, 0);
         //this.room4 = this.createRoom("ORoom", 18, 18, 20*18*2, -20*18*2);
         //comment
-        this.levelFromLevel(this.levelMap.mainSection.tiles);
+        this.levelFromLevel(this.levelMap.data);
     
 
     //-----------------------------------------------------------------------------
@@ -121,8 +121,10 @@ class Platformer extends Phaser.Scene {
                 console.log(this.sprite.player.mapY);
             }, this);
             this.input.keyboard.on('keydown-P', () => {
+                this.camera.removeBounds();
                 this.sprite.player.y = -1000;
                 this.sprite.player.x = -1000;
+                this.mapCollider.destroy();
 
             }, this);
         }
@@ -140,7 +142,7 @@ class Platformer extends Phaser.Scene {
         this.camera.width = game.config.width;
         this.camera.height = game.config.height;
         this.camera.setViewport(0, 0, game.config.width, game.config.height);
-        //this.camera.setBounds(0, 0, this.worldBoundsX, this.worldBoundsY);
+        this.camera.setBounds(0, 0, this.levelMap.width * SCALE * 18 * this.roomWidth,  this.levelMap.height * SCALE * 18 * this.roomHeight);
         this.camera.setZoom(game.config.width/1200 * 1.20, game.config.height/700 * 1.20);
         //this.camera.setDeadzone(100, 100);
 //-----------------------------------------
@@ -263,12 +265,11 @@ class Platformer extends Phaser.Scene {
     */
     createRoom(key, tileWidth, tileHeight, x, y, type) {
         let map = this.add.tilemap(key, tileWidth, tileHeight);
-
         map.addTilesetImage("kenny_tilemap_packed", "tilemap_tiles");
-        map.addTilesetImage("tilemap-backgrounds_packed", "background_tiles");
+        //map.addTilesetImage("tilemap-backgrounds_packed", "background_tiles");
         map.layers.forEach(layer => {
         
-            let curLayer = map.createLayer(layer.name, ["kenny_tilemap_packed","tilemap-backgrounds_packed"], x, y, null, true);
+            let curLayer = map.createLayer(layer.name, ["kenny_tilemap_packed"], x, y, null, true);
             curLayer.setScale(SCALE);
             //curLayer.active = false; //doesnt change anything
             if (layer.name == "Collision-Layer") {
@@ -293,9 +294,8 @@ class Platformer extends Phaser.Scene {
                 this.oneWays.add(curLayer);
 
             } else if (layer.name == "Top-Layer") {
-                curLayer.setAlpha(.8).setDepth(1);
+                curLayer.setDepth((1));
             }
-            
         });
         this.animatedTiles.init(map);
 
@@ -410,9 +410,25 @@ class Platformer extends Phaser.Scene {
         return(map);
     }
 
+    createEmpty(key, tileWidth, tileHeight, x, y, type) {
+        let map = this.add.tilemap(key, tileWidth, tileHeight);
+        map.addTilesetImage("kenny_tilemap_packed", "tilemap_tiles");
+        map.layers.forEach(layer => {
+            let curLayer = map.createLayer(layer.name, ["kenny_tilemap_packed"], x, y, null, true);
+            curLayer.setScale(SCALE);
+        });
+    }
+
     levelFromLevel(tileArr){
-        for(let tile of tileArr) {
-            this.createRoom(tile.name, 18, 18, tile.x * this.roomWidth * SCALE * 18, tile.y * this.roomHeight * SCALE * 18, tile.type);
+        for (let i = 0; i < this.levelMap.height; i++) { //y val
+            for (let j = 0; j < this.levelMap.width; j++) { //x val
+                let tile = tileArr[i][j];
+                if (tile.name == "empty") {
+                    this.createEmpty(tile.name, 18, 18, tile.x * this.roomWidth * SCALE * 18, tile.y * this.roomHeight * SCALE * 18, tile.type);
+                } else {
+                    this.createRoom(tile.name, 18, 18, tile.x * this.roomWidth * SCALE * 18, tile.y * this.roomHeight * SCALE * 18, tile.type);
+                }
+            }
         }
     }
  
