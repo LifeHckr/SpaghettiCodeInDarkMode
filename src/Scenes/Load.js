@@ -57,7 +57,7 @@ class Load extends Phaser.Scene {
         this.load.tilemapTiledJSON("CCOO", "./rooms/CCOO.tmj");
         this.load.tilemapTiledJSON("CCOC", "./rooms/CCOC.tmj");
         this.load.tilemapTiledJSON("CCCO", "./rooms/CCCO.tmj");
-        this.load.tilemapTiledJSON("CCCC", "./rooms/CCCC.tmj");
+        this.load.tilemapTiledJSON("empty", "./rooms/CCCC.tmj");
 
         //AUDIO
         this.load.audio("bwah", "audio/404775__owlstorm__retro-video-game-sfx-bwah.wav");
