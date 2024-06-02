@@ -83,11 +83,8 @@
                 for (let i = 0; i < this.currentAmmo; i++) {
                     this.scene.sprite.ammo[i].visible = true;
                 }
-                    delay: this.reloadLength,
-
-
                 this.reloadTimer.reset({
-                    delay: this.reloadLength
+                    delay: this.reloadLength,
                 });
             }
         }
