@@ -67,7 +67,7 @@ class Key extends Phaser.GameObjects.Sprite {
                     x:  wall.x - 50,
                     y: wall.y,
                     ease        : 'Linear.Out',
-                    duration    : 150,
+                    duration    : 100,
                     onComplete: () => {
                         this.scene.tweens.add({
                             targets     : wall,

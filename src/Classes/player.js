@@ -25,7 +25,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.DASHVELOCITY = 2000;
         this.DASHLENGTH = 600; //in ms
         this.FRAMEFUDGE = game.config.physics.arcade.fps / 30;//I wanted to get 60 & 30 fps to work
-        this.HITBOXSIZE = 16; //I noticed there is some jank around corners, this temporarily sort of fixes it
+        this.HITBOXSIZE = 20; //I noticed there is some jank around corners, this temporarily sort of fixes it
 
     //States
         this.moving = false; //is player "moving"
