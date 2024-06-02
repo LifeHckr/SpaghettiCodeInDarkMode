@@ -293,7 +293,7 @@ class LevelMap {
     /*Peviously was an attempt at wave function collapse
         Initializes room, assumes a fresh levelMap
     */
-    generateLevel(minLength = (this.width + this.height - 2), maxLength = (this.width + this.height - 2), branches = 2, maxRooms = -1, treasures = 2, openWeight = .75, closedWeight = .05, seed = null) {
+    generateLevel(minLength = (this.width + this.height - 2), maxLength = (this.width + this.height - 2), branches = 2, maxRooms = -1, treasures = 2, openWeight = .75, closedWeight = .10, seed = null) {
         //Go across rows then next column
         //All levels need a start, an end, a start to end path
         //Optional: special rooms, branches, maxRooms
@@ -736,6 +736,9 @@ class LevelMap {
                 name += "O";
             }
             tile.name = name;
+            if (game.config.physics.arcade.debug) {
+                console.log(tile.name);
+            }
         }
 
         //Pick Start Room if one is not already assigned
@@ -817,5 +820,5 @@ class LevelMap {
                 treasureCount--;
             }
         }
-    }
+    }//end of assignRooms
 } //end of class declaration: levelMap

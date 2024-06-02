@@ -43,7 +43,8 @@ class GameOver extends Phaser.Scene {
 
         this.input.keyboard.on('keydown-ENTER', () => {
             game.scene.stop('GameOver');
-            game.scene.start('platformerScene');
+            this.scene.get('platformerScene').scene.restart();
+            //game.scene.start('platformerScene');
         }, this);
         this.woah = new screenLoop(this, 0, 0, "platformer_characters", "tile_0000.png");
         this.woah.scale = 3;
