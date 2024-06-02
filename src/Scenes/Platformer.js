@@ -47,8 +47,6 @@ class Platformer extends Phaser.Scene {
         //Background
         this.bg1 = this.add.tileSprite(game.config.width, -500, game.config.width, game.config.height, 'bgGrass').setScale(4).setScrollFactor(.05).setScale(5).setDepth(-10);
 
-        this.sprite.keys = [];
-
 //----------------------------------------------------------------
 
 //TILEMAP--------------------------------------------------------------
@@ -102,7 +100,7 @@ class Platformer extends Phaser.Scene {
         this.physics.add.overlap(this.keyGroup, this.playerGroup, (obj1, obj2) => {
             obj1.destroy();
             let newKey = new Key(this, obj1.x, obj1.y, "texturesAtlas", 'tile_0027.png', obj2);
-            this.sprite.keys.push(newKey);
+            this.sprite.player.keys.push(newKey);
             this.activeKeyGroup.add(newKey);
         });
 
@@ -425,6 +423,7 @@ class Platformer extends Phaser.Scene {
             lockWall.y *= SCALE;
             lockWall.x += x;
             lockWall.y += y;
+            lockWall.unlocking = false;
             this.physics.world.enable(lockWall, Phaser.Physics.Arcade.STATIC_BODY);
             this.lockWallGroup.add(lockWall);
         });

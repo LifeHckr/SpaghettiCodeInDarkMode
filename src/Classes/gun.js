@@ -2,14 +2,14 @@
     constructor(scene, x, y, texture, frame, attachedSprite) {
         super(scene, x, y, texture, frame);
         this.player = attachedSprite;
-        this.shootCooldown = 750; //ms
+        this.shootCooldown = 0; //ms
         this.onCooldown = false;
         this.shootSignal = scene.events;
 
         this.startingAmmo = 3;
         this.currentAmmo = this.startingAmmo;
         this.maxAmmo = this.currentAmmo;
-        this.reloadLength = 1500; //ticks ms = #/60 * 1000
+        this.reloadLength = 1; //ticks ms = #/60 * 1000
         this.reloadTimer = scene.time.addEvent({
             delay: this.reloadLength,
             paused: true

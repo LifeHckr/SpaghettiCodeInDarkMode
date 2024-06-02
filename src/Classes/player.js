@@ -5,6 +5,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.scene = scene;
         this.mapX;
         this.mapY;
+        this.keys = [];
 
         this.signals = scene.events;
 
@@ -46,7 +47,15 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     //PlayerCollisions
         scene.mapCollider = scene.physics.add.collider(this, scene.collidesTrue);
     //LockWallcollider
-        scene.lockWallCollider = scene.physics.add.collider(this, scene.lockWallGroup);
+        scene.lockWallCollider = scene.physics.add.collider(this, scene.lockWallGroup, (player, wall) => {
+            if (wall.unlocking) {
+
+            } else if (player.keys.length > 0) {
+                wall.unlocking = true;
+                let animingKey = player.keys.pop();
+                animingKey.unlockAnim(wall);
+            }
+        });
     //OneWayCollisions- Checks if player is sufficiently above a one way to enable
         scene.extraCollider = scene.physics.add.collider(this, scene.oneWays, null, function (player, tile) {
             return((player.y + player.displayHeight/2) <= (tile.layer.tilemapLayer.tileToWorldY(tile.y)));

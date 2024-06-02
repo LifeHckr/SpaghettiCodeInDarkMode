@@ -49,4 +49,8 @@ class Key extends Phaser.GameObjects.Sprite {
 
 
     }
+
+    unlockAnim(wall) {
+
+    }
 }
