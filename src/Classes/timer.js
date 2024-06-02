@@ -35,6 +35,8 @@ class LevelTimer extends Phaser.GameObjects.Text {
         }
         if (this.time < 0) {
             my.bgm.stop();
+            this.scene.events.removeListener("hasShot");
+            delete this.scene.playerSpawn;
             game.scene.stop('platformerScene');
             game.scene.start('GameOver');
         }  

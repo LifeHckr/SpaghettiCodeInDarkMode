@@ -27,7 +27,6 @@ class Minimap extends Phaser.Cameras.Scene2D.Camera {
         scene.input.keyboard.on('keydown-L', () => {
             this.scrollX += this.rectWidth;
         }, scene);
-
         return this;
     }
 
