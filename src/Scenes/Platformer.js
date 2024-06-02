@@ -182,6 +182,18 @@ class Platformer extends Phaser.Scene {
             console.log("DB: Player map coordinate: X:" + this.sprite.player.mapX + " Y:" + this.sprite.player.mapY);
         }, this);
 
+        //U key to make gun OP
+        this.input.keyboard.on('keydown-U', () => {
+            //return if not debug
+            if (!game.config.physics.arcade.debug) {
+                return;
+            }
+
+            console.log("DB: Gun cooldown disabled");
+            this.sprite.player.gun.reloadLength = 0;
+            this.sprite.player.gun.shootCooldown = 0;
+        }, this);
+
 //--------------------------------------
 
 //Camera------------------------------------
