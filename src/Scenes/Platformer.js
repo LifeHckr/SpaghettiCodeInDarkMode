@@ -47,7 +47,7 @@ class Platformer extends Phaser.Scene {
         //Background
         this.bg1 = this.add.tileSprite(game.config.width, -500, game.config.width, game.config.height, 'bgGrass').setScale(4).setScrollFactor(.05).setScale(5).setDepth(-10);
 
-
+        this.sprite.keys = [];
 
 //----------------------------------------------------------------
 
@@ -72,6 +72,12 @@ class Platformer extends Phaser.Scene {
         this.signGroup = this.add.group();
         this.collidesTrue = this.add.group();
         this.oneWays = this.add.group();
+        this.lockWallGroup = this.add.group();
+        this.keyGroup = this.add.group();
+        this.activeKeyGroup = this.add.group({
+            runChildUpdate: true
+        });
+
 
         //this.map = this.createOldRoom("platformer-level-1", 18, 18, 45, 25);
 
@@ -91,6 +97,14 @@ class Platformer extends Phaser.Scene {
         //this.sprite.player = new Player(this, this.playerSpawn[0].x, this.playerSpawn[0].y, "pizza.png");
 
         this.playerGroup.add(this.sprite.player);
+
+        //Keyoverlap
+        this.physics.add.overlap(this.keyGroup, this.playerGroup, (obj1, obj2) => {
+            obj1.destroy();
+            let newKey = new Key(this, obj1.x, obj1.y, "texturesAtlas", 'tile_0027.png', obj2);
+            this.sprite.keys.push(newKey);
+            this.activeKeyGroup.add(newKey);
+        });
 
         //WaterOverlap
         this.physics.add.overlap(this.sprite.player, this.waterPool, (obj1, obj2) => {
@@ -377,11 +391,50 @@ class Platformer extends Phaser.Scene {
                 this.coingroup.add(coin);
             });
         }
+
+        let keys = map.createFromObjects("Objects", {
+            type: "keySpawn",
+            key: "texturesAtlas",
+            frame: 'tile_0027.png'
+        });
+
+        keys.map((key) => {
+            key.setScale(SCALE);
+            key.x *= SCALE;
+            key.y *= SCALE;
+            key.x += x;
+            key.y += y;
+
+            //let newKey = new Key(this, key.x, key.y, "texturesAtlas", 'tile_0027.png', this.sprite.player);
+            //key.destroy();
+            this.physics.world.enable(key, Phaser.Physics.Arcade.STATIC_BODY);
+            this.keyGroup.add(key);
+        });
+
+        //lockWall
+        let lockWall = map.createFromObjects("Objects", {
+            type: "lockWall",
+            key: "texturesAtlas",
+            frame: 'tile_0028.png'
+        });
+
+        lockWall.map((lockWall) => {
+            lockWall.scale = SCALE;
+            lockWall.scaleY = SCALE * 4;
+            lockWall.x *= SCALE;
+            lockWall.y *= SCALE;
+            lockWall.x += x;
+            lockWall.y += y;
+            this.physics.world.enable(lockWall, Phaser.Physics.Arcade.STATIC_BODY);
+            this.lockWallGroup.add(lockWall);
+        });
+
         let coins = map.createFromObjects("Objects", {
             type: "coin",
             key: "coin"
         });
 
+        //REMEMBER TO TURN COINS BACK TO COINS
         coins.map((coin) => {
             coin.scale = SCALE;
             coin.x *= SCALE;
