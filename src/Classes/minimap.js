@@ -93,8 +93,11 @@ class Minimap extends Phaser.Cameras.Scene2D.Camera {
 
     renderAroundTile(x, y) {
         this.renderTile(x, y);
-        console.log(x);
-        console.log(y);
+
+        //debug
+        if(game.config.physics.arcade.debug){
+            console.log("DB/Map: Rendering around tile at x: " + x + " y: " + y);
+        }
         if (this.tiles[y][x] == null) {
             return;
         }

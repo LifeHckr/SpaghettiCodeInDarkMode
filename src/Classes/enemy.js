@@ -31,7 +31,6 @@ class Enemy extends Phaser.GameObjects.PathFollower {
         if (type = 'sine') {
             this.buildSinePath(this.points1, pathLength, periods, amplitude, this.x, this.y);
         }
-        //console.log(this.points1);
         this.curve1 = new Phaser.Curves.Spline(this.points1);
         this.setPath(this.curve1);
         this.startFollow(this.startFollowOBJ1);

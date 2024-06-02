@@ -161,13 +161,15 @@ class Load extends Phaser.Scene {
          this.input.keyboard.on('keyup', function (event) {
             if (experimental.width == -1) {
                 experimental.width = parseInt(event.key);
-                console.log(experimental.width);  
             } else if (experimental.height == -1) {
                 experimental.height = parseInt(event.key);
-                console.log(experimental.height);
             } else if (experimental.height != -1 && experimental.branches == -1) {
                 experimental.branches = parseInt(event.key);
-                console.log(experimental.branches);
+            }
+
+            //debug
+            if (game.config.physics.arcade.debug) {
+                console.log("DB: Map settings changed!\nNew Width: " + experimental.width + "\nNew Height: " + experimental.height + "\nNew Branches: " + experimental.branches);
             }
          });
     }

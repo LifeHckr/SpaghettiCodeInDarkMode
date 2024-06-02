@@ -81,7 +81,11 @@ class Gun extends Phaser.GameObjects.Sprite {
                     this.scene.sprite.ammo[i].visible = true;
                 }
                 this.reloadTimer = 0;
-                console.log("reloaded");
+
+                //debug
+                if(game.config.physics.arcade.debug){
+                    console.log("DB/Gun: Reloaded");
+                }
             }
         }
 

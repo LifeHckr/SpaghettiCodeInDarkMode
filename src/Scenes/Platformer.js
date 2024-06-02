@@ -22,7 +22,13 @@ class Platformer extends Phaser.Scene {
         this.roomHeight = 30;
         this.levelMap = new LevelMap(experimental.width, experimental.height);
         this.levelMap.generateLevel(5, 7, experimental.branches);
-        console.log(this.levelMap);
+
+        //debug
+        if(game.config.physics.arcade.debug){
+            console.log("DB: Generated level map: ");
+            console.log(this.levelMap);
+        }
+
         //-----------------------------------
     }
 
@@ -111,25 +117,6 @@ class Platformer extends Phaser.Scene {
         my.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         my.keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         my.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
-        //debug key listener (assigned to D key)
-        if (game.config.physics.arcade.debug) {
-            this.input.keyboard.on('keydown-G', () => {
-                this.sprite.player.setDepth(0);
-                this.physics.world.drawDebug = this.physics.world.drawDebug ? false : true
-                this.physics.world.debugGraphic.clear();
-                this.minimap.renderAll();
-                console.log(this.sprite.player.mapX);
-                console.log(this.sprite.player.mapY);
-            }, this);
-            this.input.keyboard.on('keydown-P', () => {
-                this.camera.removeBounds();
-                this.sprite.player.y = -1000;
-                this.sprite.player.x = -1000;
-                this.mapCollider.destroy();
-                this.timer.time = 0;
-
-            }, this);
-        }
 
         //Signbutton- Set signtext, toggle sign text visibility
         this.input.keyboard.on('keydown-X', () => {
@@ -139,6 +126,62 @@ class Platformer extends Phaser.Scene {
                 this.sprite.signBoard.visible = !this.sprite.signBoard.visible;
             }
         }, this);
+
+
+//--------------------------------------
+//Debug---------------------------------
+        //debug key listener (assigned to G key)
+        this.input.keyboard.on('keydown-G', () => {
+
+            //toggle debug
+            game.config.physics.arcade.debug = game.config.physics.arcade.debug ? false : true;
+            this.physics.world.drawDebug = game.config.physics.arcade.debug;
+
+            if(game.config.physics.arcade.debug){
+               console.log(debugText);
+            }else{
+                console.log("Debug mode deactivated!");
+            }
+
+            //remove old bounding box if it exists
+            this.physics.world.debugGraphic.clear();
+        }, this);
+
+
+        //P key to teleport to the map
+        this.input.keyboard.on('keydown-P', () => {
+            //return if not debug
+            if (!game.config.physics.arcade.debug) {
+                return;
+            }
+
+            this.camera.removeBounds();
+            this.sprite.player.y = -1000;
+            this.sprite.player.x = -1000;
+            this.mapCollider.destroy();
+        }, this);
+
+        //M key to show the entire map
+        this.input.keyboard.on('keydown-M', () => {
+            //return if not debug
+            if (!game.config.physics.arcade.debug) {
+                return;
+            }
+
+            this.minimap.renderAll();
+        }, this);
+
+        //C key to show current player map coordinates
+        this.input.keyboard.on('keydown-C', () => {
+            //return if not debug
+            if (!game.config.physics.arcade.debug) {
+                return;
+            }
+
+            //show the player coordinates
+            console.log("DB: Player map coordinate: X:" + this.sprite.player.mapX + " Y:" + this.sprite.player.mapY);
+        }, this);
+
 //--------------------------------------
 
 //Camera------------------------------------

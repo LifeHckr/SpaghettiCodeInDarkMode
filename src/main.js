@@ -56,7 +56,20 @@ const enumList = {
     INAIR: 4,
     NOJUMP: 5
 };
-console.log(window.innerHeight);
-console.log(window.innerWidth);
-console.log(window.devicePixelRatio);
+
+const debugText = "Debug mode activated!" +
+        "\nDebug keys are now active:" +
+        "\nP: Teleport to map" +
+        "\nM: Reveal entire map" +
+        "\nC: Print player map coordinates";
+
 const game = new Phaser.Game(config);
+
+//debug print screen size
+if (game.config.physics.arcade.debug) {
+    console.log(debugText);
+
+    console.log("DB: Window Inner Height:" + window.innerHeight);
+    console.log("DB: Window Inner Width:" + window.innerWidth);
+    console.log("DB:Device Pixel Ratio:" + window.devicePixelRatio);
+}

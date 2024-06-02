@@ -72,7 +72,6 @@ class LevelTile {
     }
 
     closeLeft() {
-        //console.log(this);
         /*delete this.list.O;
         delete this.list.A;
         delete this.list.Y;
@@ -324,10 +323,13 @@ class LevelMap {
             this.levelMaxRooms = Math.min(Math.max(maxRooms, 2), this.rooms); //clamp, thing to clamp, min, max
         }
 
+        //Debug
+        if (game.config.physics.arcade.debug) {
+            console.log("DB: Level Minimum Length: " + this.levelMinLength);
+            console.log("DB: Level Maximum Length: " + this.levelMaxLength);
+            console.log("DB: Level Path Length: " + this.levelPathLen);
+        }
 
-        console.log(this.levelMinLength);
-        console.log(this.levelMaxLength);
-        console.log(this.levelPathLen);
         this.path = -1; //Placeholder
 
         //Init special categories
@@ -373,7 +375,6 @@ class LevelMap {
                 this.roomsToComplete.push(curTile);
                 curTile.type = "queued";
                 this.sectionCount++;
-                //console.log(this.sectionCount);
                 while(this.roomsToComplete.length > 0) {
                     curTile = this.roomsToComplete.pop();
                     curTile.section = this.sectionCount;
@@ -401,7 +402,6 @@ class LevelMap {
 
         //branch manager
         if (this.branchCounter <= 1) {
-            //console.log("branch managing");
             // bc = 0, bm = 0, walls < 2; bc = 1, bm = 1 walls < 3
             //room.closeBranching();
             let wallNum = room.walls;
@@ -427,7 +427,6 @@ class LevelMap {
             if (room[key] == "undef") {
                 if (this.rand.frac() * (this.openWeight + this.closedWeight) <= this.closedWeight) {
                     room[key] = "closed"
-                    //console.log("here");
                 } else {
                     room[key] = "open"
                 }
@@ -664,26 +663,18 @@ class LevelMap {
         //Traverse every tile it is open to
         let touchedTiles = [];
         this.getTilesInSection(startTile, touchedTiles);
-        //console.log(touchedTiles);
         //Find any remaining
         if (touchedTiles.length != section.tiles.length) {
             let difference = section.tiles.filter(x => !touchedTiles.includes(x));
-            //console.log(difference);
             //Draw paths to remaining
             difference.some(difTile => {
                 return touchedTiles.some(mainTile => {
                     if (this.getSquareDistBetween(difTile, mainTile) == 1) {
                         let direction = this.isNeighbor(difTile, mainTile);
                         difTile[direction] = "open";
-                        //console.log(difTile);
-                        //console.log(mainTile);
-                        //console.log(direction);
                         this.updateNeighbors(difTile);
-                        //this.trickyCounter++;
-                        //if (this.trickyCounter < 5) {
-                            this.validateSection(section);
-                            //console.log(this.trickyCounter);
-                        //}
+                        this.validateSection(section);
+
                         return true;
                     }
                 })
@@ -709,7 +700,6 @@ class LevelMap {
     //Gives tile its name
     //And determines if it will be a start, end, or (treasure) tile
     assignRooms(levelSection) { //Name :lefttoprightbottom
-        //console.log(levelSection.tiles);//e.g. CCCO : only bottom is open
         for (let tile of levelSection.tiles) {
             let name = "";
             if (tile.left == "closed") {
@@ -737,7 +727,7 @@ class LevelMap {
             }
             tile.name = name;
             if (game.config.physics.arcade.debug) {
-                console.log(tile.name);
+                console.log("DB: Added room \"" + tile.name + "\" to section " + tile.section);
             }
         }
 
@@ -805,7 +795,6 @@ class LevelMap {
                     }
 
                     if(isValid && tile != this.endRoom && tile != this.startRoom && this.getSquareDistBetween(this.startRoom, tile) == checkDist && tile.type != "treasure") {
-                        //console.log("Current CheckDist: " + checkDist);
                         treasureCount--;
                         tile.type = "treasure";
                         setTreasureRoom = true;
