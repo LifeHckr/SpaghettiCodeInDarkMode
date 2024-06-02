@@ -44,13 +44,49 @@ class Key extends Phaser.GameObjects.Sprite {
                 y: (this.following.body.y - 40) + Math.floor(Math.random()*20),
                 ease        : 'Linear.Out',
                 duration    : 10000/dist,
-                });
+            });
         }
 
 
     }
 
     unlockAnim(wall) {
+        this.active = false;
+        this.farTween.stop();
+        this.closeTween.stop();
+        this.active = false;
+        this.closeTween = this.scene.tweens.add({
+            targets     : this,
+            x:  wall.x + 50,
+            y: wall.y,
+            ease        : 'Linear.Out',
+            duration    : 1000,
+            onComplete: () => {
+                this.scene.tweens.add({
+                    targets     : this,
+                    x:  wall.x - 50,
+                    y: wall.y,
+                    ease        : 'Linear.Out',
+                    duration    : 150,
+                    onComplete: () => {
+                        this.scene.tweens.add({
+                            targets     : wall,
+                            x:  wall.x - 2000,
+                            y: wall.y,
+                            ease        : 'Linear.Out',
+                            duration    : 300,
+                            onUpdate: () => {
+                                wall.angle += 20;
+                            },
+                            onComplete: () => {
+                                this.destroy();
+                                wall.destroy();
+                            }
+                        });
+                    }
+                });
+            }
+        });
 
     }
 }
