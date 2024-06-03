@@ -9,7 +9,7 @@ class Gun extends Phaser.GameObjects.Sprite {
         this.startingAmmo = 3;
         this.currentAmmo = this.startingAmmo;
         this.maxAmmo = this.currentAmmo;
-        this.reloadLength = 90 //ticks ms = #/60 * 1000
+        this.reloadLength = 950 //ticks ms = #/60 * 1000
         this.reloadTimer = 0;
         this.interruptReload = false;
 
