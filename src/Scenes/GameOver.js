@@ -34,7 +34,7 @@ class GameOver extends Phaser.Scene {
         } else {
             my.sprite.g1 = this.add.text(0, 0, "Your Pizza Got Cold!", { fontFamily: 'font1', fontSize: '45px', fill: '#F00000', stroke: '#FFFFFF', strokeThickness: 14 }).setOrigin(.5).setPosition(game.config.width/2, game.config.height/2 - 100);
         }
-        my.sprite.credits = this.add.text(0, 0, "Credits!\nJarod Spangler: Lead Programmer and Game Designer\nThomas Wessel: Level Designer, General Programming, Enemy Programmer\nJack Wilhelm: Gun Design, Dash Design, Credits, End Screen\nKenny Assests: Sounds, Particles, Assests", { fontFamily: 'font1', fontSize: '20px', fill: '#000000', stroke: '#FFFFFF', strokeThickness: 14 }).setOrigin(.5).setPosition(game.config.width/2-50, game.config.height/2 - 250);
+        my.sprite.credits = this.add.text(0, 0, "Credits!\nJarod Spangler: Lead Programmer and Game Designer\nThomas Wessel: Level Designer, General Programming, Enemy Programmer\nJack Wilhelm: Gun Design/Programming, Dash Design/Programming, Credits, End Screen\nKenny Assests: Sounds, Particles, Assests", { fontFamily: 'font1', fontSize: '20px', fill: '#000000', stroke: '#FFFFFF', strokeThickness: 14 }).setOrigin(.5).setPosition(game.config.width/2-50, game.config.height/2 - 250);
 
         this.tweens.add({
             targets     : my.sprite.rst,
