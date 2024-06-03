@@ -31,8 +31,6 @@ class Bullet extends Phaser.Physics.Arcade.Sprite {
     }
 
     makeInactive() {
-        //this.visible = false;
-        //this.active = false;
         this.destroy();
     }
 

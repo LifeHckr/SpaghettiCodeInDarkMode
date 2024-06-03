@@ -5,6 +5,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.scene = scene;
         this.mapX;
         this.mapY;
+        this.keys = [];
 
         this.signals = scene.events;
 
@@ -24,7 +25,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.DASHVELOCITY = 2000;
         this.DASHLENGTH = 600; //in ms
         this.FRAMEFUDGE = game.config.physics.arcade.fps / 30;//I wanted to get 60 & 30 fps to work
-        this.HITBOXSIZE = 16; //I noticed there is some jank around corners, this temporarily sort of fixes it
+        this.HITBOXSIZE = 20; //I noticed there is some jank around corners, this temporarily sort of fixes it
+        this.sillyTimeTime = 135;
 
     //States
         this.moving = false; //is player "moving"
@@ -35,6 +37,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.signTouch = false;//false = init, otherwise is last touched sign
         this.knockback = false;//is player under enemy knockback
         this.bumpTimed = false;//did the player bonk
+        this.dashEnable = false;
 
         this.mapX = -1;
         this.mapY = -1;
@@ -42,9 +45,20 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     //Physics Set up
         //this.setCollideWorldBounds(true);
         this.body.setMaxVelocity(this.MAXVELOCITYX, this.MAXVELOCITYY);
+        this.setBodySize(this.HITBOXSIZE, this.HITBOXSIZE);
 
     //PlayerCollisions
         scene.mapCollider = scene.physics.add.collider(this, scene.collidesTrue);
+    //LockWallcollider
+        scene.lockWallCollider = scene.physics.add.collider(this, scene.lockWallGroup, (player, wall) => {
+            if (wall.unlocking) {
+
+            } else if (player.keys.length > 0) {
+                wall.unlocking = true;
+                let animingKey = player.keys.pop();
+                animingKey.unlockAnim(wall);
+            }
+        });
     //OneWayCollisions- Checks if player is sufficiently above a one way to enable
         scene.extraCollider = scene.physics.add.collider(this, scene.oneWays, null, function (player, tile) {
             return((player.y + player.displayHeight/2) <= (tile.layer.tilemapLayer.tileToWorldY(tile.y)));
@@ -66,7 +80,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     //Shooting listener
         this.signals.on("hasShot", (firedGun, tempVec) => {
             this.facing = enumList.SHOOTING;
-            this.setVelocity(tempVec.x * this.MAXVELOCITYX * 2, tempVec.y * this.MAXVELOCITYY);
+            this.setVelocity(tempVec.x * this.MAXVELOCITYX, tempVec.y * this.MAXVELOCITYY);
         });
     //gun init
         this.gun = new Gun(this.scene, this.x, this.y, "fondoodler", null , this).setScale(SCALE);
@@ -128,7 +142,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
 //DASHMOVE
         if(Phaser.Input.Keyboard.JustDown(my.keyE)) {
-            if (this.running > 1 && !this.knockback) {
+            if (this.dashEnable && this.running > 1 && !this.knockback) {
                 this.doDash();
             }
         }
@@ -248,7 +262,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                     
             //Give the player some leeway before disabling jump, for extra height
                 this.sillyTime = this.scene.time.delayedCall(
-                    135,                // ms
+                    this.sillyTimeTime,                // ms
                     ()=>{
                         this.air = enumList.NOJUMP
                 });
@@ -389,6 +403,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.mapX = Math.floor(this.x / this.scene.roomWidth / SCALE / 18);
             this.scene.minimap.mapUpdate(this.mapX, this.mapY);
 
+        }
+    }
+
+    doItemPickup(funcsArray) {
+        for (let func of funcsArray) {
+            func(this);
         }
     }
 }

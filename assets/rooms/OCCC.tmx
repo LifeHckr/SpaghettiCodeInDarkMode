@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="18" tileheight="18" infinite="0" nextlayerid="9" nextobjectid="20">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="18" tileheight="18" infinite="0" nextlayerid="9" nextobjectid="21">
  <editorsettings>
   <export target="OCCC.tmj" format="json"/>
  </editorsettings>
@@ -400,6 +400,7 @@
   <object id="17" name="keySpawn" type="keySpawn" x="756" y="504" width="18" height="18"/>
   <object id="18" name="treasure" type="treasure" x="1026" y="504" width="18" height="18"/>
   <object id="19" name="lockWall" type="lockWall" gid="29" x="972" y="522" width="18" height="72"/>
+  <object id="20" name="keySpawn" type="keySpawn" x="144" y="90" width="18" height="18"/>
  </objectgroup>
  <layer id="5" name="Collision-Layer" class="collider" width="60" height="30" opacity="0.3">
   <data encoding="csv">

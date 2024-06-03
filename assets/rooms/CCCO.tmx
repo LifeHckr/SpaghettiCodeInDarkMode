@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="18" tileheight="18" infinite="0" nextlayerid="9" nextobjectid="25">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="18" tileheight="18" infinite="0" nextlayerid="9" nextobjectid="26">
  <editorsettings>
   <export target="CCCO.tmj" format="json"/>
  </editorsettings>
@@ -392,11 +392,11 @@
 </data>
  </layer>
  <objectgroup id="4" name="Objects">
-  <object id="13" name="1" type="coin" gid="152" x="143.08" y="71.8781" width="18" height="18"/>
   <object id="14" name="spawner" type="spawner" x="126" y="162" width="18" height="18"/>
   <object id="15" name="treasure" type="treasure" x="1026" y="72" width="18" height="18"/>
   <object id="18" name="keySpawn" type="keySpawn" x="36" y="54" width="18" height="18"/>
   <object id="24" name="lockWall" type="lockWall" gid="29" x="882" y="144" width="18" height="72"/>
+  <object id="25" name="Is there a key in this room?" type="sign" gid="87" x="756" y="522" width="18" height="18"/>
  </objectgroup>
  <layer id="7" name="Top-Layer" width="60" height="30">
   <data encoding="csv">

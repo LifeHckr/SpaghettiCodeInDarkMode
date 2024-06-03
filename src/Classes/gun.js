@@ -2,15 +2,19 @@ class Gun extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, texture, frame, attachedSprite) {
         super(scene, x, y, texture, frame);
         this.player = attachedSprite;
-        this.shootCooldown = 750; //ms
+        this.player.shootCooldown = 750; //ms
         this.onCooldown = false;
         this.shootSignal = scene.events;
 
+        this.ammoDraw = 0;
         this.startingAmmo = 3;
-        this.currentAmmo = this.startingAmmo;
-        this.maxAmmo = this.currentAmmo;
-        this.reloadLength = 950 //ticks ms = #/60 * 1000
-        this.reloadTimer = 0;
+        this.currentAmmo = 0;
+        this.player.maxAmmo = this.startingAmmo;
+        this.player.reloadLength = 1500; //ms
+        this.reloadTimer = scene.time.addEvent({
+            delay: this.player.reloadLength,
+            paused: true
+        });
         this.interruptReload = false;
 
         this.newOriginY = 1;
@@ -20,7 +24,6 @@ class Gun extends Phaser.GameObjects.Sprite {
         //Mouse move listener
         this.scene.input.on('pointermove', (pointer) => {
             this.target = Phaser.Math.Angle.Between(this.x, this.y, pointer.worldX, pointer.worldY);
-            
         });
 
     //BulletGroupInit---------------------------------
@@ -31,26 +34,18 @@ class Gun extends Phaser.GameObjects.Sprite {
             //maxSize: 2
         });
 
-        /*this.bulletGroup.createMultiple({
-            classType: Bullet,
-            active: false,
-            key: this.bulletGroup.defaultKey,
-            repeat: this.bulletGroup.maxSize-1
-        });
-        scene.bulletGroup.propertyValueSet("speed", 1);*/
     //-----------------------------------------------
 
     //Shoot--------------------------------------------
-        scene.input.on('pointerdown', function (pointer)   {    
-            this.shoot(pointer); 
+        scene.input.on('pointerdown', function (pointer)   {
+            this.shoot(pointer);
         }, this);
 
     //Create Ammo Sprites----------------------------------------
         //Ammo Sprites
         this.scene.sprite.ammo = [];
-        for (let i = 0; i < this.maxAmmo; i++) {
-            this.scene.sprite.ammo.push(this.scene.add.sprite(150 + (50 * i), 600, "kenny-cheese").setDepth(10).setScrollFactor(0).setScale(SCALE + 1));
-        }
+        this.drawAmmo(this.player.maxAmmo);
+        this.reloadBullet(this.player.maxAmmo);
     //-----------------------------------------------
 
         this.scene.add.existing(this);
@@ -72,26 +67,48 @@ class Gun extends Phaser.GameObjects.Sprite {
             ease        : 'Linear.In',
             duration    : 30
         });
-        
-        if(this.currentAmmo != this.maxAmmo) {
-            this.reloadTimer += 1;
-            if (this.reloadTimer >= this.reloadLength) {
-                this.currentAmmo += 1;
-                for (let i = 0; i < this.currentAmmo; i++) {
-                    this.scene.sprite.ammo[i].visible = true;
-                }
-                this.reloadTimer = 0;
 
-                //debug
-                if(game.config.physics.arcade.debug && this.reloadLength !== 0){
-                    console.log("DB/Gun: Reloaded");
-                }
+        if (this.scene.sprite.ammo.length !== this.player.maxAmmo) {
+            if (this.scene.sprite.ammo.length < this.player.maxAmmo) {
+                this.drawAmmo(1);
+                this.reloadBullet(1);
+            } else if (this.currentAmmo > this.player.maxAmmo) {
+                this.deLoadBullet();
+                this.reloadTimer.reset({
+                    delay: this.player.reloadLength
+                });
             }
+        }
+
+
+
+        if(this.currentAmmo < this.player.maxAmmo) {
+            this.reloadTimer.paused = false;
+            if (this.reloadTimer.getRemaining() == 0) {
+                this.reloadBullet(1);
+            }
+        }
+
+        if (this.currentAmmo === this.player.maxAmmo) {
+            this.reloadTimer.paused = true;
         }
 
     }
 
     shoot(pointer) {
+        if (game.config.physics.arcade.debug) {
+            let d = new Date();
+            my.log.push({
+                message: "DB: Logging Gun Stats",
+                timeStamp: d.toLocaleTimeString(undefined, {hour: "2-digit", minute: "2-digit", second: "2-digit"}) + `.${d.getMilliseconds()}`,
+                maxAmmo: this.player.maxAmmo,
+                currentAmmo: this.currentAmmo,
+                remainingTime: this.reloadTimer.getRemaining(),
+                reloadLength: this.player.reloadLength,
+                shootCooldown: this.player.shootCooldown
+            });
+        }
+
         if (!this.onCooldown && this.currentAmmo > 0) {
             //let bullet = this.bulletGroup.getFirstDead();
             let bullet = this.bulletGroup.create(this.x,this.y);
@@ -102,14 +119,14 @@ class Gun extends Phaser.GameObjects.Sprite {
 
                 //Time till player can shoot again
                 this.scene.time.addEvent({
-                    delay: this.shootCooldown,                // ms
+                    delay: this.player.shootCooldown,                // ms
                     callback: () =>  {
                         this.onCooldown = false;
                     },
                 });
 
                 //Create a normalized vector to give things consistent speed
-                let tempVec = new Phaser.Math.Vector2((game.config.width/2 - game.input.mousePointer.x), (game.config.height/2 - game.input.mousePointer.y)).normalize();
+                let tempVec = new Phaser.Math.Vector2((this.player.x - game.input.mousePointer.worldX), (this.player.y - game.input.mousePointer.worldY)).normalize();
 
                 bullet.fire(tempVec, this.getRightCenter());
 
@@ -123,11 +140,7 @@ class Gun extends Phaser.GameObjects.Sprite {
                 this.doParticle(tempVec);
                 this.scene.sound.play("blast");
 
-                this.currentAmmo -= 1;
-                this.scene.sprite.ammo[this.currentAmmo].visible = false;
-                if (this.interruptReload) {
-                    this.reloadTimer = 0;
-                }
+                this.deLoadBullet();
             }
         }
     }
@@ -148,5 +161,37 @@ class Gun extends Phaser.GameObjects.Sprite {
             duration: 10,
 
         });
+    }
+
+    drawAmmo(num) {
+        for (let i = 0; i < num; i++) {
+            this.scene.sprite.ammo.push(this.scene.add.sprite(150 + (50 * this.scene.sprite.ammo.length), 600, "kenny-cheese").setDepth(10).setScrollFactor(0).setScale(SCALE + 1).setVisible(false));
+            this.ammoDraw++;
+        }
+    }
+
+    reloadBullet(num) {
+        this.currentAmmo += num;
+        for (let i = 0; i < this.currentAmmo; i++) {
+            if (this.scene.sprite.ammo[i]) {
+                this.scene.sprite.ammo[i].visible = true;
+            }
+        }
+        this.reloadTimer.reset({
+            delay: this.player.reloadLength,
+        });
+    }
+
+    deLoadBullet() {
+        this.currentAmmo -= 1;
+        if (this.scene.sprite.ammo[this.currentAmmo]) {
+            this.scene.sprite.ammo[this.currentAmmo].visible = false;
+        }
+
+        if (this.interruptReload) {
+            this.reloadTimer.reset({
+                delay: this.player.reloadLength
+            });
+        }
     }
 }

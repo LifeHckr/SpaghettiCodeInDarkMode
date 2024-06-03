@@ -132,18 +132,6 @@
          "name":"Objects",
          "objects":[
                 {
-                 "gid":152,
-                 "height":18,
-                 "id":13,
-                 "name":"1",
-                 "rotation":0,
-                 "type":"coin",
-                 "visible":true,
-                 "width":18,
-                 "x":143.08,
-                 "y":71.8781
-                }, 
-                {
                  "height":18,
                  "id":14,
                  "name":"spawner",
@@ -187,6 +175,18 @@
                  "width":18,
                  "x":882,
                  "y":144
+                }, 
+                {
+                 "gid":87,
+                 "height":18,
+                 "id":25,
+                 "name":"Is there a key in this room?",
+                 "rotation":0,
+                 "type":"sign",
+                 "visible":true,
+                 "width":18,
+                 "x":756,
+                 "y":522
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -236,7 +236,7 @@
          "y":0
         }],
  "nextlayerid":9,
- "nextobjectid":25,
+ "nextobjectid":26,
  "orientation":"orthogonal",
  "properties":[
         {

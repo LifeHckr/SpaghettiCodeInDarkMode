@@ -21,7 +21,8 @@ class Platformer extends Phaser.Scene {
         this.roomWidth = 60;
         this.roomHeight = 30;
         this.levelMap = new LevelMap(experimental.width, experimental.height);
-        this.levelMap.generateLevel(5, 7, experimental.branches);
+        this.levelMap.generateLevel(5, 7, experimental.branches, undefined, undefined, undefined, undefined, undefined);
+        this.itemPool = new ItemPool((this.levelMap.rand));
 
         //debug
         if(game.config.physics.arcade.debug){
@@ -47,8 +48,6 @@ class Platformer extends Phaser.Scene {
         //Background
         this.bg1 = this.add.tileSprite(game.config.width, -500, game.config.width, game.config.height, 'bgGrass').setScale(4).setScrollFactor(.05).setScale(5).setDepth(-10);
 
-
-
 //----------------------------------------------------------------
 
 //TILEMAP--------------------------------------------------------------
@@ -72,6 +71,13 @@ class Platformer extends Phaser.Scene {
         this.signGroup = this.add.group();
         this.collidesTrue = this.add.group();
         this.oneWays = this.add.group();
+        this.lockWallGroup = this.add.group();
+        this.treasureGroup = this.add.group();
+        this.keyGroup = this.add.group();
+        this.activeKeyGroup = this.add.group({
+            runChildUpdate: true
+        });
+
 
         //this.map = this.createOldRoom("platformer-level-1", 18, 18, 45, 25);
 
@@ -91,6 +97,14 @@ class Platformer extends Phaser.Scene {
         //this.sprite.player = new Player(this, this.playerSpawn[0].x, this.playerSpawn[0].y, "pizza.png");
 
         this.playerGroup.add(this.sprite.player);
+
+        //Keyoverlap
+        this.physics.add.overlap(this.keyGroup, this.playerGroup, (obj1, obj2) => {
+            obj1.destroy();
+            let newKey = new Key(this, obj1.x, obj1.y, "texturesAtlas", 'tile_0027.png', obj2);
+            this.sprite.player.keys.push(newKey);
+            this.activeKeyGroup.add(newKey);
+        });
 
         //WaterOverlap
         this.physics.add.overlap(this.sprite.player, this.waterPool, (obj1, obj2) => {
@@ -118,34 +132,29 @@ class Platformer extends Phaser.Scene {
         my.keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         my.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
 
-        //Signbutton- Set signtext, toggle sign text visibility
-        this.input.keyboard.on('keydown-X', () => {
-            if (this.signInit) {
-                this.sprite.signText.text = this.sprite.player.signTouch.name;
-                this.sprite.signText.visible = !this.sprite.signText.visible;
-                this.sprite.signBoard.visible = !this.sprite.signBoard.visible;
-            }
-        }, this);
 
 
 //--------------------------------------
 //Debug---------------------------------
-        //debug key listener (assigned to G key)
-        this.input.keyboard.on('keydown-G', () => {
+        //debug key listener (assigned to G key) Only available if debug was on on game load
+        if (game.config.physics.arcade.debug) {
+            this.input.keyboard.on('keydown-G', () => {
 
-            //toggle debug
-            game.config.physics.arcade.debug = game.config.physics.arcade.debug ? false : true;
-            this.physics.world.drawDebug = game.config.physics.arcade.debug;
+                //toggle debug
+                game.config.physics.arcade.debug = game.config.physics.arcade.debug ? false : true;
+                this.physics.world.drawDebug = game.config.physics.arcade.debug;
 
-            if(game.config.physics.arcade.debug){
-               console.log(debugText);
-            }else{
-                console.log("Debug mode deactivated!");
-            }
+                if(game.config.physics.arcade.debug){
+                    console.log(debugText);
+                }else{
+                    console.log("Debug mode deactivated!");
+                }
 
-            //remove old bounding box if it exists
-            this.physics.world.debugGraphic.clear();
-        }, this);
+                //remove old bounding box if it exists
+                this.physics.world.debugGraphic.clear();
+            }, this);
+        }
+
 
 
         //P key to teleport to the map
@@ -190,8 +199,46 @@ class Platformer extends Phaser.Scene {
             }
 
             console.log("DB: Gun cooldown disabled");
-            this.sprite.player.gun.reloadLength = 0;
-            this.sprite.player.gun.shootCooldown = 0;
+            this.sprite.player.reloadLength = 1;
+            this.sprite.player.shootCooldown = 0;
+            this.sprite.player.doItemPickup([(player) => {
+                player.maxAmmo += 2;
+            }])
+        }, this);
+
+        //O key to spawn a key
+        this.input.keyboard.on('keydown-O', () => {
+            //return if not debug
+            if (!game.config.physics.arcade.debug) {
+                return;
+            }
+
+            //let newKey = new Key(this, 0, 0, "texturesAtlas", 'tile_0027.png', this.sprite.player);
+            let newTreasure = new PickupPool(this, this.sprite.player.x + (60 * this.sprite.player.facing), this.sprite.player.y, null, null, this.levelMap.rand);
+
+            console.log("DB: Key and Chest Spawned");
+        }, this);
+
+        //0 key to reduce timer
+        this.input.keyboard.on('keydown-ZERO', () => {
+            //return if not debug
+            if (!game.config.physics.arcade.debug) {
+                return;
+            }
+
+            this.timer.time -= 75;
+            console.log("DB: Timer reduced by 75");
+        }, this)
+
+        //0 key to print log
+        this.input.keyboard.on('keydown-ONE', () => {
+            //return if not debug
+            if (!game.config.physics.arcade.debug) {
+                return;
+            }
+
+            console.log("DB:Print Log");
+            console.log(my.log);
         }, this);
 
 //--------------------------------------
@@ -237,7 +284,7 @@ class Platformer extends Phaser.Scene {
         this.time.delayedCall(
             734,                // ms
             ()=>{
-                my.bgm.play({ loop:true, seek: 100, rate: 1});
+                my.bgm.play({ loop:true, seek: 100, rate: 1, volume: 0.75});
             }
         )
         my.bgm.rateVar = 1;
@@ -359,29 +406,101 @@ class Platformer extends Phaser.Scene {
         this.animatedTiles.init(map);
 
         //Collection Layer------------------------------------------------------------------------
-        //COINS
+
+        //Treasure rooms
         if (type == "treasure") {
+
+            //Treasure rooms always hae an extra collectable
             let coins = map.createFromObjects("Objects", {
                 type: "spawner",
                 key: "coin"
             });
 
-            coins.map((coin) => {
-                coin.scale = SCALE;
-                coin.x *= SCALE;
-                coin.y *= SCALE;
-                coin.x += x;
-                coin.y += y;
-                this.physics.world.enable(coin, Phaser.Physics.Arcade.STATIC_BODY);
-                coin.play('coinTurn');
-                this.coingroup.add(coin);
+            coins.map((key) => {
+                key.setScale(SCALE);
+                key.x *= SCALE;
+                key.y *= SCALE;
+                key.x += x;
+                key.y += y;
+
+                let newKey = new PickupPool(this, key.x, key.y, null, null, this.levelMap.rand);
+                key.destroy();
+            });
+
+            //lockWall
+            let lockWall = map.createFromObjects("Objects", {
+                type: "lockWall",
+                key: "texturesAtlas",
+                frame: 'tile_0028.png'
+            });
+
+            lockWall.map((lockWall) => {
+                lockWall.scale = SCALE;
+                lockWall.scaleY = SCALE * 4;
+                lockWall.x *= SCALE;
+                lockWall.y *= SCALE;
+                lockWall.x += x;
+                lockWall.y += y;
+                lockWall.unlocking = false;
+                this.physics.world.enable(lockWall, Phaser.Physics.Arcade.STATIC_BODY);
+                this.lockWallGroup.add(lockWall);
+            });
+
+            //treasure
+            let treasure = map.createFromObjects("Objects", {
+                type: "treasure",
+                key: "kenny-chest"
+            });
+
+            treasure.map((treasure) => {
+                treasure.scale = SCALE;
+                treasure.x *= SCALE;
+                treasure.y *= SCALE;
+                treasure.x += x;
+                treasure.y += y;
+                let newTreasure = new Sign(this, treasure.x, treasure.y, "kenny-chest", undefined, null, "chest");
+                this.physics.world.enable(newTreasure, Phaser.Physics.Arcade.STATIC_BODY);
+                this.treasureGroup.add(newTreasure);
+                treasure.destroy();
             });
         }
-        let coins = map.createFromObjects("Objects", {
+
+        //General Pickups
+        let keys = map.createFromObjects("Objects", {
+            type: "keySpawn",
+            key: "texturesAtlas",
+            frame: 'tile_0027.png'
+        });
+        let chancesToFail = keys.length;
+        keys.map((key) => {
+
+            //Allow rooms to have multiple collectible spots
+            //Currently each spot has a 1/(number of spots) chance to spawn a pickup
+            //Each unsuccessful spawn increases the chance, up to guaranteeing atleast 1 pickup spawns in each room
+            let chance = this.levelMap.rand.integerInRange(1, chancesToFail);
+            if (chance == 1) {
+                chancesToFail--;
+                key.setScale(SCALE);
+                key.x *= SCALE;
+                key.y *= SCALE;
+                key.x += x;
+                key.y += y;
+
+                let newKey = new PickupPool(this, key.x, key.y, null, null, this.levelMap.rand);
+            } else {
+                chancesToFail++;
+            }
+
+            key.destroy();
+        });
+
+        //"Coins"
+        /*let coins = map.createFromObjects("Objects", {
             type: "coin",
             key: "coin"
         });
 
+        //REMEMBER TO TURN COINS BACK TO COINS
         coins.map((coin) => {
             coin.scale = SCALE;
             coin.x *= SCALE;
@@ -394,8 +513,7 @@ class Platformer extends Phaser.Scene {
             let newSign = new Sign(this, coin.x, coin.y, "sign", undefined, coin.name);
             this.signGroup.add(newSign);
             coin.destroy();
-        });
-
+        });*/
 
         //SIGNS
         let signs = map.createFromObjects("Objects", {
@@ -432,6 +550,7 @@ class Platformer extends Phaser.Scene {
                 });
             }
         }
+
         //Enemy
         let enemySpawn = map.createFromObjects("Objects", {
             type: "enemSpawn",
@@ -450,6 +569,7 @@ class Platformer extends Phaser.Scene {
             this.enemygroup.add(newEnemy);
             enemy.destroy();
         });
+
         //Water
         if (type == "endRoom") {
             this.waterPool = map.createFromObjects("Objects", {
@@ -470,7 +590,7 @@ class Platformer extends Phaser.Scene {
         }
 
         return(map);
-    }
+    }//end createRoom
 
     createEmpty(key, tileWidth, tileHeight, x, y, type) {
         let map = this.add.tilemap(key, tileWidth, tileHeight);

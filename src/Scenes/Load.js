@@ -28,7 +28,7 @@ class Load extends Phaser.Scene {
         this.load.image("pizza-face", "pizza-face.png");
         this.load.image("kenny-pizza", "tile_0106.png");
         this.load.image("kenny-cheese", "tile_0105.png");
-
+        this.load.image("kenny-chest", "tile_0061.png");
 
         //Game Over
         this.load.image("meteor1", "spaceMeteors_004.png");

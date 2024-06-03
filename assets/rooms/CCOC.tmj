@@ -44,6 +44,85 @@
          "y":0
         }, 
         {
+         "draworder":"topdown",
+         "id":4,
+         "name":"Objects",
+         "objects":[
+                {
+                 "gid":152,
+                 "height":18,
+                 "id":13,
+                 "name":"1",
+                 "rotation":0,
+                 "type":"coin",
+                 "visible":true,
+                 "width":18,
+                 "x":432,
+                 "y":144
+                }, 
+                {
+                 "height":18,
+                 "id":14,
+                 "name":"spawner",
+                 "rotation":0,
+                 "type":"spawner",
+                 "visible":true,
+                 "width":18,
+                 "x":72,
+                 "y":126
+                }, 
+                {
+                 "height":18,
+                 "id":15,
+                 "name":"keySpawn",
+                 "rotation":0,
+                 "type":"keySpawn",
+                 "visible":true,
+                 "width":18,
+                 "x":36,
+                 "y":486
+                }, 
+                {
+                 "height":18,
+                 "id":17,
+                 "name":"treasure",
+                 "rotation":0,
+                 "type":"treasure",
+                 "visible":true,
+                 "width":18,
+                 "x":918,
+                 "y":450
+                }, 
+                {
+                 "gid":29,
+                 "height":72,
+                 "id":18,
+                 "name":"lockWall",
+                 "rotation":0,
+                 "type":"lockWall",
+                 "visible":true,
+                 "width":18,
+                 "x":792,
+                 "y":486
+                }, 
+                {
+                 "height":18,
+                 "id":19,
+                 "name":"keySpawn",
+                 "rotation":0,
+                 "type":"keySpawn",
+                 "visible":true,
+                 "width":18,
+                 "x":684,
+                 "y":252
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
          "data":[5, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 143, 6,
             124, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 122,
             124, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 122,
@@ -168,74 +247,6 @@
          "y":0
         }, 
         {
-         "draworder":"topdown",
-         "id":4,
-         "name":"Objects",
-         "objects":[
-                {
-                 "gid":152,
-                 "height":18,
-                 "id":13,
-                 "name":"1",
-                 "rotation":0,
-                 "type":"coin",
-                 "visible":true,
-                 "width":18,
-                 "x":432,
-                 "y":144
-                }, 
-                {
-                 "height":18,
-                 "id":14,
-                 "name":"spawner",
-                 "rotation":0,
-                 "type":"spawner",
-                 "visible":true,
-                 "width":18,
-                 "x":72,
-                 "y":126
-                }, 
-                {
-                 "height":18,
-                 "id":15,
-                 "name":"keySpawn",
-                 "rotation":0,
-                 "type":"keySpawn",
-                 "visible":true,
-                 "width":18,
-                 "x":36,
-                 "y":486
-                }, 
-                {
-                 "height":18,
-                 "id":17,
-                 "name":"treasure",
-                 "rotation":0,
-                 "type":"treasure",
-                 "visible":true,
-                 "width":18,
-                 "x":918,
-                 "y":450
-                }, 
-                {
-                 "gid":29,
-                 "height":72,
-                 "id":18,
-                 "name":"lockWall",
-                 "rotation":0,
-                 "type":"lockWall",
-                 "visible":true,
-                 "width":18,
-                 "x":792,
-                 "y":486
-                }],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "x":0,
-         "y":0
-        }, 
-        {
          "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -277,7 +288,7 @@
          "y":0
         }],
  "nextlayerid":9,
- "nextobjectid":19,
+ "nextobjectid":20,
  "orientation":"orthogonal",
  "properties":[
         {

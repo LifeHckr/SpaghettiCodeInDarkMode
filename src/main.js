@@ -46,7 +46,7 @@ var experimental = {
     branches: -1
 }
 const SCALE = 2.0;
-var my = {sprite: {}, text: {}};
+var my = {sprite: {}, text: {}, log: []};
 const enumList = {
     RIGHT: 1,
     LEFT: -1,
@@ -62,7 +62,13 @@ const debugText = "Debug mode activated!" +
         "\nP: Teleport to map" +
         "\nM: Reveal entire map" +
         "\nC: Print player map coordinates" +
-        "\nU: Disable gun cooldown";
+        "\nU: Disable gun cooldown" +
+        "\n0: Reduce Timer by 75" +
+        "\n1: Display generation log" +
+        "\nO: Spawn Pickup";
+
+
+
 
 const game = new Phaser.Game(config);
 

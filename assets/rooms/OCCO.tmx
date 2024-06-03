@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="18" tileheight="18" infinite="0" nextlayerid="8" nextobjectid="20">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="18" tileheight="18" infinite="0" nextlayerid="8" nextobjectid="24">
  <editorsettings>
   <export target="OCCO.tmj" format="json"/>
  </editorsettings>
@@ -329,6 +329,10 @@
   <object id="17" name="keySpawn" type="keySpawn" x="360" y="36" width="18" height="18"/>
   <object id="18" name="treasure" type="treasure" x="1026" y="72" width="18" height="18"/>
   <object id="19" name="lockWall" type="lockWall" gid="29" x="954" y="90" width="18" height="72"/>
+  <object id="20" name="keySpawn" type="keySpawn" x="1026" y="486" width="18" height="18"/>
+  <object id="21" name="keySpawn" type="keySpawn" x="1026" y="324" width="18" height="18"/>
+  <object id="22" name="keySpawn" type="keySpawn" x="1026" y="252" width="18" height="18"/>
+  <object id="23" name="keySpawn" type="keySpawn" x="1022.33" y="393.333" width="18" height="18"/>
  </objectgroup>
  <layer id="7" name="Top-Layer" width="60" height="30">
   <properties>
