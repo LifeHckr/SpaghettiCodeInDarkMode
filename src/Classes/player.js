@@ -26,6 +26,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.DASHLENGTH = 600; //in ms
         this.FRAMEFUDGE = game.config.physics.arcade.fps / 30;//I wanted to get 60 & 30 fps to work
         this.HITBOXSIZE = 20; //I noticed there is some jank around corners, this temporarily sort of fixes it
+        this.sillyTimeTime = 135;
 
     //States
         this.moving = false; //is player "moving"
@@ -77,7 +78,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     //Shooting listener
         this.signals.on("hasShot", (firedGun, tempVec) => {
             this.facing = enumList.SHOOTING;
-            this.setVelocity(tempVec.x * this.MAXVELOCITYX * 2, tempVec.y * this.MAXVELOCITYY);
+            this.setVelocity(tempVec.x * this.MAXVELOCITYX, tempVec.y * this.MAXVELOCITYY);
         });
     //gun init
         this.gun = new Gun(this.scene, this.x, this.y, "fondoodler", null , this).setScale(SCALE);
@@ -259,7 +260,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                     
             //Give the player some leeway before disabling jump, for extra height
                 this.sillyTime = this.scene.time.delayedCall(
-                    135,                // ms
+                    this.sillyTimeTime,                // ms
                     ()=>{
                         this.air = enumList.NOJUMP
                 });
@@ -400,6 +401,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.mapX = Math.floor(this.x / this.scene.roomWidth / SCALE / 18);
             this.scene.minimap.mapUpdate(this.mapX, this.mapY);
 
+        }
+    }
+
+    doItemPickup(funcsArray) {
+        for (let func of funcsArray) {
+            func(this);
         }
     }
 }

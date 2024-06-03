@@ -21,7 +21,7 @@ class Platformer extends Phaser.Scene {
         this.roomWidth = 60;
         this.roomHeight = 30;
         this.levelMap = new LevelMap(experimental.width, experimental.height);
-        this.levelMap.generateLevel(5, 7, experimental.branches, undefined, undefined, undefined, undefined, "hello");
+        this.levelMap.generateLevel(5, 7, experimental.branches, undefined, undefined, undefined, undefined, undefined);
         this.itemPool = new ItemPool((this.levelMap.rand));
 
         //debug
@@ -196,8 +196,11 @@ class Platformer extends Phaser.Scene {
             }
 
             console.log("DB: Gun cooldown disabled");
-            this.sprite.player.gun.reloadLength = 0;
-            this.sprite.player.gun.shootCooldown = 0;
+            this.sprite.player.reloadLength = 1;
+            this.sprite.player.shootCooldown = 0;
+            this.sprite.player.doItemPickup([(player) => {
+                player.maxAmmo += 2;
+            }])
         }, this);
 
         //O key to spawn a key
@@ -207,10 +210,12 @@ class Platformer extends Phaser.Scene {
                 return;
             }
 
-            let newKey = new Key(this, 0, 0, "texturesAtlas", 'tile_0027.png', this.sprite.player);
+            //let newKey = new Key(this, 0, 0, "texturesAtlas", 'tile_0027.png', this.sprite.player);
+            let newTreasure = new Pickup(this, this.sprite.player.x + (60 * this.sprite.player.facing), this.sprite.player.y, null, null, this.levelMap.rand);
+
             this.sprite.player.keys.push(newKey);
             this.activeKeyGroup.add(newKey);
-            console.log("DB: Key Spawned");
+            console.log("DB: Key and Chest Spawned");
         }, this);
 
         //0 key to reduce timer
@@ -267,7 +272,7 @@ class Platformer extends Phaser.Scene {
         this.time.delayedCall(
             734,                // ms
             ()=>{
-                my.bgm.play({ loop:true, seek: 100, rate: 1});
+                my.bgm.play({ loop:true, seek: 100, rate: 1, volume: 0.75});
             }
         )
         my.bgm.rateVar = 1;
@@ -406,6 +411,43 @@ class Platformer extends Phaser.Scene {
                 coin.play('coinTurn');
                 this.coingroup.add(coin);
             });
+
+            //lockWall
+            let lockWall = map.createFromObjects("Objects", {
+                type: "lockWall",
+                key: "texturesAtlas",
+                frame: 'tile_0028.png'
+            });
+
+            lockWall.map((lockWall) => {
+                lockWall.scale = SCALE;
+                lockWall.scaleY = SCALE * 4;
+                lockWall.x *= SCALE;
+                lockWall.y *= SCALE;
+                lockWall.x += x;
+                lockWall.y += y;
+                lockWall.unlocking = false;
+                this.physics.world.enable(lockWall, Phaser.Physics.Arcade.STATIC_BODY);
+                this.lockWallGroup.add(lockWall);
+            });
+
+            //treasure
+            let treasure = map.createFromObjects("Objects", {
+                type: "treasure",
+                key: "kenny-chest"
+            });
+
+            treasure.map((treasure) => {
+                treasure.scale = SCALE;
+                treasure.x *= SCALE;
+                treasure.y *= SCALE;
+                treasure.x += x;
+                treasure.y += y;
+                let newTreasure = new Sign(this, treasure.x, treasure.y, "kenny-chest", undefined, null, "chest");
+                this.physics.world.enable(newTreasure, Phaser.Physics.Arcade.STATIC_BODY);
+                this.treasureGroup.add(newTreasure);
+                treasure.destroy();
+            });
         }
 
         let keys = map.createFromObjects("Objects", {
@@ -421,47 +463,8 @@ class Platformer extends Phaser.Scene {
             key.x += x;
             key.y += y;
 
-            //let newKey = new Key(this, key.x, key.y, "texturesAtlas", 'tile_0027.png', this.sprite.player);
-            //key.destroy();
-            this.physics.world.enable(key, Phaser.Physics.Arcade.STATIC_BODY);
-            this.keyGroup.add(key);
-        });
-
-        //lockWall
-        let lockWall = map.createFromObjects("Objects", {
-            type: "lockWall",
-            key: "texturesAtlas",
-            frame: 'tile_0028.png'
-        });
-
-        lockWall.map((lockWall) => {
-            lockWall.scale = SCALE;
-            lockWall.scaleY = SCALE * 4;
-            lockWall.x *= SCALE;
-            lockWall.y *= SCALE;
-            lockWall.x += x;
-            lockWall.y += y;
-            lockWall.unlocking = false;
-            this.physics.world.enable(lockWall, Phaser.Physics.Arcade.STATIC_BODY);
-            this.lockWallGroup.add(lockWall);
-        });
-
-        //treasure
-        let treasure = map.createFromObjects("Objects", {
-            type: "treasure",
-            key: "kenny-chest"
-        });
-
-        treasure.map((treasure) => {
-            treasure.scale = SCALE;
-            treasure.x *= SCALE;
-            treasure.y *= SCALE;
-            treasure.x += x;
-            treasure.y += y;
-            let newTreasure = new Sign(this, treasure.x, treasure.y, "kenny-chest", undefined, null, "chest");
-            this.physics.world.enable(newTreasure, Phaser.Physics.Arcade.STATIC_BODY);
-            this.treasureGroup.add(newTreasure);
-            treasure.destroy();
+            let newKey = new Pickup(this, key.x, key.y, null, null, this.levelMap.rand);
+            key.destroy();
         });
 
         let coins = map.createFromObjects("Objects", {
