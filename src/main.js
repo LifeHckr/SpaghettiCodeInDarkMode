@@ -62,7 +62,13 @@ const debugText = "Debug mode activated!" +
         "\nP: Teleport to map" +
         "\nM: Reveal entire map" +
         "\nC: Print player map coordinates" +
-        "\nU: Disable gun cooldown";
+        "\nU: Disable gun cooldown" +
+        "\n0: Reduce Timer by 75" +
+        "\n1: Display generation log" +
+        "\nO: Spawn Pickup";
+
+
+
 
 const game = new Phaser.Game(config);
 
