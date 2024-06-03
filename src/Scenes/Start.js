@@ -69,7 +69,7 @@ class Start extends Phaser.Scene {
 
     runOnce() {
         my.bgm = this.sound.add("music");
-        my.sprite.gO = this.add.text(0, 0, "You're an alien.", { fontFamily: 'font1', fontSize: '40px', fill: '#5ad28c', stroke: '#FFFFFF', strokeThickness: 14 }).setOrigin(.5).setPosition(game.config.width/2, 60).setScale(50);
+        my.sprite.gO = this.add.text(0, 0, "You're a pizza", { fontFamily: 'font1', fontSize: '40px', fill: '#5ad28c', stroke: '#FFFFFF', strokeThickness: 14 }).setOrigin(.5).setPosition(game.config.width/2, 60).setScale(50);
         this.tweens.add({
             targets     : my.sprite.gO,
             scale     : 1,
@@ -79,7 +79,7 @@ class Start extends Phaser.Scene {
                 this.sound.play("bwah"); 
             }
         });
-        my.sprite.g1 = this.add.text(0, 0, "You're about to explode.", { fontFamily: 'font1', fontSize: '38px', fill: '#5ad28c', stroke: '#FFFFFF', strokeThickness: 13 }).setOrigin(.5).setPosition(game.config.width/2, 200).setScale(50).setVisible(false);
+        my.sprite.g1 = this.add.text(0, 0, "With a gun", { fontFamily: 'font1', fontSize: '38px', fill: '#5ad28c', stroke: '#FFFFFF', strokeThickness: 13 }).setOrigin(.5).setPosition(game.config.width/2, 200).setScale(50).setVisible(false);
         this.tweens.add({
             delay: 1500,
             targets     : my.sprite.g1,
@@ -93,7 +93,7 @@ class Start extends Phaser.Scene {
                 this.sound.play("bwah"); 
             }
         });
-        my.sprite.g2 = this.add.text(0, 0, "Get in water so you don't.", { fontFamily: 'font1', fontSize: '38px', fill: '#5ad28c', stroke: '#FFFFFF', strokeThickness: 14 }).setOrigin(.5).setPosition(game.config.width/2, 360).setScale(50).setVisible(false);
+        my.sprite.g2 = this.add.text(0, 0, "Deliver yourself", { fontFamily: 'font1', fontSize: '38px', fill: '#5ad28c', stroke: '#FFFFFF', strokeThickness: 14 }).setOrigin(.5).setPosition(game.config.width/2, 360).setScale(50).setVisible(false);
         this.tweens.add({
             delay: 3000,
             targets     : my.sprite.g2,

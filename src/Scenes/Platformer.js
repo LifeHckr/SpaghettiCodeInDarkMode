@@ -111,6 +111,7 @@ class Platformer extends Phaser.Scene {
                 this.time.delayedCall(
                     1000,                // ms
                     ()=>{
+                        my.gameWin = true;
                         this.scene.start("GameOver");
                     }
                 )
