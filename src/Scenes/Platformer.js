@@ -1,13 +1,14 @@
 class Platformer extends Phaser.Scene {
     constructor() {
         super("platformerScene");
-        
+
     }
 
     init() {
 
         my.bgm = this.sound.add("music");
-    // variables and settings        
+        this.signInit = false;
+        // variables and settings
         this.physics.world.gravity.y = 1900;
         //this.worldBoundsX = SCALE * 18 * (215); //scale = 2, 18 = width of tile, x = num tiles
         //this.worldBoundsY = SCALE * 18 * (40);
@@ -16,13 +17,19 @@ class Platformer extends Phaser.Scene {
         this.camera = this.cameras.main;
         this.minimap;
         this.sprite = {};
-    //------ETC-----------------------------
+        //------ETC-----------------------------
         this.roomWidth = 60;
         this.roomHeight = 30;
         this.levelMap = new LevelMap(experimental.width, experimental.height);
         this.levelMap.generateLevel(5, 7, experimental.branches);
-        console.log(this.levelMap);
-    //-----------------------------------
+
+        //debug
+        if(game.config.physics.arcade.debug){
+            console.log("DB: Generated level map: ");
+            console.log(this.levelMap);
+        }
+
+        //-----------------------------------
     }
 
     preload() {
@@ -31,21 +38,21 @@ class Platformer extends Phaser.Scene {
 
     create() {
 //SPRITES------------------------------------------------------------
-    //xMark for Signs
+        //xMark for Signs
         this.sprite.xMark = this.add.sprite(0, 0, "x").setScale(SCALE).setVisible(true).setDepth(1).setAlpha(0);
-    //HintText
-        this.sprite.hintText = this.add.text(0, 0, 'A and D to move', { fontFamily: 'font1', fontSize: '42px', fill: '#FFFFFFF',  stroke: '#FFFFFF', strokeThickness: 10}).setOrigin(.5).setPosition(game.config.width/2, game.config.height - 160).setDepth(1).setAngle(-20).setScrollFactor(0);
-    //Timer Text
+        //HintText
+        this.sprite.hintText = this.add.text(0, 0, 'A and D to move', { fontFamily: 'font1', fontSize: '42px', fill: '#FFFFFFF',  stroke: '#FFFFFF', strokeThickness: 10}).setOrigin(.5).setPosition(game.config.width/2, game.config.height - 160).setDepth(10).setAngle(-20).setScrollFactor(0);
+        //Timer Text
         this.timer = new LevelTimer(this, 0, 0, '999', { fontFamily: 'font1', fontSize: '37px', fill: '#FFFFFFF', stroke: '#FFFFFF', strokeThickness: 10 }, 999);
-    //Background
+        //Background
         this.bg1 = this.add.tileSprite(game.config.width, -500, game.config.width, game.config.height, 'bgGrass').setScale(4).setScrollFactor(.05).setScale(5).setDepth(-10);
 
 
-        
+
 //----------------------------------------------------------------
 
 //TILEMAP--------------------------------------------------------------
-    //initMap
+        //initMap
         this.protoRoomConfig = {
             key: "platformer-level-1",
             tileWidth: 18,
@@ -74,9 +81,9 @@ class Platformer extends Phaser.Scene {
         //this.room4 = this.createRoom("ORoom", 18, 18, 20*18*2, -20*18*2);
         //comment
         this.levelFromLevel(this.levelMap.data);
-    
 
-    //-----------------------------------------------------------------------------
+
+        //-----------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------
 // PlayerInit---------------------------------
 
@@ -87,7 +94,7 @@ class Platformer extends Phaser.Scene {
 
         //WaterOverlap
         this.physics.add.overlap(this.sprite.player, this.waterPool, (obj1, obj2) => {
-            
+
             if (this.timer.timerTimer) {
                 this.sound.play("jingle");
                 let tempText = this.add.text(0, 0, 'YOU WIN!!!', { fontFamily: 'font1', fontSize: '42px', fill: '#5ad28c',  stroke: '#FFFFFF', strokeThickness: 15}).setOrigin(.5).setPosition(game.config.width/2, game.config.height/2).setDepth(10).setAngle(-20).setScrollFactor(0);
@@ -100,7 +107,7 @@ class Platformer extends Phaser.Scene {
                 this.timer.timerTimer.destroy();
                 this.timer.timerTimer = false;//:)
             }
-            
+
         });
 //-----------------------------------------------
 // Controls--------------------------
@@ -110,31 +117,83 @@ class Platformer extends Phaser.Scene {
         my.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         my.keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         my.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
-    //debug key listener (assigned to D key)
-        if (game.config.physics.arcade.debug) {
-            this.input.keyboard.on('keydown-G', () => {
-                this.sprite.player.setDepth(0);
-                this.physics.world.drawDebug = this.physics.world.drawDebug ? false : true
-                this.physics.world.debugGraphic.clear();
-                this.minimap.renderAll();
-                console.log(this.sprite.player.mapX);
-                console.log(this.sprite.player.mapY);
-            }, this);
-            this.input.keyboard.on('keydown-P', () => {
-                this.camera.removeBounds();
-                this.sprite.player.y = -1000;
-                this.sprite.player.x = -1000;
-                this.mapCollider.destroy();
 
-            }, this);
-        }
-
-    //Signbutton- Set signtext, toggle sign text visibility
+        //Signbutton- Set signtext, toggle sign text visibility
         this.input.keyboard.on('keydown-X', () => {
-            this.sprite.signText.text = this.sprite.player.signTouch.name;
-            this.sprite.signText.visible = !this.sprite.signText.visible;
-            this.sprite.signBoard.visible = !this.sprite.signBoard.visible;
+            if (this.signInit) {
+                this.sprite.signText.text = this.sprite.player.signTouch.name;
+                this.sprite.signText.visible = !this.sprite.signText.visible;
+                this.sprite.signBoard.visible = !this.sprite.signBoard.visible;
+            }
         }, this);
+
+
+//--------------------------------------
+//Debug---------------------------------
+        //debug key listener (assigned to G key)
+        this.input.keyboard.on('keydown-G', () => {
+
+            //toggle debug
+            game.config.physics.arcade.debug = game.config.physics.arcade.debug ? false : true;
+            this.physics.world.drawDebug = game.config.physics.arcade.debug;
+
+            if(game.config.physics.arcade.debug){
+               console.log(debugText);
+            }else{
+                console.log("Debug mode deactivated!");
+            }
+
+            //remove old bounding box if it exists
+            this.physics.world.debugGraphic.clear();
+        }, this);
+
+
+        //P key to teleport to the map
+        this.input.keyboard.on('keydown-P', () => {
+            //return if not debug
+            if (!game.config.physics.arcade.debug) {
+                return;
+            }
+
+            this.camera.removeBounds();
+            this.sprite.player.y = -1000;
+            this.sprite.player.x = -1000;
+            this.mapCollider.destroy();
+        }, this);
+
+        //M key to show the entire map
+        this.input.keyboard.on('keydown-M', () => {
+            //return if not debug
+            if (!game.config.physics.arcade.debug) {
+                return;
+            }
+
+            this.minimap.renderAll();
+        }, this);
+
+        //C key to show current player map coordinates
+        this.input.keyboard.on('keydown-C', () => {
+            //return if not debug
+            if (!game.config.physics.arcade.debug) {
+                return;
+            }
+
+            //show the player coordinates
+            console.log("DB: Player map coordinate: X:" + this.sprite.player.mapX + " Y:" + this.sprite.player.mapY);
+        }, this);
+
+        //U key to make gun OP
+        this.input.keyboard.on('keydown-U', () => {
+            //return if not debug
+            if (!game.config.physics.arcade.debug) {
+                return;
+            }
+
+            console.log("DB: Gun cooldown disabled");
+            this.sprite.player.gun.reloadLength = 0;
+            this.sprite.player.gun.shootCooldown = 0;
+        }, this);
+
 //--------------------------------------
 
 //Camera------------------------------------
@@ -149,7 +208,7 @@ class Platformer extends Phaser.Scene {
 
 //Tweens---------------------------------
 
-    //xMark grow/shrink, just constantly on, might technically be performance loss idk
+        //xMark grow/shrink, just constantly on, might technically be performance loss idk
         this.sprite.xMark.tween = this.tweens.add({
             targets     : this.sprite.xMark,
             scale     : 1.5,
@@ -159,7 +218,7 @@ class Platformer extends Phaser.Scene {
             repeat: -1
         });
 
-    //Starting hint text tween, bouncy, also i assume this ends and gets destroyed when text does
+        //Starting hint text tween, bouncy, also i assume this ends and gets destroyed when text does
         this.tweens.add({
             targets     : this.sprite.hintText,
             angle      : 20,
@@ -170,7 +229,7 @@ class Platformer extends Phaser.Scene {
         });
 //---------------------------------------------
 //Particles?------------------------------------
-        
+
 //-----------------------------------------------
 
 //Start Musics Music Playback
@@ -187,20 +246,20 @@ class Platformer extends Phaser.Scene {
     }
 
     update() {
-        
-        this.sprite.player.update();            
+
+        this.sprite.player.update();
 
 //Extra Checks------------------------
 
-    //SignTimer- Tricky to get signs to disapear reasonably, I had alot of flickering
+        //SignTimer- Tricky to get signs to disapear reasonably, I had alot of flickering
         //While touching sign create/reset timer, once its gone thing should go away
-        if (this.signTouchTimer != undefined && this.signTouchTimer.getRemaining() != 0) {
+        if (this.signInit && this.signTouchTimer.getRemaining() != 0) {
             this.sprite.xMark.x = this.sprite.player.signTouch.x;
             this.sprite.xMark.y = this.sprite.player.signTouch.y - 50;
             this.sprite.xMark.visible = true;
             this.sprite.xMark.alpha = 1;
             this.sprite.xMark.tween.resume();
-        } else {
+        } else if (this.signInit) {
             this.tweens.add({
                 targets     : this.sprite.xMark,
                 alpha      : 0,
@@ -217,7 +276,7 @@ class Platformer extends Phaser.Scene {
 
         }
 
-    //Remove hint once move
+        //Remove hint once move
         if (this.sprite.hintText && (Math.abs(this.sprite.player.body.velocity.x) > 0 || (cursors.up.isDown||my.keySpace.isDown))) {
             if (this.timer.timerTimer.paused == true) {
                 this.timer.timerTimer.paused = false;
@@ -249,7 +308,7 @@ class Platformer extends Phaser.Scene {
                 ease: 'LinearOut'
             });
         }
-        
+
         this.timer.update();
 
 //------------------------------------------------------
@@ -260,15 +319,15 @@ class Platformer extends Phaser.Scene {
     Objects are NOT the same, if an object doesn't exist, its fine to check anyways.
 
     Current needs for a room: key, x, y, tile x, tile y,
-    Probably will want: room width, room height, spritesheets needed, ?doors?, 
-    
+    Probably will want: room width, room height, spritesheets needed, ?doors?,
+
     */
     createRoom(key, tileWidth, tileHeight, x, y, type) {
         let map = this.add.tilemap(key, tileWidth, tileHeight);
         map.addTilesetImage("kenny_tilemap_packed", "tilemap_tiles");
         //map.addTilesetImage("tilemap-backgrounds_packed", "background_tiles");
         map.layers.forEach(layer => {
-        
+
             let curLayer = map.createLayer(layer.name, ["kenny_tilemap_packed"], x, y, null, true);
             curLayer.setScale(SCALE);
             //curLayer.active = false; //doesnt change anything
@@ -299,14 +358,14 @@ class Platformer extends Phaser.Scene {
         });
         this.animatedTiles.init(map);
 
-    //Collection Layer------------------------------------------------------------------------
+        //Collection Layer------------------------------------------------------------------------
         //COINS
         if (type == "treasure") {
             let coins = map.createFromObjects("Objects", {
                 type: "spawner",
                 key: "coin"
             });
-            
+
             coins.map((coin) => {
                 coin.scale = SCALE;
                 coin.x *= SCALE;
@@ -322,16 +381,19 @@ class Platformer extends Phaser.Scene {
             type: "coin",
             key: "coin"
         });
-        
+
         coins.map((coin) => {
             coin.scale = SCALE;
             coin.x *= SCALE;
             coin.y *= SCALE;
             coin.x += x;
             coin.y += y;
-            this.physics.world.enable(coin, Phaser.Physics.Arcade.STATIC_BODY);
-            coin.play('coinTurn');
-            this.coingroup.add(coin);
+            //this.physics.world.enable(coin, Phaser.Physics.Arcade.STATIC_BODY);
+            //coin.play('coinTurn');
+            //this.coingroup.add(coin);
+            let newSign = new Sign(this, coin.x, coin.y, "sign", undefined, coin.name);
+            this.signGroup.add(newSign);
+            coin.destroy();
         });
 
 
@@ -366,7 +428,7 @@ class Platformer extends Phaser.Scene {
                     spawn.x += x;
                     spawn.y += y;
                     spawn.visible = false;
-        
+
                 });
             }
         }
@@ -431,5 +493,5 @@ class Platformer extends Phaser.Scene {
             }
         }
     }
- 
+
 }

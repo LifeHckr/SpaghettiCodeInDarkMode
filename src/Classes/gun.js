@@ -27,7 +27,7 @@ class Gun extends Phaser.GameObjects.Sprite {
         this.bulletGroup = scene.add.group({
             classType: Bullet,
             active: true,
-            defaultKey: "x",
+            defaultKey: "kenny-cheese",
             //maxSize: 2
         });
 
@@ -49,7 +49,7 @@ class Gun extends Phaser.GameObjects.Sprite {
         //Ammo Sprites
         this.scene.sprite.ammo = [];
         for (let i = 0; i < this.maxAmmo; i++) {
-            this.scene.sprite.ammo.push(this.scene.add.sprite(150 + (50 * i), 600, "sign").setDepth(10).setScrollFactor(0).setScale(SCALE + .5));
+            this.scene.sprite.ammo.push(this.scene.add.sprite(150 + (50 * i), 600, "kenny-cheese").setDepth(10).setScrollFactor(0).setScale(SCALE + 1));
         }
     //-----------------------------------------------
 
@@ -81,7 +81,11 @@ class Gun extends Phaser.GameObjects.Sprite {
                     this.scene.sprite.ammo[i].visible = true;
                 }
                 this.reloadTimer = 0;
-                console.log("reloaded");
+
+                //debug
+                if(game.config.physics.arcade.debug && this.reloadLength !== 0){
+                    console.log("DB/Gun: Reloaded");
+                }
             }
         }
 
@@ -91,7 +95,8 @@ class Gun extends Phaser.GameObjects.Sprite {
         if (!this.onCooldown && this.currentAmmo > 0) {
             //let bullet = this.bulletGroup.getFirstDead();
             let bullet = this.bulletGroup.create(this.x,this.y);
-            bullet.setTint(0xffc524);
+            //bullet.setTint(0xffc524);
+            bullet.rotation = this.rotation + Math.PI/2;
             if (bullet != null) {
                 this.onCooldown = true;
 

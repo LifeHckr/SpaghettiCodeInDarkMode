@@ -28,6 +28,5 @@ class screenLoop extends Phaser.GameObjects.Sprite {
 
             }
         }
-        //console.log("I exist");
     }
 }

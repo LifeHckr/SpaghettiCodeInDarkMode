@@ -20,11 +20,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.MAXVELOCITYX = 1000;
         this.MAXVELOCITYY = 1000;
         this.JUMP_VELOCITY = -605;
-        this.TEMP_JUMPVELOCITY = -2700;
+        this.TEMP_JUMPVELOCITY = -1975;
         this.DASHVELOCITY = 2000;
         this.DASHLENGTH = 600; //in ms
         this.FRAMEFUDGE = game.config.physics.arcade.fps / 30;//I wanted to get 60 & 30 fps to work
-        this.HITBOXSIZE = 20; //I noticed there is some jank around corners, this temporarily sort of fixes it
+        this.HITBOXSIZE = 16; //I noticed there is some jank around corners, this temporarily sort of fixes it
 
     //States
         this.moving = false; //is player "moving"
@@ -47,10 +47,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         scene.mapCollider = scene.physics.add.collider(this, scene.collidesTrue);
     //OneWayCollisions- Checks if player is sufficiently above a one way to enable
         scene.extraCollider = scene.physics.add.collider(this, scene.oneWays, null, function (player, tile) {
-            //console.log((player.y + player.displayHeight/2));
-            //console.log(tile.layer.tilemapLayer.tileToWorldY(tile.y));
-            //console.log(tile);
-            return((player.y + player.displayHeight/2) <= (tile.layer.tilemapLayer.tileToWorldY(tile.y) + 5));
+            return((player.y + player.displayHeight/2) <= (tile.layer.tilemapLayer.tileToWorldY(tile.y)));
         });
     //coinoverlap
         scene.physics.add.overlap(this, scene.coingroup, (obj1, obj2) => {
@@ -251,7 +248,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                     
             //Give the player some leeway before disabling jump, for extra height
                 this.sillyTime = this.scene.time.delayedCall(
-                    130,                // ms
+                    135,                // ms
                     ()=>{
                         this.air = enumList.NOJUMP
                 });

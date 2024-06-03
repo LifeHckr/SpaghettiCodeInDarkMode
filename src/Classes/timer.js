@@ -27,7 +27,6 @@ class LevelTimer extends Phaser.GameObjects.Text {
         } else {
             my.bgm.rate = my.bgm.rateVar;
             this.setStroke('#FFFFFF', 10);
-            //console.log(my.bgm.rate);
         }
         if (this.time <= 99) {
             my.bgm.rateVar = 1.5;
@@ -35,6 +34,8 @@ class LevelTimer extends Phaser.GameObjects.Text {
         }
         if (this.time < 0) {
             my.bgm.stop();
+            this.scene.events.removeListener("hasShot");
+            delete this.scene.playerSpawn;
             game.scene.stop('platformerScene');
             game.scene.start('GameOver');
         }  
