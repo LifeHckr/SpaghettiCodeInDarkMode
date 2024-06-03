@@ -69,7 +69,9 @@ class ItemPool {
             weight: .25,
             name: "Quarter System",
             funcs: [(player) => {
-                player.scene.timer.timerTimer.timeScale *= 2;
+                if (player.scene.timer.timerTimer) {
+                    player.scene.timer.timerTimer.timeScale *= 2;
+                }
                 if (player.shootCooldown > 10) { //temp make minimum normal shootCooldown 10
                     player.shootCooldown *= .5;
                 }
@@ -77,16 +79,34 @@ class ItemPool {
                     player.reloadLength *= .5;
                 }
             },],
-            description: "Twice as fast, twice as bold, right?"
+            description: "Half the time, double the crime, right?"
+        },
+        7: {
+            weight: .20,
+            name: "Speedy Delivery",
+            funcs: [(player) => {
+                player.dashEnable = true;
+            },],
+            description: "Press E while running to dash!",
+            remove: true
         }
     }
-    totalItems = 7;
+    totalItems = 8;
     pickItem() {
         let itemWeight = this.rand.frac();
         let item = this.pool[this.rand.integerInRange(0, this.totalItems - 1)];
         while (item.weight < itemWeight) {
             item = this.pool[this.rand.integerInRange(0, this.totalItems - 1)];
         }
+        if (item.remove) {
+            this.removeItem(item);
+        }
         return item;
+    }
+
+    removeItem(item) {
+        if (this.pool.hasOwnProperty(item)) {
+            item.weight = 0;
+        }
     }
 }

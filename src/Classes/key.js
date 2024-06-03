@@ -3,7 +3,7 @@ class Key extends Phaser.GameObjects.Sprite {
         super(scene, x, y, texture, frame);
         this.following = attachedSprite;
         this.scene = scene;
-        this.followCD = 10;
+        this.followCD = 15;
         this.followTimer = 0;
         this.offsetX = Math.floor(Math.random()*60) - 30;
         this.offsetY = Math.floor(Math.random()*40) - 20;
@@ -24,16 +24,16 @@ class Key extends Phaser.GameObjects.Sprite {
 
     update() {
         this.followTimer--;
-        let dist = Phaser.Math.Distance.Between(this.following.body.x, this.following.body.y, this.x, this.y);
-        if (dist > 70) {
+        let dist = Phaser.Math.Distance.Between(this.following.body.x, this.following.body.y, this.x, this.y) + 1;
+        if (dist > 50) {
             //this.moving = "far";
             this.closeTween.stop();
             this.farTween = this.scene.tweens.add({
                 targets     : this,
-                x:  this.following.body.x + this.offsetX,
-                y: this.following.body.y + this.offsetY,
+                x:  (this.following.body.x + 16) + this.offsetX,
+                y: this.following.body.y - this.offsetY,
                 ease        : 'Linear.Out',
-                duration    : 10000/dist
+                duration    : 10000/dist + 30
             });
         } else if (this.followTimer <= 0) {
             this.followTimer = this.followCD;
@@ -42,10 +42,10 @@ class Key extends Phaser.GameObjects.Sprite {
             this.closeTween.stop();
             this.closeTween = this.scene.tweens.add({
                 targets     : this,
-                x:  (this.following.body.x - 30) + Math.    floor(Math.random()*90),
+                x:  ((this.following.body.x + 16)- 30) + Math.floor(Math.random()*60),
                 y: (this.following.body.y - 40) + Math.floor(Math.random()*20),
                 ease        : 'Linear.Out',
-                duration    : 10000/dist,
+                duration    : 10000/dist + 30,
             });
         }
 

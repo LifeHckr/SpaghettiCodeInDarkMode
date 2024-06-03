@@ -37,6 +37,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.signTouch = false;//false = init, otherwise is last touched sign
         this.knockback = false;//is player under enemy knockback
         this.bumpTimed = false;//did the player bonk
+        this.dashEnable = false;
 
         this.mapX = -1;
         this.mapY = -1;
@@ -140,7 +141,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
 //DASHMOVE
         if(Phaser.Input.Keyboard.JustDown(my.keyE)) {
-            if (this.running > 1 && !this.knockback) {
+            if (this.dashEnable && this.running > 1 && !this.knockback) {
                 this.doDash();
             }
         }

@@ -60,6 +60,16 @@ class Sign extends Phaser.GameObjects.Sprite {
     generateLoot() {
         this.loot = this.scene.itemPool.pickItem();
         this.name = this.loot.name;
+        if (game.config.physics.arcade.debug) {
+            let d = new Date();
+            my.log.push({
+                message: "DB: Treasure Generation",
+                timeStamp: d.toLocaleTimeString(undefined, {hour: "2-digit", minute: "2-digit", second: "2-digit"}) + `.${d.getMilliseconds()}`,
+                item: this.loot.name,
+                x: this.x,
+                y: this.y
+            });
+        }
     }
 
     chestOpen() {

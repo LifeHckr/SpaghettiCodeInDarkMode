@@ -211,10 +211,8 @@ class Platformer extends Phaser.Scene {
             }
 
             //let newKey = new Key(this, 0, 0, "texturesAtlas", 'tile_0027.png', this.sprite.player);
-            let newTreasure = new Pickup(this, this.sprite.player.x + (60 * this.sprite.player.facing), this.sprite.player.y, null, null, this.levelMap.rand);
+            let newTreasure = new PickupPool(this, this.sprite.player.x + (60 * this.sprite.player.facing), this.sprite.player.y, null, null, this.levelMap.rand);
 
-            this.sprite.player.keys.push(newKey);
-            this.activeKeyGroup.add(newKey);
             console.log("DB: Key and Chest Spawned");
         }, this);
 
@@ -227,6 +225,17 @@ class Platformer extends Phaser.Scene {
 
             this.timer.time -= 75;
             console.log("DB: Timer reduced by 75");
+        }, this)
+
+        //0 key to print log
+        this.input.keyboard.on('keydown-ONE', () => {
+            //return if not debug
+            if (!game.config.physics.arcade.debug) {
+                return;
+            }
+
+            console.log("DB:Print Log");
+            console.log(my.log);
         }, this);
 
 //--------------------------------------
@@ -463,7 +472,7 @@ class Platformer extends Phaser.Scene {
             key.x += x;
             key.y += y;
 
-            let newKey = new Pickup(this, key.x, key.y, null, null, this.levelMap.rand);
+            let newKey = new PickupPool(this, key.x, key.y, null, null, this.levelMap.rand);
             key.destroy();
         });
 

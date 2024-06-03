@@ -97,14 +97,15 @@ class Gun extends Phaser.GameObjects.Sprite {
 
     shoot(pointer) {
         if (game.config.physics.arcade.debug) {
-            console.log("DB: Logging Gun Stats");
-            console.log({
+            let d = new Date();
+            my.log.push({
+                message: "DB: Logging Gun Stats",
+                timeStamp: d.toLocaleTimeString(undefined, {hour: "2-digit", minute: "2-digit", second: "2-digit"}) + `.${d.getMilliseconds()}`,
                 maxAmmo: this.player.maxAmmo,
                 currentAmmo: this.currentAmmo,
                 remainingTime: this.reloadTimer.getRemaining(),
                 reloadLength: this.player.reloadLength,
                 shootCooldown: this.player.shootCooldown
-
             });
         }
 
@@ -125,7 +126,7 @@ class Gun extends Phaser.GameObjects.Sprite {
                 });
 
                 //Create a normalized vector to give things consistent speed
-                let tempVec = new Phaser.Math.Vector2((game.config.width/2 - game.input.mousePointer.x), (game.config.height/2 - game.input.mousePointer.y)).normalize();
+                let tempVec = new Phaser.Math.Vector2((this.player.x - game.input.mousePointer.worldX), (this.player.y - game.input.mousePointer.worldY)).normalize();
 
                 bullet.fire(tempVec, this.getRightCenter());
 
@@ -183,7 +184,10 @@ class Gun extends Phaser.GameObjects.Sprite {
 
     deLoadBullet() {
         this.currentAmmo -= 1;
-        this.scene.sprite.ammo[this.currentAmmo].visible = false;
+        if (this.scene.sprite.ammo[this.currentAmmo]) {
+            this.scene.sprite.ammo[this.currentAmmo].visible = false;
+        }
+
         if (this.interruptReload) {
             this.reloadTimer.reset({
                 delay: this.player.reloadLength

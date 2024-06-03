@@ -1,4 +1,4 @@
-class Pickup extends Phaser.GameObjects.Sprite {
+class PickupPool extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, texture, frame, rand) {
         super(scene, x, y, texture, frame);
         this.rand = rand;
@@ -17,7 +17,7 @@ class Pickup extends Phaser.GameObjects.Sprite {
             },
         },
         1: {
-            weight: .75,
+            weight: .4,
             name: "key",
             func: () => {
                 this.setTexture("texturesAtlas", 'tile_0027.png');
@@ -27,20 +27,47 @@ class Pickup extends Phaser.GameObjects.Sprite {
             },
         },
         2: {
-            weight: .25,
+            weight: .20,
             name: "Chest",
             func: () => {
                 let newTreasure = new Sign(this.scene, this.x, this.y, "kenny-chest", undefined, null, "chest");
                 this.destroy();
             },
+        },
+        3: {
+            weight: .5,
+            name: "ammo",
+            func: () => {
+                let newAmmo = new Ammo(this.scene, this.x, this.y, "kenny-cheese");
+                this.destroy();
+            },
+        },
+        4: {
+            weight: .4,
+            name: "slice",
+            func: () => {
+                let newAmmo = new pizzaSlice(this.scene, this.x, this.y, "kenny-pizza");
+                this.destroy();
+            },
         }
     }
-    totalItems = 3;
+    totalItems = 5;
     pickItem() {
         let itemWeight = this.rand.frac();
         let item = this.pool[this.rand.integerInRange(0, this.totalItems - 1)];
         while (item.weight < itemWeight) {
             item = this.pool[this.rand.integerInRange(0, this.totalItems - 1)];
+        }
+        if (game.config.physics.arcade.debug) {
+            let d = new Date();
+            my.log.push({
+                message: "DB: Pickup Creation",
+                timeStamp: d.toLocaleTimeString(undefined, {hour: "2-digit", minute: "2-digit", second: "2-digit"}) + `.${d.getMilliseconds()}`,
+                item: item.name,
+                currentWeight: itemWeight,
+                x: this.x,
+                y: this.y
+            });
         }
         item.func();
     }
