@@ -28,9 +28,13 @@ class GameOver extends Phaser.Scene {
         //game.scene.stop('GameOver');
         //game.scene.start('Start');
 
-        my.sprite.gO = this.add.text(0, 0, "You 'Sploded", { fontFamily: 'font1', fontSize: '45px', fill: '#F00000', stroke: '#FFFFFF', strokeThickness: 14 }).setOrigin(.5).setPosition(game.config.width/2, game.config.height/2 - 100);
         my.sprite.rst = this.add.text(0, 0, 'Press Enter to Restart', { fontFamily: 'font1', fontSize: '40px', fill: '#000000', stroke: '#FFFFFF', strokeThickness: 10 }).setOrigin(.5).setPosition(game.config.width/2, game.config.height - 150).setDepth(1).setAngle(20);
-
+        if (my.gameWin) {
+            my.sprite.gO = this.add.text(0, 0, "You Won!", { fontFamily: 'font1', fontSize: '45px', fill: '#F00000', stroke: '#FFFFFF', strokeThickness: 14 }).setOrigin(.5).setPosition(game.config.width/2, game.config.height/2 - 100);
+        } else {
+            my.sprite.g1 = this.add.text(0, 0, "Your Pizza Got Cold!", { fontFamily: 'font1', fontSize: '45px', fill: '#F00000', stroke: '#FFFFFF', strokeThickness: 14 }).setOrigin(.5).setPosition(game.config.width/2, game.config.height/2 - 100);
+        }
+        my.sprite.credits = this.add.text(0, 0, "Credits!\nGun Design: Jack Wilhelm\nDash Design: Jack Wilhelm\nCredits: Jack Wilhelm\nEnd Screen: Jack Wilhelm\nParticles: Kenny Assets\nAssests: Kenny Assets", { fontFamily: 'font1', fontSize: '20px', fill: '#000000', stroke: '#FFFFFF', strokeThickness: 14 }).setOrigin(.5).setPosition(game.config.width/2-400, game.config.height/2 - 250);
 
         this.tweens.add({
             targets     : my.sprite.rst,

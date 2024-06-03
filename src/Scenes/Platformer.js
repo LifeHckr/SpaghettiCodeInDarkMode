@@ -30,6 +30,7 @@ class Platformer extends Phaser.Scene {
         }
 
         //-----------------------------------
+        my.gameWin = false;
     }
 
     preload() {
@@ -106,6 +107,13 @@ class Platformer extends Phaser.Scene {
                 });
                 this.timer.timerTimer.destroy();
                 this.timer.timerTimer = false;//:)
+
+                this.time.delayedCall(
+                    1000,                // ms
+                    ()=>{
+                        this.scene.start("GameOver");
+                    }
+                )
             }
 
         });
