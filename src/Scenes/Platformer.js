@@ -474,6 +474,9 @@ class Platformer extends Phaser.Scene {
         let chancesToFail = keys.length;
         keys.map((key) => {
 
+            //Allow rooms to have multiple collectible spots
+            //Currently each spot has a 1/(number of spots) chance to spawn a pickup
+            //Each unsuccessful spawn increases the chance, up to guaranteeing atleast 1 pickup spawns in each room
             let chance = this.levelMap.rand.integerInRange(1, chancesToFail);
             if (chance == 1) {
                 chancesToFail--;

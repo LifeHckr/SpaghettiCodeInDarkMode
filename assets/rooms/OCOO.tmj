@@ -192,8 +192,8 @@
                  "type":"spawner",
                  "visible":true,
                  "width":18,
-                 "x":324,
-                 "y":504
+                 "x":522,
+                 "y":468
                 }, 
                 {
                  "height":18,
@@ -228,6 +228,28 @@
                  "width":18,
                  "x":504,
                  "y":144
+                }, 
+                {
+                 "height":18,
+                 "id":21,
+                 "name":"keySpawn",
+                 "rotation":0,
+                 "type":"keySpawn",
+                 "visible":true,
+                 "width":18,
+                 "x":756,
+                 "y":54
+                }, 
+                {
+                 "height":18,
+                 "id":22,
+                 "name":"keySpawn",
+                 "rotation":0,
+                 "type":"keySpawn",
+                 "visible":true,
+                 "width":18,
+                 "x":72,
+                 "y":486
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -236,7 +258,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":21,
+ "nextobjectid":23,
  "orientation":"orthogonal",
  "properties":[
         {

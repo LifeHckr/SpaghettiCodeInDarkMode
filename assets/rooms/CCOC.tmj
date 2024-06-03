@@ -104,6 +104,17 @@
                  "width":18,
                  "x":792,
                  "y":486
+                }, 
+                {
+                 "height":18,
+                 "id":19,
+                 "name":"keySpawn",
+                 "rotation":0,
+                 "type":"keySpawn",
+                 "visible":true,
+                 "width":18,
+                 "x":684,
+                 "y":252
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -277,7 +288,7 @@
          "y":0
         }],
  "nextlayerid":9,
- "nextobjectid":19,
+ "nextobjectid":20,
  "orientation":"orthogonal",
  "properties":[
         {

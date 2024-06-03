@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="18" tileheight="18" infinite="0" nextlayerid="8" nextobjectid="21">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="18" tileheight="18" infinite="0" nextlayerid="8" nextobjectid="23">
  <editorsettings>
   <export target="OCOO.tmj" format="json"/>
  </editorsettings>
@@ -427,9 +427,11 @@
  </layer>
  <objectgroup id="4" name="Objects">
   <object id="16" name="1" type="coin" gid="152" x="756" y="72" width="18" height="18"/>
-  <object id="17" name="Spawner" type="spawner" x="324" y="504" width="18" height="18"/>
+  <object id="17" name="Spawner" type="spawner" x="522" y="468" width="18" height="18"/>
   <object id="18" name="keySpawn" type="keySpawn" x="36" y="72" width="18" height="18"/>
   <object id="19" name="treasure" type="treasure" x="540" y="126" width="18" height="18"/>
   <object id="20" name="lockWall" type="lockWall" gid="29" x="504" y="144" width="18" height="72"/>
+  <object id="21" name="keySpawn" type="keySpawn" x="756" y="54" width="18" height="18"/>
+  <object id="22" name="keySpawn" type="keySpawn" x="72" y="486" width="18" height="18"/>
  </objectgroup>
 </map>
