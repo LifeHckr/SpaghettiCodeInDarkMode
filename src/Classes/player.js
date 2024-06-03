@@ -45,6 +45,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     //Physics Set up
         //this.setCollideWorldBounds(true);
         this.body.setMaxVelocity(this.MAXVELOCITYX, this.MAXVELOCITYY);
+        this.setBodySize(this.HITBOXSIZE, this.HITBOXSIZE);
 
     //PlayerCollisions
         scene.mapCollider = scene.physics.add.collider(this, scene.collidesTrue);
