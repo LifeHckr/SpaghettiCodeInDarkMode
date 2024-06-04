@@ -88,7 +88,7 @@ class TitleScreen extends Phaser.Scene {
             }
             this.bgm.stop();
             game.scene.stop('TitleScreen');
-            this.scene.get('platformerScene').scene.restart();
+            game.scene.start('Start');
         });
     }
 

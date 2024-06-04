@@ -49,12 +49,12 @@ class Start extends Phaser.Scene {
         this.input.keyboard.on('keydown-ENTER', () => {
             this.bgm.stop();
             game.scene.stop('Start');
-            game.scene.start('platformerScene');
+            this.scene.get('platformerScene').scene.restart();
         }, this);
         this.input.keyboard.on('keydown-SPACE', () => {
             this.bgm.stop();
             game.scene.stop('Start');
-            game.scene.start('platformerScene');
+            this.scene.get('platformerScene').scene.restart();
         }, this);
         this.runOncey = false;
     }
@@ -143,7 +143,7 @@ class Start extends Phaser.Scene {
             ()=>{
                 this.bgm.stop();
                 game.scene.stop('Start');
-                game.scene.start('platformerScene');
+                this.scene.get('platformerScene').scene.restart();
         });
     }
 }

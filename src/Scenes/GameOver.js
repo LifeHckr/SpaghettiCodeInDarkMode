@@ -47,7 +47,7 @@ class GameOver extends Phaser.Scene {
 
         this.input.keyboard.on('keydown-ENTER', () => {
             game.scene.stop('GameOver');
-            this.scene.get('platformerScene').scene.restart();
+            game.scene.start('TitleScreen');
             this.bgm.stop();
         }, this);
         this.woah = new screenLoop(this, 0, 0, "fondoodler", "tile_0000.png");
