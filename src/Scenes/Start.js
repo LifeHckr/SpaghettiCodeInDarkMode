@@ -10,7 +10,7 @@ class Start extends Phaser.Scene {
 
     create() {
         this.bgm = this.sound.add("stereotypicalitalianmusic");
-        this.bgm.play();
+        this.bgm.play({ loop:true, rate: 1});
 
         this.background = this.add.tileSprite(game.config.width/2, game.config.height/2, game.config.width, game.config.height, 'spackBack').setDepth(-1000);
         my.sprite.meteors = this.add.group({

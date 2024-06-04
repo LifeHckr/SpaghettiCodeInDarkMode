@@ -53,7 +53,7 @@ class GameOver extends Phaser.Scene {
         this.woah = new screenLoop(this, 0, 0, "fondoodler", "tile_0000.png");
         this.woah.scale = 3;
         this.bgm = this.sound.add("stereotypicalitalianmusic");
-        this.bgm.play();
+        this.bgm.play({ loop:true, rate: 1});
 
     }
 
