@@ -69,6 +69,8 @@ class Load extends Phaser.Scene {
         //this.load.audio("jumpSound", "audio/383240__jofae__bounce.wav");
         this.load.audio("landSound", "audio/701084__8bitmyketison__multimedia-water-drop-lo-fi.wav");
         this.load.audio("blast", "audio/footstep_snow_004.ogg");
+        this.load.audio("stereotypicalitalianmusic", "audio/14_TARANTELLA.mp3");
+
 
     }
 

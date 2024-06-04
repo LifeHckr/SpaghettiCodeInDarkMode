@@ -9,6 +9,9 @@ class Start extends Phaser.Scene {
     }
 
     create() {
+        this.bgm = this.sound.add("stereotypicalitalianmusic");
+        this.bgm.play();
+
         this.background = this.add.tileSprite(game.config.width/2, game.config.height/2, game.config.width, game.config.height, 'spackBack').setDepth(-1000);
         my.sprite.meteors = this.add.group({
             active: true,
@@ -20,11 +23,9 @@ class Start extends Phaser.Scene {
         )
 
         my.sprite.meteors.createMultiple({
-            key: "platformer_characters",
-            frame: "tile_0000.png",
+            key: "pizza",
             classType: screenLoop,
             active: true,
-            key: my.sprite.meteors.defaultKey,
             repeat: my.sprite.meteors.maxSize-1,
         });
         my.sprite.meteors.scaleXY(3);
@@ -46,10 +47,12 @@ class Start extends Phaser.Scene {
         });
 
         this.input.keyboard.on('keydown-ENTER', () => {
+            this.bgm.stop();
             game.scene.stop('Start');
             game.scene.start('platformerScene');
         }, this);
         this.input.keyboard.on('keydown-SPACE', () => {
+            this.bgm.stop();
             game.scene.stop('Start');
             game.scene.start('platformerScene');
         }, this);
@@ -69,7 +72,7 @@ class Start extends Phaser.Scene {
 
     runOnce() {
         my.bgm = this.sound.add("music");
-        my.sprite.gO = this.add.text(0, 0, "You're a pizza", { fontFamily: 'font1', fontSize: '40px', fill: '#5ad28c', stroke: '#FFFFFF', strokeThickness: 14 }).setOrigin(.5).setPosition(game.config.width/2, 60).setScale(50);
+        my.sprite.gO = this.add.text(0, 0, "You're a pizza", { fontFamily: 'font1', fontSize: '40px', fill: '#d4af37', stroke: '#FFFFFF', strokeThickness: 14 }).setOrigin(.5).setPosition(game.config.width/2, 60).setScale(50);
         this.tweens.add({
             targets     : my.sprite.gO,
             scale     : 1,
@@ -79,7 +82,7 @@ class Start extends Phaser.Scene {
                 this.sound.play("bwah"); 
             }
         });
-        my.sprite.g1 = this.add.text(0, 0, "With a gun", { fontFamily: 'font1', fontSize: '38px', fill: '#5ad28c', stroke: '#FFFFFF', strokeThickness: 13 }).setOrigin(.5).setPosition(game.config.width/2, 200).setScale(50).setVisible(false);
+        my.sprite.g1 = this.add.text(0, 0, "With a gun", { fontFamily: 'font1', fontSize: '38px', fill: '#d4af37', stroke: '#FFFFFF', strokeThickness: 13 }).setOrigin(.5).setPosition(game.config.width/2, 200).setScale(50).setVisible(false);
         this.tweens.add({
             delay: 1500,
             targets     : my.sprite.g1,
@@ -93,7 +96,7 @@ class Start extends Phaser.Scene {
                 this.sound.play("bwah"); 
             }
         });
-        my.sprite.g2 = this.add.text(0, 0, "Deliver yourself", { fontFamily: 'font1', fontSize: '38px', fill: '#5ad28c', stroke: '#FFFFFF', strokeThickness: 14 }).setOrigin(.5).setPosition(game.config.width/2, 360).setScale(50).setVisible(false);
+        my.sprite.g2 = this.add.text(0, 0, "Deliver yourself in 999 seconds", { fontFamily: 'font1', fontSize: '38px', fill: '#d4af37', stroke: '#FFFFFF', strokeThickness: 14 }).setOrigin(.5).setPosition(game.config.width/2, 360).setScale(50).setVisible(false);
         this.tweens.add({
             delay: 3000,
             targets     : my.sprite.g2,
@@ -107,7 +110,7 @@ class Start extends Phaser.Scene {
                 this.sound.play("bwah"); 
             }
         });
-        my.sprite.g3 = this.add.text(0, 0, "You have 999 seconds.", { fontFamily: 'font1', fontSize: '38px', fill: '#5ad28c', stroke: '#FFFFFF', strokeThickness: 12 }).setOrigin(.5).setPosition(game.config.width/2, 520).setScale(50).setVisible(false);
+        my.sprite.g3 = this.add.text(0, 0, "Or else you're free!", { fontFamily: 'font1', fontSize: '38px', fill: '#d4af37', stroke: '#FFFFFF', strokeThickness: 12 }).setOrigin(.5).setPosition(game.config.width/2, 520).setScale(50).setVisible(false);
         this.tweens.add({
             delay: 4500,
             targets     : my.sprite.g3,
@@ -121,7 +124,7 @@ class Start extends Phaser.Scene {
                 this.sound.play("bwah"); 
             }
         });
-        my.sprite.g4 = this.add.text(0, 0, "Have fun :P", { fontFamily: 'font1', fontSize: '38px', fill: '#5ad28c', stroke: '#FFFFFF', strokeThickness: 12 }).setOrigin(.5).setPosition(game.config.width/2, 640).setScale(50).setVisible(false);
+        my.sprite.g4 = this.add.text(0, 0, "Don't Lose :P", { fontFamily: 'font1', fontSize: '38px', fill: '#d4af37', stroke: '#FFFFFF', strokeThickness: 12 }).setOrigin(.5).setPosition(game.config.width/2, 640).setScale(50).setVisible(false);
         this.tweens.add({
             delay: 6000,
             targets     : my.sprite.g4,
@@ -138,6 +141,7 @@ class Start extends Phaser.Scene {
         this.time.delayedCall(
             7500,                // ms
             ()=>{
+                this.bgm.stop();
                 game.scene.stop('Start');
                 game.scene.start('platformerScene');
         });
