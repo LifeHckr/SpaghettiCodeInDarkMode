@@ -101,12 +101,17 @@ class ItemPool {
         if (item.remove) {
             this.removeItem(item);
         }
+        /*if (game.config.physics.arcade.debug) {
+            my.log.push({
+                message: "DB: Treasure Generation",
+                item: item.name,
+                weight: itemWeight,
+            });
+        }*/
         return item;
     }
 
     removeItem(item) {
-        if (this.pool.hasOwnProperty(item)) {
-            item.weight = 0;
-        }
+            item.weight = -1;
     }
 }

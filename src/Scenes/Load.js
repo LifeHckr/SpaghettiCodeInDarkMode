@@ -178,7 +178,7 @@ class Load extends Phaser.Scene {
     update() {
 
         if (experimental.branches != -1) {
-            this.scene.start("platformerScene");
+            this.scene.start("TitleScreen");
         }
 
     }

@@ -58,17 +58,15 @@ class PickupPool extends Phaser.GameObjects.Sprite {
         while (item.weight < itemWeight) {
             item = this.pool[this.rand.integerInRange(0, this.totalItems - 1)];
         }
-        if (game.config.physics.arcade.debug) {
-            let d = new Date();
+        /*if (game.config.physics.arcade.debug) {
             my.log.push({
                 message: "DB: Pickup Creation",
-                timeStamp: d.toLocaleTimeString(undefined, {hour: "2-digit", minute: "2-digit", second: "2-digit"}) + `.${d.getMilliseconds()}`,
                 item: item.name,
                 currentWeight: itemWeight,
                 x: this.x,
                 y: this.y
             });
-        }
+        }*/
         item.func();
     }
 }

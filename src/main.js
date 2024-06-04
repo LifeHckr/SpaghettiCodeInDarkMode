@@ -36,7 +36,7 @@ let config = {
     },
     width:  1200,//window.innerWidth * window.devicePixelRatio
     height: 700,//window.innerHeight * window.devicePixelRatio,
-    scene: [Load, Platformer, GameOver]
+    scene: [Load, TitleScreen, Platformer, GameOver]
 }
 
 var cursors;

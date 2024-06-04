@@ -34,8 +34,11 @@ class Minimap extends Phaser.Cameras.Scene2D.Camera {
     drawLevel(levelMap) {
         this.widthInTiles = levelMap.width;
         this.heightInTiles = levelMap.height;
+        if (levelMap.width > 15  || levelMap.height > 15) {
+            this.offset = -5000;
+        }
 
-        this.miniMapbg = this.scene.add.rectangle(this.offset, this.offset, this.rectWidth * levelMap.width, this.rectWidth * levelMap.width, 0x000000, 0.5).setOrigin(0, 0);
+        this.miniMapbg = this.scene.add.rectangle(this.offset, this.offset, this.rectWidth * levelMap.width, this.rectWidth * levelMap.height, 0x000000, 0.5).setOrigin(0, 0);
 
         this.tiles = Array.apply(null, Array(levelMap.height)).map(e => Array(levelMap.width));//x by y arrays
 

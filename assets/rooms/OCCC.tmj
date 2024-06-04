@@ -156,8 +156,8 @@
                  "type":"spawner",
                  "visible":true,
                  "width":18,
-                 "x":990,
-                 "y":108
+                 "x":684,
+                 "y":504
                 }, 
                 {
                  "height":18,
@@ -167,8 +167,8 @@
                  "type":"keySpawn",
                  "visible":true,
                  "width":18,
-                 "x":756,
-                 "y":504
+                 "x":990,
+                 "y":108
                 }, 
                 {
                  "height":18,

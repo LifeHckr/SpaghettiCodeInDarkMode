@@ -20,8 +20,8 @@ class Platformer extends Phaser.Scene {
         //------ETC-----------------------------
         this.roomWidth = 60;
         this.roomHeight = 30;
-        this.levelMap = new LevelMap(experimental.width, experimental.height);
-        this.levelMap.generateLevel(5, 7, experimental.branches, undefined, undefined, undefined, undefined, undefined);
+        this.levelMap = new LevelMap(my.levelConfig.width, my.levelConfig.height);
+        this.levelMap.generateLevel(my.levelConfig.minLength, my.levelConfig.maxLength, my.levelConfig.branches, my.levelConfig.maxRooms, my.levelConfig.treasures, my.levelConfig.openWeight, my.levelConfig.closedWeight, my.levelConfig.seed);
         this.itemPool = new ItemPool((this.levelMap.rand));
 
         //debug
