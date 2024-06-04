@@ -8,7 +8,7 @@ class screenLoop extends Phaser.GameObjects.Sprite {
         this.x = Math.floor(Math.random() * (game.config.width - 0 + 1) + 0),
         this.y = Math.floor(Math.random() * (game.config.height - 0 + 1) + 0),
         this.setDepth(-1);
-
+        this.setScale(8);
         this.scene.add.existing(this);
         return this;
     }

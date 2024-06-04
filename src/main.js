@@ -46,7 +46,7 @@ var experimental = {
     branches: -1
 }
 const SCALE = 2.0;
-var my = {sprite: {}, text: {}, log: []};
+var my = {sprite: {}, text: {}};
 const enumList = {
     RIGHT: 1,
     LEFT: -1,

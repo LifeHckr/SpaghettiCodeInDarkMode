@@ -31,6 +31,7 @@ class Platformer extends Phaser.Scene {
         }
 
         //-----------------------------------
+        my.gameWin = false;
     }
 
     preload() {
@@ -109,7 +110,8 @@ class Platformer extends Phaser.Scene {
         //WaterOverlap
         this.physics.add.overlap(this.sprite.player, this.waterPool, (obj1, obj2) => {
 
-            if (this.timer.timerTimer) {
+            if (!my.gameWin) {
+                my.gameWin = true;
                 this.sound.play("jingle");
                 let tempText = this.add.text(0, 0, 'YOU WIN!!!', { fontFamily: 'font1', fontSize: '42px', fill: '#5ad28c',  stroke: '#FFFFFF', strokeThickness: 15}).setOrigin(.5).setPosition(game.config.width/2, game.config.height/2).setDepth(10).setAngle(-20).setScrollFactor(0);
                 this.tweens.add({
@@ -118,8 +120,15 @@ class Platformer extends Phaser.Scene {
                     ease        : 'Cubic.In',
                     duration    : 2000,
                 });
-                this.timer.timerTimer.destroy();
-                this.timer.timerTimer = false;//:)
+                //this.timer.timerTimer.destroy();
+                //this.timer.timerTimer = false;//:)
+
+                this.time.delayedCall(
+                    1000,                // ms
+                    ()=>{
+                        this.timer.time = 0;
+                    }
+                )
             }
 
         });
