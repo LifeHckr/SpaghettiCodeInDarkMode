@@ -49,7 +49,8 @@ class Minimap extends Phaser.Cameras.Scene2D.Camera {
             miniTile.y = curTile.y;
 
             if (curTile == levelMap.startRoom) {
-                this.playerRect = this.scene.add.text(curTile.x * (this.rectWidth) + this.offset + (this.rectWidth/2), curTile.y * (this.rectWidth)+ this.offset+(this.rectWidth/2), "._.", { fontFamily: 'font1', fontSize: '30px', fill: '#FFFFFFF',  stroke: '#FFFFFF', strokeThickness: 10}).setDepth(3).setOrigin(.5, .5);
+                //this.playerRect = this.scene.add.text(curTile.x * (this.rectWidth) + this.offset + (this.rectWidth/2), curTile.y * (this.rectWidth)+ this.offset+(this.rectWidth/2), "._.", { fontFamily: 'font1', fontSize: '30px', fill: '#FFFFFFF',  stroke: '#FFFFFF', strokeThickness: 10}).setDepth(3).setOrigin(.5, .5);
+                this.playerRect = this.scene.add.sprite(curTile.x * (this.rectWidth) + this.offset + (this.rectWidth/2), curTile.y * (this.rectWidth)+ this.offset+(this.rectWidth/2), "pizza").setAlpha(1).setScale(3).setDepth(2);
                 this.centerOn(curTile.x * (this.rectWidth) + this.offset + (this.rectWidth/2), curTile.y * (this.rectWidth)+ this.offset+(this.rectWidth/2));
             }
             if (curTile == levelMap.endRoom) {
