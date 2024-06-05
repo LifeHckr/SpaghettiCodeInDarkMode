@@ -58,12 +58,12 @@ class ItemPool {
         },
         5: {
             weight: .75,
-            name: "Aged Cheddar",
+            name: "Aged Pepperoni",
             funcs: [(player) => {
                 player.MAXVELOCITYX += 60;
                 player.MAXVELOCITYY += 30;
             },],
-            description: "More oomph, aged like.. cheddar."
+            description: "More oomph, aged like.. pepperoni?"
         },
         6: {
             weight: .25,
@@ -89,9 +89,18 @@ class ItemPool {
             },],
             description: "Press E while running to dash!",
             remove: true
+        },
+        8: {
+            weight: .20,
+            name: "Whitehead Cheese",
+            funcs: [(player) => {
+                player.scene.minimap.renderAll();
+            },],
+            description: "Illuminating, like the Prof. himself.",
+            remove: true
         }
     }
-    totalItems = 8;
+    totalItems = 9;
     pickItem() {
         let itemWeight = this.rand.frac();
         let item = this.pool[this.rand.integerInRange(0, this.totalItems - 1)];
@@ -101,13 +110,13 @@ class ItemPool {
         if (item.remove) {
             this.removeItem(item);
         }
-        /*if (game.config.physics.arcade.debug) {
+        if (game.config.physics.arcade.debug) {
             my.log.push({
                 message: "DB: Treasure Generation",
                 item: item.name,
                 weight: itemWeight,
             });
-        }*/
+        }
         return item;
     }
 

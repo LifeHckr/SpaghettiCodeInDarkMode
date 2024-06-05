@@ -55,6 +55,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
             } else if (player.keys.length > 0) {
                 wall.unlocking = true;
+                //remove lock icon
+                this.scene.minimap.getTile(Math.floor(wall.x / this.scene.roomWidth / SCALE / 18), Math.floor(wall.y / this.scene.roomHeight / SCALE / 18)).removeIcon();
+
                 let animingKey = player.keys.pop();
                 animingKey.unlockAnim(wall);
             }

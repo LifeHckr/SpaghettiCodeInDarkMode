@@ -72,7 +72,10 @@ class TitleScreen extends Phaser.Scene {
                 console.log("DB: Ignoring Selection starting with test config: ");
                 my.levelConfig = {minLength: 5, maxLength: 7, branches : experimental.branches, maxRooms: undefined, treasures: 3, openWeight: undefined, closedWeight: undefined, seed: undefined, width: experimental.width, height: experimental.height};
                 console.log((my.levelConfig));
-
+                this.bgm.stop();
+                game.scene.stop('TitleScreen');
+                this.scene.get('platformerScene').scene.restart();
+                return;
             } else if(object === this.sprite.uhoh){
                 my.levelConfig = {minLength: 1, maxLength: 1, branches : 800, maxRooms: 700, treasures: 40, openWeight: 1, closedWeight: .1, seed: ["possible?"], width: 30, height: 30};
 
