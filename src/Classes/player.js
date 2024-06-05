@@ -36,6 +36,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.animating = false;//is player doing change direction animation, dont use
         this.signTouch = false;//false = init, otherwise is last touched sign
         this.knockback = false;//is player under enemy knockback
+        this.hitStun = false;
         this.bumpTimed = false;//did the player bonk
         this.dashEnable = false;
 
@@ -86,6 +87,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.signals.on("hasShot", (firedGun, tempVec) => {
             this.facing = enumList.SHOOTING;
             this.setVelocity(tempVec.x * this.MAXVELOCITYX, tempVec.y * this.MAXVELOCITYY);
+            this.signals.emit("noise", this);
         });
     //gun init
         this.gun = new Gun(this.scene, this.x, this.y, "fondoodler", null , this).setScale(SCALE);
@@ -189,6 +191,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             //Fall Tween
                 if (this.body.deltaAbsY() > 15) {
                     this.scene.sound.play("landSound", {mute: false, volume: .5, rate: 1.5, detune: -600});
+                    this.signals.emit("noise", this);
                 //More squish when landing from a slightly higher height
                 //Also funny stuff to keep the hitbox from deforming
                     this.scene.tweens.add({
@@ -233,6 +236,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             //If player was just grounded, set to in air, set up velocity, and play anims
             if (this.air == enumList.GROUNDED) {
                 this.scene.sound.play("landSound", {mute: false, volume: .75, rate: .5});
+                this.signals.emit("noise", this);
                 this.air = enumList.INAIR;
                 this.body.setVelocityY(this.JUMP_VELOCITY);
     
@@ -315,7 +319,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     //Trigger Running - If over run threshold and not running
         if (!this.knockback && Math.abs(this.body.velocity.x) >= this.RUNTHRESHOLD) {
             this.running = this.RUNMULTI;
-        //Remove Running    
+            this.signals.emit("noise", this);
+            //Remove Running
         } else if (Math.abs(this.body.velocity.x) < this.RUNTHRESHOLD) {            
             this.running = 1;
         }

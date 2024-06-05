@@ -154,6 +154,26 @@ class Load extends Phaser.Scene {
             frameRate: 6
         });
 
+        this.anims.create({
+            key: 'blindWalk',
+            frames: [
+                { key: 'platformer_characters', frame: "tile_0018.png" },
+                { key: 'platformer_characters', frame: "tile_0019.png" }
+            ],
+            yoyo: true,
+            repeat: -1,
+            frameRate: 6
+        });
+
+        this.anims.create({
+            key: 'blindIdle',
+
+            frames: [
+                { key: 'platformer_characters', frame: "tile_0018.png" },
+            ],
+            repeat: -1
+        });
+
 
          // ...and pass to the next Scene
          

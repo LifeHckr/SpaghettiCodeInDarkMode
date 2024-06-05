@@ -73,7 +73,6 @@ class Platformer extends Phaser.Scene {
 
         }
         this.enemygroup = this.add.group({
-            classType: Enemy,
             maxSize: 100,
             // activate update calls
             runChildUpdate: true
@@ -239,6 +238,7 @@ class Platformer extends Phaser.Scene {
 
             //let newKey = new Key(this, 0, 0, "texturesAtlas", 'tile_0027.png', this.sprite.player);
             let newTreasure = new PickupPool(this, this.sprite.player.x + (60 * this.sprite.player.facing), this.sprite.player.y, null, null, this.levelMap.rand);
+            //let newEnem = new Blind(this, this.sprite.player.x + (60 * this.sprite.player.facing), this.sprite.player.y, "platformer_characters", "tile_0018.png");
 
             console.log("DB: Key and Chest Spawned");
         }, this);
@@ -310,7 +310,7 @@ class Platformer extends Phaser.Scene {
             () => {
                 my.bgm.play({loop: true, seek: 100, rate: 1, volume: 0.75});
             }
-        )
+        );
         my.bgm.rateVar = 1;
 
         this.minimap = new Minimap(this, -1000, -1000, 200, 200, this.levelMap);
@@ -582,12 +582,13 @@ class Platformer extends Phaser.Scene {
         }
 
         //Enemy
-        let enemySpawn = map.createFromObjects("Objects", {
+        //FlySpawn
+        let flySpawn = map.createFromObjects("Objects", {
             type: "flySpawn",
             key: "platformer_characters",
             frame: "tile_0024.png",
         });
-        enemySpawn.map((enemy) => {
+        flySpawn.map((enemy) => {
             enemy.scale = SCALE;
             enemy.x *= SCALE;
             enemy.y *= SCALE;
@@ -598,6 +599,26 @@ class Platformer extends Phaser.Scene {
             this.enemygroup.add(newEnemy);
             enemy.destroy();
         });
+
+        //BlindSpawn
+        let blindSpawn = map.createFromObjects("Objects", {
+            name: "blindSpawn",
+            key: "platformer_characters",
+            frame: "tile_0024.png",
+        });
+        blindSpawn.map((enemy) => {
+            enemy.scale = SCALE;
+            enemy.x *= SCALE;
+            enemy.y *= SCALE;
+            enemy.x += x;
+            enemy.y += y;
+            let newBlind = new Blind(this, enemy.x, enemy.y, "platformer_characters", "tile_0018.png");
+            newBlind.facing = enumList.LEFT;
+            this.enemygroup.add(newBlind);
+            enemy.destroy();
+        });
+
+
 
         //Water
         if (type == "endRoom") {

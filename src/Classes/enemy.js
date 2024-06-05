@@ -47,10 +47,16 @@ class Enemy extends Phaser.GameObjects.PathFollower {
             if (obj1.running > 1) {
                 obj2.death();
             //Dont reknockback, invince frames
-            } else if (!obj1.knockback) {
+            } else if (!obj1.hitStun) {
                 //Push player away, first remove current momentum, and set flag
                 obj1.body.setAccelerationX(0);
                 obj1.knockback = true;
+                obj1.hitStun = true;
+                scene.time.delayedCall(
+                    1000,                // ms
+                    ()=>{
+                        obj1.hitStun = false;
+                    });
                 obj1.running = 1;
                 obj1.setAngularVelocity(0);
                 //Determine knockback vector
