@@ -400,7 +400,6 @@ class Platformer extends Phaser.Scene {
         map.addTilesetImage("kenny_tilemap_packed", "tilemap_tiles");
         //map.addTilesetImage("tilemap-backgrounds_packed", "background_tiles");
         map.layers.forEach(layer => {
-
             let curLayer = map.createLayer(layer.name, ["kenny_tilemap_packed"], x, y, null, true);
             curLayer.setScale(SCALE);
             //curLayer.active = false; //doesnt change anything
@@ -429,14 +428,9 @@ class Platformer extends Phaser.Scene {
                 curLayer.setDepth((1));
             }
 
-            if (layer.name === "Below-Layer-check") {
-                console.log("test");
-                curLayer.setTint(parseInt(curLayer.tint));
-            }
 
-            if (curLayer.hasOwnProperty("tint")) {
-                console.log("test");
-                curLayer.setTint(parseInt(curLayer.tint));
+            if (layer.properties.length > 0 && layer.properties[0].name === "0_tint") {
+                curLayer.setTint(parseInt(layer.properties[0].value));
             }
         });
         this.animatedTiles.init(map);

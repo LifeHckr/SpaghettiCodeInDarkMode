@@ -289,9 +289,9 @@
    </properties>
   </tile>
  </tileset>
- <layer id="9" name="Below-Layer" width="60" height="30" tintcolor="#c8c8c8">
+ <layer id="9" name="word" width="60" height="30" tintcolor="#c8c8c8">
   <properties>
-   <property name="tint" value="0xc8c8c8"/>
+   <property name="0_tint" value="0xc8c8c8"/>
   </properties>
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
