@@ -43,12 +43,23 @@ class Platformer extends Phaser.Scene {
         //xMark for Signs
         this.sprite.xMark = this.add.sprite(0, 0, "x").setScale(SCALE).setVisible(true).setDepth(1).setAlpha(0);
         //HintText
-        this.sprite.hintText = this.add.text(0, 0, 'A and D to move', { fontFamily: 'font1', fontSize: '42px', fill: '#FFFFFFF',  stroke: '#FFFFFF', strokeThickness: 10}).setOrigin(.5).setPosition(game.config.width/2, game.config.height - 160).setDepth(10).setAngle(-20).setScrollFactor(0);
+        this.sprite.hintText = this.add.text(0, 0, 'A and D to move', {
+            fontFamily: 'font1',
+            fontSize: '42px',
+            fill: '#FFFFFFF',
+            stroke: '#FFFFFF',
+            strokeThickness: 10
+        }).setOrigin(.5).setPosition(game.config.width / 2, game.config.height - 160).setDepth(10).setAngle(-20).setScrollFactor(0);
         //Timer Text
-        this.timer = new LevelTimer(this, 0, 0, '999', { fontFamily: 'font1', fontSize: '37px', fill: '#FFFFFFF', stroke: '#FFFFFF', strokeThickness: 10 }, 999);
+        this.timer = new LevelTimer(this, 0, 0, '999', {
+            fontFamily: 'font1',
+            fontSize: '37px',
+            fill: '#FFFFFFF',
+            stroke: '#FFFFFF',
+            strokeThickness: 10
+        }, 999);
         //Background
-        this.bg1 = this.add.tileSprite(game.config.width, -500, game.config.width, game.config.height, 'bgGrass').setScale(4).setScrollFactor(.05).setScale(5).setDepth(-10);
-
+        this.bg1 = this.add.tileSprite(0, 0, game.config.width, game.config.width, 'bgGrass').setTileScale(5, 5).setDepth(-10).setOrigin(0, 0).setScrollFactor(0);
 //----------------------------------------------------------------
 
 //TILEMAP--------------------------------------------------------------
@@ -113,19 +124,25 @@ class Platformer extends Phaser.Scene {
             if (!my.gameWin) {
                 my.gameWin = true;
                 this.sound.play("jingle");
-                let tempText = this.add.text(0, 0, 'YOU WIN!!!', { fontFamily: 'font1', fontSize: '42px', fill: '#5ad28c',  stroke: '#FFFFFF', strokeThickness: 15}).setOrigin(.5).setPosition(game.config.width/2, game.config.height/2).setDepth(10).setAngle(-20).setScrollFactor(0);
+                let tempText = this.add.text(0, 0, 'YOU WIN!!!', {
+                    fontFamily: 'font1',
+                    fontSize: '42px',
+                    fill: '#5ad28c',
+                    stroke: '#FFFFFF',
+                    strokeThickness: 15
+                }).setOrigin(.5).setPosition(game.config.width / 2, game.config.height / 2).setDepth(10).setAngle(-20).setScrollFactor(0);
                 this.tweens.add({
-                    targets     : tempText,
-                    alpha     : 0,
-                    ease        : 'Cubic.In',
-                    duration    : 2000,
+                    targets: tempText,
+                    alpha: 0,
+                    ease: 'Cubic.In',
+                    duration: 2000,
                 });
                 //this.timer.timerTimer.destroy();
                 //this.timer.timerTimer = false;//:)
 
                 this.time.delayedCall(
                     1000,                // ms
-                    ()=>{
+                    () => {
                         this.timer.time = 0;
                     }
                 )
@@ -142,7 +159,6 @@ class Platformer extends Phaser.Scene {
         my.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
 
 
-
 //--------------------------------------
 //Debug---------------------------------
         //debug key listener (assigned to G key) Only available if debug was on on game load
@@ -153,9 +169,9 @@ class Platformer extends Phaser.Scene {
                 game.config.physics.arcade.debug = game.config.physics.arcade.debug ? false : true;
                 this.physics.world.drawDebug = game.config.physics.arcade.debug;
 
-                if(game.config.physics.arcade.debug){
+                if (game.config.physics.arcade.debug) {
                     console.log(debugText);
-                }else{
+                } else {
                     console.log("Debug mode deactivated!");
                 }
 
@@ -163,7 +179,6 @@ class Platformer extends Phaser.Scene {
                 this.physics.world.debugGraphic.clear();
             }, this);
         }
-
 
 
         //P key to teleport to the map
@@ -257,8 +272,8 @@ class Platformer extends Phaser.Scene {
         this.camera.width = game.config.width;
         this.camera.height = game.config.height;
         this.camera.setViewport(0, 0, game.config.width, game.config.height);
-        this.camera.setBounds(0, 0, this.levelMap.width * SCALE * 18 * this.roomWidth,  this.levelMap.height * SCALE * 18 * this.roomHeight);
-        this.camera.setZoom(game.config.width/1200 * 1.20, game.config.height/700 * 1.20);
+        this.camera.setBounds(0, 0, this.levelMap.width * SCALE * 18 * this.roomWidth, this.levelMap.height * SCALE * 18 * this.roomHeight);
+        this.camera.setZoom(game.config.width / 1200 * 1.20, game.config.height / 700 * 1.20);
         //this.camera.setDeadzone(100, 100);
 //-----------------------------------------
 
@@ -266,20 +281,20 @@ class Platformer extends Phaser.Scene {
 
         //xMark grow/shrink, just constantly on, might technically be performance loss idk
         this.sprite.xMark.tween = this.tweens.add({
-            targets     : this.sprite.xMark,
-            scale     : 1.5,
-            ease        : 'Linear',
-            duration    : 600,
+            targets: this.sprite.xMark,
+            scale: 1.5,
+            ease: 'Linear',
+            duration: 600,
             yoyo: true,
             repeat: -1
         });
 
         //Starting hint text tween, bouncy, also i assume this ends and gets destroyed when text does
         this.tweens.add({
-            targets     : this.sprite.hintText,
-            angle      : 20,
-            ease        : 'Cubic.In',
-            duration    : 500,
+            targets: this.sprite.hintText,
+            angle: 20,
+            ease: 'Cubic.In',
+            duration: 500,
             repeat: -1,
             yoyo: true
         });
@@ -292,18 +307,20 @@ class Platformer extends Phaser.Scene {
         this.sound.play("jingle");
         this.time.delayedCall(
             734,                // ms
-            ()=>{
-                my.bgm.play({ loop:true, seek: 100, rate: 1, volume: 0.75});
+            () => {
+                my.bgm.play({loop: true, seek: 100, rate: 1, volume: 0.75});
             }
         )
         my.bgm.rateVar = 1;
 
         this.minimap = new Minimap(this, -1000, -1000, 200, 200, this.levelMap);
     }
+//END CREATE---------------------------------------------------------
 
     update() {
 
         this.sprite.player.update();
+        this.bg1.setTilePosition(this.camera.scrollX * 0.02, this.camera.scrollY* 0.02);
 
 //Extra Checks------------------------
 

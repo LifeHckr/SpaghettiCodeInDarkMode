@@ -24,7 +24,7 @@ let config = {
     physics: {
         default: 'arcade',
         arcade: {
-            debug: true,
+            //debug: true,
             fps: 60,//I am officially leaving this at 60
             fixedstep: true,
             tileBias: 64,
