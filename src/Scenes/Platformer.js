@@ -57,7 +57,7 @@ class Platformer extends Phaser.Scene {
             fill: '#FFFFFFF',
             stroke: '#FFFFFF',
             strokeThickness: 10
-        }, 999);
+        }, my.levelConfig.duration);
         //Background
         this.bg1 = this.add.tileSprite(0, 0, game.config.width, game.config.width, 'bgGrass').setTileScale(5, 5).setDepth(-10).setOrigin(0, 0).setScrollFactor(0);
 //----------------------------------------------------------------
@@ -320,7 +320,7 @@ class Platformer extends Phaser.Scene {
     update() {
 
         this.sprite.player.update();
-        this.bg1.setTilePosition(this.camera.scrollX * 0.02, this.camera.scrollY* 0.02);
+        this.bg1.setTilePosition(this.camera.scrollX * 0.03, this.camera.scrollY* 0.03);
 
 //Extra Checks------------------------
 

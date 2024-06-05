@@ -96,7 +96,7 @@ class Start extends Phaser.Scene {
                 this.sound.play("bwah"); 
             }
         });
-        my.sprite.g2 = this.add.text(0, 0, "Deliver yourself in 999 seconds", { fontFamily: 'font1', fontSize: '38px', fill: '#d4af37', stroke: '#FFFFFF', strokeThickness: 14 }).setOrigin(.5).setPosition(game.config.width/2, 360).setScale(50).setVisible(false);
+        my.sprite.g2 = this.add.text(0, 0, `Deliver yourself in ${my.levelConfig.duration} seconds`, { fontFamily: 'font1', fontSize: '38px', fill: '#d4af37', stroke: '#FFFFFF', strokeThickness: 14 }).setOrigin(.5).setPosition(game.config.width/2, 360).setScale(50).setVisible(false);
         this.tweens.add({
             delay: 3000,
             targets     : my.sprite.g2,
