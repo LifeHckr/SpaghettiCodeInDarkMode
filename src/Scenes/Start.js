@@ -144,6 +144,7 @@ class Start extends Phaser.Scene {
                 this.bgm.stop();
                 game.scene.stop('Start');
                 this.scene.get('platformerScene').scene.restart();
+                console.log("check");
         });
     }
 }
