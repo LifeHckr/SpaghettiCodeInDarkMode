@@ -91,6 +91,7 @@ class Blind extends Phaser.Physics.Arcade.Sprite {
         });
         //Noise timer
         this.noiseTimer = this.scene.time.addEvent({
+            paused: true,
             delay: 1,                // ms
             callback: ()=>{
             this.noiseListen = false;
@@ -125,8 +126,12 @@ class Blind extends Phaser.Physics.Arcade.Sprite {
             this.canJump = true;
         }
 
-
         this.changeDir(this.facing !== enumList.LEFT);
+
+        if (this.noiseListen && this.noiseTimer.getRemaining() == 0) {
+            this.transitionState(this.state, "idle");
+            this.noiseTimer.paused = true;
+        }
     }
 
     transitionState(cur, next) {
@@ -210,12 +215,8 @@ class Blind extends Phaser.Physics.Arcade.Sprite {
             this.transitionState(this.state, "chase");
             this.noiseListen = true;
             this.noiseTimer.reset({
-                delay: 1500,                // ms
-                callback: ()=>{
-                    this.transitionState(this.state, "idle");
-                }
+                delay: 1500
             });
-            this.scene.time.addEvent(this.noiseTimer);
         } else {
             this.transitionState(this.state, "idle");
         }
