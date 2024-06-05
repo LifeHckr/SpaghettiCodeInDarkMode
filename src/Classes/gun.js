@@ -128,7 +128,7 @@ class Gun extends Phaser.GameObjects.Sprite {
                 //Create a normalized vector to give things consistent speed
                 let tempVec = new Phaser.Math.Vector2((this.player.x - game.input.mousePointer.worldX), (this.player.y - game.input.mousePointer.worldY)).normalize();
 
-                bullet.fire(tempVec, this.getRightCenter());
+                bullet.fire(tempVec, this.getRightCenter(), this.player.damage);
 
                 //signals:
                 //Make a var: (thing) = scene.events;

@@ -187,6 +187,28 @@
                  "width":18,
                  "x":756,
                  "y":522
+                }, 
+                {
+                 "height":18,
+                 "id":26,
+                 "name":"enemy",
+                 "properties":[
+                        {
+                         "name":"duration",
+                         "type":"int",
+                         "value":4000
+                        }, 
+                        {
+                         "name":"pathLength",
+                         "type":"int",
+                         "value":576
+                        }],
+                 "rotation":0,
+                 "type":"flySpawn",
+                 "visible":true,
+                 "width":18,
+                 "x":810,
+                 "y":216
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -236,7 +258,7 @@
          "y":0
         }],
  "nextlayerid":9,
- "nextobjectid":26,
+ "nextobjectid":27,
  "orientation":"orthogonal",
  "properties":[
         {

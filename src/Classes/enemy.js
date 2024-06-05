@@ -5,7 +5,7 @@ class Enemy extends Phaser.GameObjects.PathFollower {
         this.active = true;
         this.setDepth(0);
         this.scale = SCALE;
-        
+        this.hp = 1;
 
 
         this.startFollowOBJ1 = {
@@ -45,20 +45,7 @@ class Enemy extends Phaser.GameObjects.PathFollower {
         scene.physics.add.overlap(scene.playerGroup, this, (obj1, obj2) => {
             //Only kill if running and do particles
             if (obj1.running > 1) {
-                scene.add.particles(obj2.x, obj2.y, 'x', { 
-                    angle: { min: 0, max: 360 },
-                    gravityY: 600,
-                    delay: 10,
-                    speed: 100,
-                    lifespan: 300,
-                    quantity: 10,
-                    scale: { start: 2, end: 0 },
-                    emitting: true,
-                    emitZone: { type: 'random', source: scene.sprite.player, quantity:10, scale: { start: 2, end: 0 } },
-                    duration: 10
-                });
-                scene.sound.play("bwah");
-                obj2.destroy();
+                obj2.death();
             //Dont reknockback, invince frames
             } else if (!obj1.knockback) {
                 //Push player away, first remove current momentum, and set flag
@@ -147,5 +134,30 @@ class Enemy extends Phaser.GameObjects.PathFollower {
             array.push(startY);
             //And repeat
        }
+    }
+
+    doDamage(damage) {
+        this.hp -= damage;
+        if (this.hp <= 0) {
+            this.death();
+        }
+    }
+
+    death() {
+        this.scene.add.particles(this.x, this.y, 'x', {
+            angle: { min: 0, max: 360 },
+            gravityY: 600,
+            delay: 10,
+            speed: 100,
+            lifespan: 300,
+            quantity: 10,
+            scale: { start: 2, end: 0 },
+            emitting: true,
+            emitZone: { type: 'random', source: this, quantity:10, scale: { start: 2, end: 0 } },
+            duration: 10
+        });
+        let newPickup = new PickupPool(this.scene, this.x, this.y, null, null, this.scene.levelMap.rand);
+        this.scene.sound.play("bwah");
+        this.destroy();
     }
 }

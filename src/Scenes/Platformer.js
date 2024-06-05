@@ -583,7 +583,7 @@ class Platformer extends Phaser.Scene {
 
         //Enemy
         let enemySpawn = map.createFromObjects("Objects", {
-            type: "enemSpawn",
+            type: "flySpawn",
             key: "platformer_characters",
             frame: "tile_0024.png",
         });
@@ -593,8 +593,7 @@ class Platformer extends Phaser.Scene {
             enemy.y *= SCALE;
             enemy.x += x;
             enemy.y += y;
-
-            let newEnemy = new Enemy(this, enemy.x, enemy.y, "platformer_characters", "tile_0024.png");
+            let newEnemy = new Enemy(this, enemy.x, enemy.y, "platformer_characters", "tile_0024.png", enemy.data.list.duration, enemy.data.list.pathLength);
             newEnemy.facing = enumList.LEFT;
             this.enemygroup.add(newEnemy);
             enemy.destroy();
