@@ -428,6 +428,16 @@ class Platformer extends Phaser.Scene {
             } else if (layer.name == "Top-Layer") {
                 curLayer.setDepth((1));
             }
+
+            if (layer.name === "Below-Layer-check") {
+                console.log("test");
+                curLayer.setTint(parseInt(curLayer.tint));
+            }
+
+            if (curLayer.hasOwnProperty("tint")) {
+                console.log("test");
+                curLayer.setTint(parseInt(curLayer.tint));
+            }
         });
         this.animatedTiles.init(map);
 

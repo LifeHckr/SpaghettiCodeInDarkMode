@@ -37,6 +37,12 @@
          "id":9,
          "name":"Below-Layer",
          "opacity":1,
+         "properties":[
+                {
+                 "name":"tint",
+                 "type":"string",
+                 "value":"0xc8c8c8"
+                }],
          "tintcolor":"#c8c8c8",
          "type":"tilelayer",
          "visible":true,
