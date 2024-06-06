@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="18" tileheight="18" infinite="0" nextlayerid="9" nextobjectid="27">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="18" tileheight="18" infinite="0" nextlayerid="9" nextobjectid="30">
  <editorsettings>
   <export target="CCCO.tmj" format="json"/>
  </editorsettings>
@@ -401,6 +401,24 @@
    <properties>
     <property name="duration" type="int" value="4000"/>
     <property name="pathLength" type="int" value="576"/>
+    <property name="spawnChance" type="float" value="0.9"/>
+   </properties>
+  </object>
+  <object id="27" name="blindSpawn" type="blindSpawn" x="180" y="306" width="18" height="18">
+   <properties>
+    <property name="secondaryChance" type="float" value="0.3"/>
+    <property name="spawnChance" type="float" value="1"/>
+   </properties>
+  </object>
+  <object id="28" name="blockSpawn" type="blockSpawn" x="522" y="324" width="18" height="18">
+   <properties>
+    <property name="spawnChance" type="float" value="0.75"/>
+   </properties>
+  </object>
+  <object id="29" name="blindSpawn" type="blindSpawn" x="126" y="504" width="18" height="18">
+   <properties>
+    <property name="secondaryChance" type="float" value="1"/>
+    <property name="spawnChance" type="float" value="0.15"/>
    </properties>
   </object>
  </objectgroup>

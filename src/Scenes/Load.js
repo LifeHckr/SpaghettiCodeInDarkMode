@@ -29,6 +29,8 @@ class Load extends Phaser.Scene {
         this.load.image("kenny-pizza", "tile_0106.png");
         this.load.image("kenny-cheese", "tile_0105.png");
         this.load.image("kenny-chest", "tile_0061.png");
+        this.load.image("pizzaBox", "pizzaBoxEmpty.png");
+        this.load.image("pizzaFull", "pizzaBox.png");
 
         //Game Over
         this.load.image("meteor1", "spaceMeteors_004.png");
@@ -90,12 +92,7 @@ class Load extends Phaser.Scene {
 
         this.anims.create({
             key: 'idle',
-            /*
-            defaultTextureKey: "platformer_characters",
-            frames: [
-                { frame: "tile_0000.png" }
-            ],
-            */
+
             frames: [
                 { key: 'pizza', frame: null }
             ],
@@ -104,12 +101,6 @@ class Load extends Phaser.Scene {
 
         this.anims.create({
             key: 'jump',
-            /*
-            defaultTextureKey: "platformer_characters",
-            frames: [
-                { frame: "tile_0001.png" }
-            ],
-            */
             frames: [
                 { key: 'pizza', frame: null }
             ],
@@ -172,6 +163,51 @@ class Load extends Phaser.Scene {
                 { key: 'platformer_characters', frame: "tile_0018.png" },
             ],
             repeat: -1
+        });
+
+        this.anims.create({
+            key: 'bigWalk',
+            frames: [
+                { key: 'platformer_characters', frame: "tile_0021.png" },
+                { key: 'platformer_characters', frame: "tile_0022.png" }
+            ],
+            yoyo: true,
+            repeat: -1,
+            frameRate: 6
+        });
+
+        this.anims.create({
+            key: 'bigIdle',
+
+            frames: [
+                { key: 'platformer_characters', frame: "tile_0021.png" },
+            ],
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'blockIdle',
+
+            frames: [
+                { key: 'platformer_characters', frame: "tile_0011.png" },
+            ],
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'blockMove',
+
+            frames: [
+                { key: 'platformer_characters', frame: "tile_0012.png" },
+            ],
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'pizzaFull',
+            frames: [
+                { key: 'pizzaFull', frame: null }
+            ],
         });
 
 

@@ -121,6 +121,16 @@ class Platformer extends Phaser.Scene {
         this.physics.add.overlap(this.sprite.player, this.waterPool, (obj1, obj2) => {
 
             if (!my.gameWin) {
+                obj2.anims.play("pizzaFull");
+                //Make player invis nd no move
+                obj1.air = enumList.NOJUMP;
+                obj1.animating = true;
+                obj1.setVelocity(0, 0);
+                obj1.setAcceleration(0, 0);
+                obj1.visible = false;
+                this.input.enabled = false;
+                obj1.gun.active = false;
+
                 my.gameWin = true;
                 this.sound.play("jingle");
                 let tempText = this.add.text(0, 0, 'YOU WIN!!!', {
@@ -136,8 +146,7 @@ class Platformer extends Phaser.Scene {
                     ease: 'Cubic.In',
                     duration: 2000,
                 });
-                //this.timer.timerTimer.destroy();
-                //this.timer.timerTimer = false;//:)
+
 
                 this.time.delayedCall(
                     1000,                // ms
@@ -236,10 +245,9 @@ class Platformer extends Phaser.Scene {
                 return;
             }
 
-            //let newKey = new Key(this, 0, 0, "texturesAtlas", 'tile_0027.png', this.sprite.player);
             let newTreasure = new PickupPool(this, this.sprite.player.x + (60 * this.sprite.player.facing), this.sprite.player.y, null, null, this.levelMap.rand);
-            //let newEnem = new Blind(this, this.sprite.player.x + (60 * this.sprite.player.facing), this.sprite.player.y, "platformer_characters", "tile_0018.png");
-
+            //let test = new notRayCast(this, this.sprite.player.x + (60 * this.sprite.player.facing), this.sprite.player.y, "pizza", );
+            this.enemygroup.add(test);
             console.log("DB: Key and Chest Spawned");
         }, this);
 
@@ -437,8 +445,12 @@ class Platformer extends Phaser.Scene {
 
         //Collection Layer------------------------------------------------------------------------
 
+        let spawnModifier = 1;
+
         //Treasure rooms
         if (type == "treasure") {
+
+            spawnModifier = 2;
 
             //Treasure rooms always hae an extra collectable
             let coins = map.createFromObjects("Objects", {
@@ -507,8 +519,9 @@ class Platformer extends Phaser.Scene {
             //Allow rooms to have multiple collectible spots
             //Currently each spot has a 1/(number of spots) chance to spawn a pickup
             //Each unsuccessful spawn increases the chance, up to guaranteeing atleast 1 pickup spawns in each room
+            //No pickups in start room
             let chance = this.levelMap.rand.integerInRange(1, chancesToFail);
-            if (chance == 1) {
+            if (type !== "startRoom" && chance == 1) {
                 chancesToFail--;
                 key.setScale(SCALE);
                 key.x *= SCALE;
@@ -524,26 +537,6 @@ class Platformer extends Phaser.Scene {
             key.destroy();
         });
 
-        //"Coins"
-        /*let coins = map.createFromObjects("Objects", {
-            type: "coin",
-            key: "coin"
-        });
-
-        //REMEMBER TO TURN COINS BACK TO COINS
-        coins.map((coin) => {
-            coin.scale = SCALE;
-            coin.x *= SCALE;
-            coin.y *= SCALE;
-            coin.x += x;
-            coin.y += y;
-            //this.physics.world.enable(coin, Phaser.Physics.Arcade.STATIC_BODY);
-            //coin.play('coinTurn');
-            //this.coingroup.add(coin);
-            let newSign = new Sign(this, coin.x, coin.y, "sign", undefined, coin.name);
-            this.signGroup.add(newSign);
-            coin.destroy();
-        });*/
 
         //SIGNS
         let signs = map.createFromObjects("Objects", {
@@ -563,7 +556,8 @@ class Platformer extends Phaser.Scene {
         });
 
         //Player Spawn
-        if (type == "startRoom") {
+        if (type === "startRoom") {
+            spawnModifier = 0;
             if (!this.playerSpawn){
                 this.playerSpawn = map.createFromObjects("Objects", {
                     type: "spawner",
@@ -581,6 +575,11 @@ class Platformer extends Phaser.Scene {
             }
         }
 
+        //Endroom
+        if (type === "endRoom") {
+            spawnModifier = 1.5;
+        }
+
         //Enemy
         //FlySpawn
         let flySpawn = map.createFromObjects("Objects", {
@@ -589,14 +588,16 @@ class Platformer extends Phaser.Scene {
             frame: "tile_0024.png",
         });
         flySpawn.map((enemy) => {
-            enemy.scale = SCALE;
-            enemy.x *= SCALE;
-            enemy.y *= SCALE;
-            enemy.x += x;
-            enemy.y += y;
-            let newEnemy = new Enemy(this, enemy.x, enemy.y, "platformer_characters", "tile_0024.png", enemy.data.list.duration, enemy.data.list.pathLength);
-            newEnemy.facing = enumList.LEFT;
-            this.enemygroup.add(newEnemy);
+            if (this.levelMap.rand.frac() <= enemy.data.list.spawnChance * spawnModifier) {
+                enemy.scale = SCALE;
+                enemy.x *= SCALE;
+                enemy.y *= SCALE;
+                enemy.x += x;
+                enemy.y += y;
+                let newEnemy = new Enemy(this, enemy.x, enemy.y, "platformer_characters", "tile_0024.png", enemy.data.list.duration, enemy.data.list.pathLength);
+                newEnemy.facing = enumList.LEFT;
+                this.enemygroup.add(newEnemy);
+            }
             enemy.destroy();
         });
 
@@ -607,14 +608,41 @@ class Platformer extends Phaser.Scene {
             frame: "tile_0024.png",
         });
         blindSpawn.map((enemy) => {
-            enemy.scale = SCALE;
-            enemy.x *= SCALE;
-            enemy.y *= SCALE;
-            enemy.x += x;
-            enemy.y += y;
-            let newBlind = new Blind(this, enemy.x, enemy.y, "platformer_characters", "tile_0018.png");
-            newBlind.facing = enumList.LEFT;
-            this.enemygroup.add(newBlind);
+            if (this.levelMap.rand.frac() <= enemy.data.list.spawnChance * spawnModifier) {
+                enemy.scale = SCALE;
+                enemy.x *= SCALE;
+                enemy.y *= SCALE;
+                enemy.x += x;
+                enemy.y += y;
+                let newBlind;
+                let chance = this.levelMap.rand.frac();
+                if (chance <= enemy.data.list.secondaryChance) {
+                    newBlind = new BigBlind(this, enemy.x, enemy.y, "platformer_characters", "tile_0021.png");
+                } else {
+                    newBlind = new Blind(this, enemy.x, enemy.y, "platformer_characters", "tile_0018.png");
+                }
+                newBlind.facing = enumList.LEFT;
+                this.enemygroup.add(newBlind);
+            }
+            enemy.destroy();
+        });
+
+        //blockSpawn
+        let blockSpawn = map.createFromObjects("Objects", {
+            name: "blockSpawn",
+            key: "platformer_characters",
+            frame: "tile_0024.png",
+        });
+        blockSpawn.map((enemy) => {
+            if (this.levelMap.rand.frac() <= enemy.data.list.spawnChance * spawnModifier) {
+                enemy.scale = SCALE;
+                enemy.x *= SCALE;
+                enemy.y *= SCALE;
+                enemy.x += x;
+                enemy.y += y;
+                let newBlock = new Block(this, enemy.x, enemy.y, "platformer_characters", "tile_0011.png");
+                this.enemygroup.add(newBlock);
+            }
             enemy.destroy();
         });
 
@@ -624,7 +652,7 @@ class Platformer extends Phaser.Scene {
         if (type == "endRoom") {
             this.waterPool = map.createFromObjects("Objects", {
                 type: "spawner",
-                key: ""
+                key: "pizzaBox"
             });
             this.waterPool.map((water) => {
                 water.scale = SCALE;
@@ -632,9 +660,6 @@ class Platformer extends Phaser.Scene {
                 water.y *= SCALE;
                 water.x += x;
                 water.y += y;
-                water.displayHeight = 36;
-                water.displayWidth = 180;
-                water.visible = false;
                 this.physics.world.enable(water, Phaser.Physics.Arcade.STATIC_BODY);
             });
         }
