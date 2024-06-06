@@ -73,7 +73,7 @@ class Platformer extends Phaser.Scene {
 
         }
         this.enemygroup = this.add.group({
-            maxSize: 100,
+            //maxSize: 100,
             // activate update calls
             runChildUpdate: true
         });
@@ -580,6 +580,12 @@ class Platformer extends Phaser.Scene {
         if (type === "endRoom") {
             spawnModifier = 1.5;
         }
+        //Big level assisstance
+        //If the level is too big, it will lag, we like less lag, you will maybe see an enemy
+        //Also we wanted Uh Oh to be playable
+        if (this.levelMap.width * this.levelMap.height > 200) {
+            spawnModifier *= 0.01;
+        }
 
         //Enemy
         //FlySpawn
@@ -646,8 +652,6 @@ class Platformer extends Phaser.Scene {
             }
             enemy.destroy();
         });
-
-
 
         //Water
         if (type == "endRoom") {
