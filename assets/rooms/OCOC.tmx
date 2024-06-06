@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="18" tileheight="18" infinite="0" nextlayerid="8" nextobjectid="21">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="18" tileheight="18" infinite="0" nextlayerid="8" nextobjectid="26">
  <editorsettings>
   <export target="OCOC.tmj" format="json"/>
  </editorsettings>
@@ -325,11 +325,35 @@
  </layer>
  <objectgroup id="4" name="Objects">
   <object id="15" name="1" type="coin" gid="152" x="198" y="270" width="18" height="18"/>
-  <object id="16" name="Spawner" type="spawner" x="540" y="450" width="18" height="18"/>
+  <object id="16" name="Spawner" type="spawner" x="414" y="324" width="18" height="18"/>
   <object id="17" name="keySpawn" type="keySpawn" x="360" y="126" width="18" height="18"/>
   <object id="18" name="treasure" type="treasure" x="1008" y="90" width="18" height="18"/>
   <object id="19" name="lockWall" type="lockWall" gid="29" x="954" y="126" width="18" height="72"/>
   <object id="20" name="keySpawn" type="keySpawn" x="504" y="504" width="18" height="18"/>
+  <object id="22" name="flySpawn" type="flySpawn" x="162" y="378" width="18" height="18">
+   <properties>
+    <property name="duration" type="int" value="3000"/>
+    <property name="pathLength" type="int" value="144"/>
+    <property name="spawnChance" type="float" value="0.6"/>
+   </properties>
+  </object>
+  <object id="23" name="blindSpawn" type="blindSpawn" x="378" y="504" width="18" height="18">
+   <properties>
+    <property name="secondaryChance" type="float" value="0.5"/>
+    <property name="spawnChance" type="float" value="0.6"/>
+   </properties>
+  </object>
+  <object id="24" name="blockSpawn" type="blockSpawn" x="828" y="198" width="18" height="18">
+   <properties>
+    <property name="spawnChance" type="float" value="0.5"/>
+   </properties>
+  </object>
+  <object id="25" name="blindSpawn" type="blindSpawn" x="756" y="90" width="18" height="18">
+   <properties>
+    <property name="secondaryChance" type="float" value="0.1"/>
+    <property name="spawnChance" type="float" value="0.6"/>
+   </properties>
+  </object>
  </objectgroup>
  <layer id="7" name="Top-Layer" width="60" height="30">
   <data encoding="csv">

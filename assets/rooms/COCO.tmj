@@ -104,6 +104,99 @@
                  "width":18,
                  "x":1026,
                  "y":54
+                }, 
+                {
+                 "height":18,
+                 "id":37,
+                 "name":"blockSpawn",
+                 "properties":[
+                        {
+                         "name":"spawnChance",
+                         "type":"float",
+                         "value":0.5
+                        }],
+                 "rotation":0,
+                 "type":"blockSpawn",
+                 "visible":true,
+                 "width":18,
+                 "x":54,
+                 "y":90
+                }, 
+                {
+                 "height":18,
+                 "id":38,
+                 "name":"blindSpawn",
+                 "properties":[
+                        {
+                         "name":"secondaryChance",
+                         "type":"float",
+                         "value":0.7
+                        }, 
+                        {
+                         "name":"spawnChance",
+                         "type":"float",
+                         "value":0.5
+                        }],
+                 "rotation":0,
+                 "type":"blindSpawn",
+                 "visible":true,
+                 "width":18,
+                 "x":576,
+                 "y":342
+                }, 
+                {
+                 "height":18,
+                 "id":39,
+                 "name":"flySpawn",
+                 "properties":[
+                        {
+                         "name":"duration",
+                         "type":"int",
+                         "value":4000
+                        }, 
+                        {
+                         "name":"pathLength",
+                         "type":"int",
+                         "value":684
+                        }, 
+                        {
+                         "name":"spawnChance",
+                         "type":"float",
+                         "value":0.85
+                        }],
+                 "rotation":0,
+                 "type":"flySpawn",
+                 "visible":true,
+                 "width":18,
+                 "x":702,
+                 "y":90
+                }, 
+                {
+                 "height":18,
+                 "id":40,
+                 "name":"flySpawn",
+                 "properties":[
+                        {
+                         "name":"duration",
+                         "type":"int",
+                         "value":3500
+                        }, 
+                        {
+                         "name":"pathLength",
+                         "type":"int",
+                         "value":360
+                        }, 
+                        {
+                         "name":"spawnChance",
+                         "type":"float",
+                         "value":0.6
+                        }],
+                 "rotation":0,
+                 "type":"flySpawn",
+                 "visible":true,
+                 "width":18,
+                 "x":342,
+                 "y":396
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -236,7 +329,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":37,
+ "nextobjectid":44,
  "orientation":"orthogonal",
  "properties":[
         {

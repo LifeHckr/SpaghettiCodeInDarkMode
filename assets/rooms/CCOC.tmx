@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="18" tileheight="18" infinite="0" nextlayerid="9" nextobjectid="20">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="18" tileheight="18" infinite="0" nextlayerid="9" nextobjectid="25">
  <editorsettings>
   <export target="CCOC.tmj" format="json"/>
  </editorsettings>
@@ -330,6 +330,36 @@
   <object id="17" name="treasure" type="treasure" x="918" y="450" width="18" height="18"/>
   <object id="18" name="lockWall" type="lockWall" gid="29" x="792" y="486" width="18" height="72"/>
   <object id="19" name="keySpawn" type="keySpawn" x="684" y="252" width="18" height="18"/>
+  <object id="20" name="flySpawn" type="flySpawn" x="378" y="126" width="18" height="18">
+   <properties>
+    <property name="duration" type="int" value="4500"/>
+    <property name="pathLength" type="int" value="720"/>
+    <property name="spawnChance" type="float" value="0.35"/>
+   </properties>
+  </object>
+  <object id="21" name="blockSpawn" type="blockSpawn" x="432" y="162" width="18" height="18">
+   <properties>
+    <property name="spawnChance" type="float" value="0.5"/>
+   </properties>
+  </object>
+  <object id="22" name="blindSpawn" type="blindSpawn" x="252" y="504" width="18" height="18">
+   <properties>
+    <property name="secondaryChance" type="float" value="0"/>
+    <property name="spawnChance" type="float" value="0.9"/>
+   </properties>
+  </object>
+  <object id="23" name="blindSpawn" type="blindSpawn" x="1044" y="504" width="18" height="18">
+   <properties>
+    <property name="secondaryChance" type="float" value="0"/>
+    <property name="spawnChance" type="float" value="0.2"/>
+   </properties>
+  </object>
+  <object id="24" name="blindSpawn" type="blindSpawn" x="558" y="450" width="18" height="18">
+   <properties>
+    <property name="secondaryChance" type="float" value="0"/>
+    <property name="spawnChance" type="float" value="0.1"/>
+   </properties>
+  </object>
  </objectgroup>
  <layer id="1" name="Ground-n-Platforms" width="60" height="30">
   <data encoding="csv">

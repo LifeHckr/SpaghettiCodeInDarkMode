@@ -84,11 +84,6 @@ class Block extends Phaser.Physics.Arcade.Sprite {
 
     update() {
 
-        if (this.state === "idle" && Phaser.Math.Distance.Between(this.scene.sprite.player.x, this.scene.sprite.player.y, this.x, this.y) <= this.activeRange) {
-            //Pick a direction to move in
-            //Change state
-            //Set moving direction
-        }
 
         if (this.state !== "idle" && this.body.blocked[this.state]) {
             this.transitionState(this.state, "idle");
@@ -185,24 +180,24 @@ class notRayCast extends Phaser.Physics.Arcade.Sprite {
                 this.setVelocityX(-1);
                 this.setOrigin(1, .5);
                 this.YScaling = 0;
-                this.XScaling = 2;
+                this.XScaling = 1;
                 break;
             case "right":
                 this.setVelocityX(1);
                 this.setOrigin(0, .5);
                 this.YScaling = 0;
-                this.XScaling = 2;
+                this.XScaling = 1;
                 break;
             case "up":
                 this.setVelocityY(-1);
                 this.setOrigin(.5, 1);
-                this.YScaling = 2;
+                this.YScaling = 1;
                 this.XScaling = 0;
                 break;
             case "down":
                 this.setVelocityY(1);
                 this.setOrigin(.5, 0);
-                this.YScaling = 2;
+                this.YScaling = 1;
                 this.XScaling = 0;
                 break;
         }

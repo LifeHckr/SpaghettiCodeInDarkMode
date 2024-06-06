@@ -187,12 +187,12 @@
                 {
                  "height":18,
                  "id":14,
-                 "name":"",
+                 "name":"spawner",
                  "rotation":0,
                  "type":"spawner",
                  "visible":true,
                  "width":18,
-                 "x":126,
+                 "x":162,
                  "y":234
                 }, 
                 {
@@ -239,6 +239,99 @@
                  "width":18,
                  "x":666,
                  "y":306
+                }, 
+                {
+                 "height":18,
+                 "id":20,
+                 "name":"blindSpawn",
+                 "properties":[
+                        {
+                         "name":"secondaryChance",
+                         "type":"float",
+                         "value":0.15
+                        }, 
+                        {
+                         "name":"spawnChance",
+                         "type":"float",
+                         "value":0.5
+                        }],
+                 "rotation":0,
+                 "type":"blindSpawn",
+                 "visible":true,
+                 "width":18,
+                 "x":936,
+                 "y":396
+                }, 
+                {
+                 "height":18,
+                 "id":21,
+                 "name":"flySpawn",
+                 "properties":[
+                        {
+                         "name":"duration",
+                         "type":"int",
+                         "value":3500
+                        }, 
+                        {
+                         "name":"pathLength",
+                         "type":"int",
+                         "value":504
+                        }, 
+                        {
+                         "name":"spawnChance",
+                         "type":"float",
+                         "value":0.4
+                        }],
+                 "rotation":0,
+                 "type":"flySpawn",
+                 "visible":true,
+                 "width":18,
+                 "x":504,
+                 "y":234
+                }, 
+                {
+                 "height":18,
+                 "id":22,
+                 "name":"blindSpawn",
+                 "properties":[
+                        {
+                         "name":"secondaryChance",
+                         "type":"float",
+                         "value":0.15
+                        }, 
+                        {
+                         "name":"spawnChance",
+                         "type":"float",
+                         "value":0.5
+                        }],
+                 "rotation":0,
+                 "type":"blindSpawn",
+                 "visible":true,
+                 "width":18,
+                 "x":36,
+                 "y":108
+                }, 
+                {
+                 "height":18,
+                 "id":23,
+                 "name":"blindSpawn",
+                 "properties":[
+                        {
+                         "name":"secondaryChance",
+                         "type":"float",
+                         "value":0.15
+                        }, 
+                        {
+                         "name":"spawnChance",
+                         "type":"float",
+                         "value":0.5
+                        }],
+                 "rotation":0,
+                 "type":"blindSpawn",
+                 "visible":true,
+                 "width":18,
+                 "x":180,
+                 "y":360
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -288,7 +381,7 @@
          "y":0
         }],
  "nextlayerid":9,
- "nextobjectid":19,
+ "nextobjectid":24,
  "orientation":"orthogonal",
  "properties":[
         {

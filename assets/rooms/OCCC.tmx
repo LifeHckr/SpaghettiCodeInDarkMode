@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="18" tileheight="18" infinite="0" nextlayerid="9" nextobjectid="21">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="18" tileheight="18" infinite="0" nextlayerid="9" nextobjectid="26">
  <editorsettings>
   <export target="OCCC.tmj" format="json"/>
  </editorsettings>
@@ -357,6 +357,37 @@
 2684354586,1203,1203,1203,1203,1264,1203,1264,1203,1264,1264,1264,1203,1264,1203,1264,1203,1203,1264,1203,1203,1203,1203,1203,1203,1203,1203,1203,1203,1203,1203,1203,1203,1203,1203,1203,1203,1264,1203,1264,1264,1264,1203,1264,1264,1203,2684354566,1223,1223,3221225478,1203,1203,1203,1203,1264,1264,1264,1203,1203,26
 </data>
  </layer>
+ <objectgroup id="4" name="Objects">
+  <object id="15" name="1" type="coin" gid="152" x="144" y="108" width="18" height="18"/>
+  <object id="16" name="Spawner" type="spawner" x="684" y="504" width="18" height="18"/>
+  <object id="17" name="keySpawn" type="keySpawn" x="990" y="108" width="18" height="18"/>
+  <object id="18" name="treasure" type="treasure" x="1026" y="504" width="18" height="18"/>
+  <object id="19" name="lockWall" type="lockWall" gid="29" x="972" y="522" width="18" height="72"/>
+  <object id="20" name="keySpawn" type="keySpawn" x="144" y="90" width="18" height="18"/>
+  <object id="21" name="blockSpawn" type="blockSpawn" x="666" y="72" width="18" height="18">
+   <properties>
+    <property name="spawnChance" type="float" value="0.8"/>
+   </properties>
+  </object>
+  <object id="23" name="blindSpawn" type="blindSpawn" x="396" y="504" width="18" height="18">
+   <properties>
+    <property name="secondaryChance" type="float" value="0.2"/>
+    <property name="spawnChance" type="float" value="0.5"/>
+   </properties>
+  </object>
+  <object id="24" name="blindSpawn" type="blindSpawn" x="270" y="270" width="18" height="18">
+   <properties>
+    <property name="secondaryChance" type="float" value="0.2"/>
+    <property name="spawnChance" type="float" value="0.5"/>
+   </properties>
+  </object>
+  <object id="25" name="blindSpawn" type="blindSpawn" x="918" y="108" width="18" height="18">
+   <properties>
+    <property name="secondaryChance" type="float" value="0.2"/>
+    <property name="spawnChance" type="float" value="0.5"/>
+   </properties>
+  </object>
+ </objectgroup>
  <layer id="7" name="Top-Layer" width="60" height="30">
   <properties>
    <property name="depth" type="int" value="1"/>
@@ -394,14 +425,6 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="4" name="Objects">
-  <object id="15" name="1" type="coin" gid="152" x="144" y="108" width="18" height="18"/>
-  <object id="16" name="Spawner" type="spawner" x="684" y="504" width="18" height="18"/>
-  <object id="17" name="keySpawn" type="keySpawn" x="990" y="108" width="18" height="18"/>
-  <object id="18" name="treasure" type="treasure" x="1026" y="504" width="18" height="18"/>
-  <object id="19" name="lockWall" type="lockWall" gid="29" x="972" y="522" width="18" height="72"/>
-  <object id="20" name="keySpawn" type="keySpawn" x="144" y="90" width="18" height="18"/>
- </objectgroup>
  <layer id="5" name="Collision-Layer" class="collider" width="60" height="30" opacity="0.3">
   <data encoding="csv">
 48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,

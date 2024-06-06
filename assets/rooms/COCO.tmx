@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="18" tileheight="18" infinite="0" nextlayerid="8" nextobjectid="37">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="18" tileheight="18" infinite="0" nextlayerid="8" nextobjectid="44">
  <editorsettings>
   <export target="COCO.tmj" format="json"/>
  </editorsettings>
@@ -329,6 +329,31 @@
   <object id="15" name="lockWall" type="lockWall" gid="29" x="126" y="108" width="18" height="72"/>
   <object id="16" name="treasure" type="treasure" x="54" y="72" width="18" height="18"/>
   <object id="17" name="keySpawn" type="keySpawn" x="1026" y="54" width="18" height="18"/>
+  <object id="37" name="blockSpawn" type="blockSpawn" x="54" y="90" width="18" height="18">
+   <properties>
+    <property name="spawnChance" type="float" value="0.5"/>
+   </properties>
+  </object>
+  <object id="38" name="blindSpawn" type="blindSpawn" x="576" y="342" width="18" height="18">
+   <properties>
+    <property name="secondaryChance" type="float" value="0.7"/>
+    <property name="spawnChance" type="float" value="0.5"/>
+   </properties>
+  </object>
+  <object id="39" name="flySpawn" type="flySpawn" x="702" y="90" width="18" height="18">
+   <properties>
+    <property name="duration" type="int" value="4000"/>
+    <property name="pathLength" type="int" value="684"/>
+    <property name="spawnChance" type="float" value="0.85"/>
+   </properties>
+  </object>
+  <object id="40" name="flySpawn" type="flySpawn" x="342" y="396" width="18" height="18">
+   <properties>
+    <property name="duration" type="int" value="3500"/>
+    <property name="pathLength" type="int" value="360"/>
+    <property name="spawnChance" type="float" value="0.6"/>
+   </properties>
+  </object>
  </objectgroup>
  <layer id="7" name="Top-Layer" width="60" height="30" visible="0">
   <data encoding="csv">

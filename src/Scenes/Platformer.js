@@ -127,6 +127,7 @@ class Platformer extends Phaser.Scene {
                 obj1.animating = true;
                 obj1.setVelocity(0, 0);
                 obj1.setAcceleration(0, 0);
+                obj1.setPosition(obj2.x, obj2.y);
                 obj1.visible = false;
                 this.input.enabled = false;
                 obj1.gun.active = false;

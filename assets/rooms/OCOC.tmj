@@ -68,8 +68,8 @@
                  "type":"spawner",
                  "visible":true,
                  "width":18,
-                 "x":540,
-                 "y":450
+                 "x":414,
+                 "y":324
                 }, 
                 {
                  "height":18,
@@ -115,6 +115,94 @@
                  "width":18,
                  "x":504,
                  "y":504
+                }, 
+                {
+                 "height":18,
+                 "id":22,
+                 "name":"flySpawn",
+                 "properties":[
+                        {
+                         "name":"duration",
+                         "type":"int",
+                         "value":3000
+                        }, 
+                        {
+                         "name":"pathLength",
+                         "type":"int",
+                         "value":144
+                        }, 
+                        {
+                         "name":"spawnChance",
+                         "type":"float",
+                         "value":0.6
+                        }],
+                 "rotation":0,
+                 "type":"flySpawn",
+                 "visible":true,
+                 "width":18,
+                 "x":162,
+                 "y":378
+                }, 
+                {
+                 "height":18,
+                 "id":23,
+                 "name":"blindSpawn",
+                 "properties":[
+                        {
+                         "name":"secondaryChance",
+                         "type":"float",
+                         "value":0.5
+                        }, 
+                        {
+                         "name":"spawnChance",
+                         "type":"float",
+                         "value":0.6
+                        }],
+                 "rotation":0,
+                 "type":"blindSpawn",
+                 "visible":true,
+                 "width":18,
+                 "x":378,
+                 "y":504
+                }, 
+                {
+                 "height":18,
+                 "id":24,
+                 "name":"blockSpawn",
+                 "properties":[
+                        {
+                         "name":"spawnChance",
+                         "type":"float",
+                         "value":0.5
+                        }],
+                 "rotation":0,
+                 "type":"blockSpawn",
+                 "visible":true,
+                 "width":18,
+                 "x":828,
+                 "y":198
+                }, 
+                {
+                 "height":18,
+                 "id":25,
+                 "name":"blindSpawn",
+                 "properties":[
+                        {
+                         "name":"secondaryChance",
+                         "type":"float",
+                         "value":0.1
+                        }, 
+                        {
+                         "name":"spawnChance",
+                         "type":"float",
+                         "value":0.6
+                        }],
+                 "rotation":0,
+                 "type":"blindSpawn",
+                 "visible":true,
+                 "width":18,
+                 "x":756,
+                 "y":90
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -247,7 +335,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":21,
+ "nextobjectid":26,
  "orientation":"orthogonal",
  "properties":[
         {
