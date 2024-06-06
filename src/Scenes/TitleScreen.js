@@ -64,7 +64,7 @@ class TitleScreen extends Phaser.Scene {
         this.input.on('dragend', (pointer, object) =>{
             if (game.config.physics.arcade.debug) {
                 console.log("DB: Ignoring Selection starting with test config: ");
-                my.levelConfig = {minLength: 5, maxLength: 7, branches : experimental.branches, maxRooms: undefined, treasures: 3, openWeight: undefined, closedWeight: undefined, seed: undefined, width: experimental.width, height: experimental.height, duration: 999};
+                my.levelConfig = {minLength: 5, maxLength: 7, branches : 9, maxRooms: undefined, treasures: 3, openWeight: undefined, closedWeight: undefined, seed: undefined, width: 9, height: 9, duration: 999};
                 console.log((my.levelConfig));
                 this.bgm.stop();
                 game.scene.stop('TitleScreen');
