@@ -387,6 +387,17 @@ class LevelMap {
             }
         }
         this.sectionify();
+
+        //-----------------Pathfinding system initialization-----------------
+        //might do this better later, idk
+        //each element in this 2d array represents a 30x60 room. Create a 2D array to hold all of that
+        pathfindingArr = new Array(this.data.length * 30);
+
+        for(let i = 0; i < pathfindingArr.length; i++){
+            pathfindingArr[i] = new Array(this.data[0].length * 60).fill(0);
+        }
+        //-------------------------------------------------------------------
+
     }
 
 

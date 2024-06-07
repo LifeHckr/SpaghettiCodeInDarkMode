@@ -426,12 +426,15 @@ class Platformer extends Phaser.Scene {
                 console.log(curLayer);
                 console.log(curLayer.active);*/
 
+                this.addLayerToPathfinding(curLayer, (x /(this.roomWidth * SCALE * 18)) , (y / (this.roomHeight * SCALE * 18))); //Yay!!! Doing math twice!
+
             } else if (layer.name == "One-Layer") {
                 curLayer.visible = false;
                 curLayer.setCollisionByProperty({
                     oneWay: true
                 });
                 this.oneWays.add(curLayer);
+                this.addLayerToPathfinding(curLayer, (x /(this.roomWidth * SCALE * 18)) , (y / (this.roomHeight * SCALE * 18))); ////Yay!!! Potentially doing math thrice!!!!!
 
             } else if (layer.name == "Top-Layer") {
                 curLayer.setDepth((1));
@@ -681,6 +684,31 @@ class Platformer extends Phaser.Scene {
         });
     }
 
+    //we need to add the layer to the pathfinding array from the layer that is passed to us
+    addLayerToPathfinding(layer, x, y){
+        if(game.config.physics.arcade.debug){
+            //ok, so the x and y should be the offset of the current room. I think. Please have done this in a way that makes sense Jarod. PLEASE
+            console.log("Adding layer to pathfinding array at position: (" + x + "," + y + ")" + " with name: " + layer.name);
+            console.log(layer)
+            //yay, he did
+        }
+
+        //now lets calculate the actual offsets that we are gonna do. Each room is 60x30 tiles, so we need to multiply the x and y by 60 and 30 respectively
+        let offsetX = x * this.roomWidth;
+        let offsetY = y * this.roomHeight;
+
+        //loop through everything and add it!
+        for(let i = offsetX; i < offsetX + this.roomWidth; i++){
+            for(let j = offsetY; j < offsetY + this.roomHeight; j++){
+                if(layer.layer.data[j - offsetY][i - offsetX].index !== -1){
+                    pathfindingArr[j][i] = layer.layer.data[j - offsetY][i - offsetX].index;
+                }
+            }
+        }
+    }
+
+
+
     levelFromLevel(tileArr){
         for (let i = 0; i < this.levelMap.height; i++) { //y val
             for (let j = 0; j < this.levelMap.width; j++) { //x val
@@ -691,6 +719,12 @@ class Platformer extends Phaser.Scene {
                     this.createRoom(tile.name, 18, 18, tile.x * this.roomWidth * SCALE * 18, tile.y * this.roomHeight * SCALE * 18, tile.type);
                 }
             }
+        }
+
+        //at this point the pathfinding array should be built
+        if(game.config.physics.arcade.debug){
+            console.log("Pathfinding array: ");
+            console.log(pathfindingArr);
         }
     }
 

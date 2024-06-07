@@ -65,7 +65,8 @@ const debugText = "Debug mode activated!" +
         "\nO: Spawn Pickup";
 
 
-
+// placeholder for a* pathfindingArr. Why is it global? Because I'm lazy.
+let pathfindingArr;
 
 const game = new Phaser.Game(config);
 
