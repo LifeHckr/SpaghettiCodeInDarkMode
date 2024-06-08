@@ -1,5 +1,5 @@
-class Enemy extends Phaser.GameObjects.PathFollower {
-    constructor(scene, x, y, texture, frame, duration = 4000, pathLength = 500, periods = 4, amplitude = 60, type = 'sine') {        
+class FlyEnemy extends Phaser.GameObjects.PathFollower {
+    constructor(scene, x, y, texture, frame, duration = 4000, pathLength = 500, periods = 4, amplitude = 60, type = 'sine') {
         super(scene, 'Path', x, y, texture, frame);
         this.visible = true;
         this.active = true;
@@ -9,7 +9,7 @@ class Enemy extends Phaser.GameObjects.PathFollower {
 
 
         this.startFollowOBJ1 = {
-            
+
             from: 0,
             to: 1,
             delay: 0,
@@ -17,14 +17,14 @@ class Enemy extends Phaser.GameObjects.PathFollower {
             ease: 'Quadratic',
             repeat: -1,
             yoyo: true,
-            
+
             onYoyo: () => {
                 this.changeDir();
             },
-            onRepeat:  () => {
+            onRepeat: () => {
                 this.changeDir();
             }
-            
+
         };
 
         this.points1 = [];//original this.x, this.y, this.x - 216, this.y
@@ -38,15 +38,15 @@ class Enemy extends Phaser.GameObjects.PathFollower {
         scene.add.existing(this);
         scene.physics.world.enable(this, Phaser.Physics.Arcade.DYNAMIC_BODY);
         this.body.setAllowGravity(false);
-        this.body.setSize(this.displayWidth/3, this.displayHeight/3);
+        this.body.setSize(this.displayWidth / 3, this.displayHeight / 3);
         this.anims.play("enemyFly");
 
-    //enemyoverlap
+        //enemyoverlap
         scene.physics.add.overlap(scene.playerGroup, this, (obj1, obj2) => {
             //Only kill if running and do particles
             if (obj1.running > 1) {
                 obj2.death();
-            //Dont reknockback, invince frames
+                //Dont reknockback, invince frames
             } else if (!obj1.hitStun) {
                 //Push player away, first remove current momentum, and set flag
                 obj1.body.setAccelerationX(0);
@@ -54,7 +54,7 @@ class Enemy extends Phaser.GameObjects.PathFollower {
                 obj1.hitStun = true;
                 scene.time.delayedCall(
                     1000,                // ms
-                    ()=>{
+                    () => {
                         obj1.hitStun = false;
                     });
                 obj1.running = 1;
@@ -69,19 +69,19 @@ class Enemy extends Phaser.GameObjects.PathFollower {
                 obj1.body.setDragX(scene.sprite.player.DRAG);
                 obj1.body.setAccelerationY(10);
                 scene.timer.time -= 3;
-                scene.sound.play("bwah", { rate: 1.5, detune: 200});
+                scene.sound.play("bwah", {rate: 1.5, detune: 200});
                 //Either remove knockback after timer or on grounded
                 scene.time.delayedCall(
                     475,                // ms
-                    ()=>{
+                    () => {
                         scene.sprite.player.knockback = false;
-                });
+                    });
                 this.scene.cameras.main.shake(75, 0.01);
-                this.scene.cameras.main.setZoom(game.config.width/1200 * 1.20 + 0.2, game.config.height/700 * 1.20 + 0.2);
-                this.scene.cameras.main.zoomTo(game.config.width/1200 * 1.20, 500);
+                this.scene.cameras.main.setZoom(game.config.width / 1200 * 1.20 + 0.2, game.config.height / 700 * 1.20 + 0.2);
+                this.scene.cameras.main.zoomTo(game.config.width / 1200 * 1.20, 500);
             }
         });
-    //enemyOverlap--------------------------------------------
+        //enemyOverlap--------------------------------------------
 
         return this;
     }
@@ -102,7 +102,7 @@ class Enemy extends Phaser.GameObjects.PathFollower {
 
     selfEnd() {
         this.stopFollow();
-        this.active =  false;
+        this.active = false;
         this.destroy();
     }
 
@@ -112,34 +112,34 @@ class Enemy extends Phaser.GameObjects.PathFollower {
             array.push(startX - i);
             array.push(Math.min(amplitude * Math.sin(((i*Math.PI)/(length/numPeriods*.5)) + (Math.PI * .5)) + startY, startY));         
        }*/
-       for (let i = 0; i<numPeriods; i++) {
+        for (let i = 0; i < numPeriods; i++) {
             //Start
-            array.push(startX - i*length/numPeriods);
+            array.push(startX - i * length / numPeriods);
             array.push(startY);
 
-            array.push(startX - i*length/numPeriods - length/numPeriods/8);
+            array.push(startX - i * length / numPeriods - length / numPeriods / 8);
             array.push(startY);
 
-            array.push(startX - i*length/numPeriods - 2*length/numPeriods/8);
+            array.push(startX - i * length / numPeriods - 2 * length / numPeriods / 8);
             array.push(startY);
 
-            array.push(startX - i*length/numPeriods - 3*length/numPeriods/8);
-            array.push(startY - amplitude/1.4);
+            array.push(startX - i * length / numPeriods - 3 * length / numPeriods / 8);
+            array.push(startY - amplitude / 1.4);
 
             //1/2 period at peak
-            array.push(startX - i*length/numPeriods - 4*length/numPeriods/8);
+            array.push(startX - i * length / numPeriods - 4 * length / numPeriods / 8);
             array.push(startY - amplitude);
 
-            array.push(startX - i*length/numPeriods - 5*length/numPeriods/8);
-            array.push(startY - amplitude/1.4);
+            array.push(startX - i * length / numPeriods - 5 * length / numPeriods / 8);
+            array.push(startY - amplitude / 1.4);
 
-            array.push(startX - i*length/numPeriods - 6*length/numPeriods/8);
+            array.push(startX - i * length / numPeriods - 6 * length / numPeriods / 8);
             array.push(startY);
 
-            array.push(startX - i*length/numPeriods - 7*length/numPeriods/8);
+            array.push(startX - i * length / numPeriods - 7 * length / numPeriods / 8);
             array.push(startY);
             //And repeat
-       }
+        }
     }
 
     doDamage(damage) {
@@ -151,15 +151,15 @@ class Enemy extends Phaser.GameObjects.PathFollower {
 
     death() {
         this.scene.add.particles(this.x, this.y, 'x', {
-            angle: { min: 0, max: 360 },
+            angle: {min: 0, max: 360},
             gravityY: 600,
             delay: 10,
             speed: 100,
             lifespan: 300,
             quantity: 10,
-            scale: { start: 2, end: 0 },
+            scale: {start: 2, end: 0},
             emitting: true,
-            emitZone: { type: 'random', source: this, quantity:10, scale: { start: 2, end: 0 } },
+            emitZone: {type: 'random', source: this, quantity: 10, scale: {start: 2, end: 0}},
             duration: 10
         });
         let newPickup = new PickupPool(this.scene, this.x, this.y, null, null, this.scene.levelMap.rand);

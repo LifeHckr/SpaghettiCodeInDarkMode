@@ -105,6 +105,7 @@ class Platformer extends Phaser.Scene {
 // PlayerInit---------------------------------
 
         this.sprite.player = new Player(this, this.playerSpawn[0].x, this.playerSpawn[0].y, "platformer_characters", "tile_0000.png");
+
         //this.sprite.player = new Player(this, this.playerSpawn[0].x, this.playerSpawn[0].y, "pizza.png");
 
         this.playerGroup.add(this.sprite.player);
@@ -322,6 +323,8 @@ class Platformer extends Phaser.Scene {
         my.bgm.rateVar = 1;
 
         this.minimap = new Minimap(this, -1000, -1000, 200, 200, this.levelMap);
+
+
     }
 //END CREATE---------------------------------------------------------
 
@@ -425,12 +428,15 @@ class Platformer extends Phaser.Scene {
                 console.log(curLayer);
                 console.log(curLayer.active);*/
 
+                this.addLayerToPathfinding(curLayer, (x /(this.roomWidth * SCALE * 18)) , (y / (this.roomHeight * SCALE * 18))); //Yay!!! Doing math twice!
+
             } else if (layer.name == "One-Layer") {
                 curLayer.visible = false;
                 curLayer.setCollisionByProperty({
                     oneWay: true
                 });
                 this.oneWays.add(curLayer);
+                this.addLayerToPathfinding(curLayer, (x /(this.roomWidth * SCALE * 18)) , (y / (this.roomHeight * SCALE * 18))); ////Yay!!! Potentially doing math thrice!!!!!
 
             } else if (layer.name == "Top-Layer") {
                 curLayer.setDepth((1));
@@ -586,7 +592,7 @@ class Platformer extends Phaser.Scene {
             spawnModifier *= 0.01;
         }
 
-        //Enemy
+        //FlyEnemy
         //FlySpawn
         let flySpawn = map.createFromObjects("Objects", {
             type: "flySpawn",
@@ -600,7 +606,7 @@ class Platformer extends Phaser.Scene {
                 enemy.y *= SCALE;
                 enemy.x += x;
                 enemy.y += y;
-                let newEnemy = new Enemy(this, enemy.x, enemy.y, "platformer_characters", "tile_0024.png", enemy.data.list.duration, enemy.data.list.pathLength);
+                let newEnemy = new FlyEnemy(this, enemy.x, enemy.y, "platformer_characters", "tile_0024.png", enemy.data.list.duration, enemy.data.list.pathLength);
                 newEnemy.facing = enumList.LEFT;
                 this.enemygroup.add(newEnemy);
             }
@@ -625,7 +631,7 @@ class Platformer extends Phaser.Scene {
                 if (chance <= enemy.data.list.secondaryChance) {
                     newBlind = new BigBlind(this, enemy.x, enemy.y, "platformer_characters", "tile_0021.png");
                 } else {
-                    newBlind = new Blind(this, enemy.x, enemy.y, "platformer_characters", "tile_0018.png");
+                    newBlind = new BlindEnemy(this, enemy.x, enemy.y, "platformer_characters", "tile_0018.png");
                 }
                 newBlind.facing = enumList.LEFT;
                 this.enemygroup.add(newBlind);
@@ -646,7 +652,7 @@ class Platformer extends Phaser.Scene {
                 enemy.y *= SCALE;
                 enemy.x += x;
                 enemy.y += y;
-                let newBlock = new Block(this, enemy.x, enemy.y, "platformer_characters", "tile_0011.png");
+                let newBlock = new BlockheadEnemy(this, enemy.x, enemy.y, "platformer_characters", "tile_0011.png");
                 this.enemygroup.add(newBlock);
             }
             enemy.destroy();
@@ -665,6 +671,10 @@ class Platformer extends Phaser.Scene {
                 water.x += x;
                 water.y += y;
                 this.physics.world.enable(water, Phaser.Physics.Arcade.STATIC_BODY);
+
+
+                //Spawn the seeker enemy too
+                this.enemygroup.add(new PathEnemy(this, water.x , water.y , "platformer_characters", "tile_0008.png"));
             });
         }
 
@@ -680,6 +690,31 @@ class Platformer extends Phaser.Scene {
         });
     }
 
+    //we need to add the layer to the pathfinding array from the layer that is passed to us
+    addLayerToPathfinding(layer, x, y){
+        if(game.config.physics.arcade.debug){
+            //ok, so the x and y should be the offset of the current room. I think. Please have done this in a way that makes sense Jarod. PLEASE
+            console.log("Adding layer to pathfinding array at position: (" + x + "," + y + ")" + " with name: " + layer.name);
+            console.log(layer)
+            //yay, he did
+        }
+
+        //now lets calculate the actual offsets that we are gonna do. Each room is 60x30 tiles, so we need to multiply the x and y by 60 and 30 respectively
+        let offsetX = x * this.roomWidth;
+        let offsetY = y * this.roomHeight;
+
+        //loop through everything and add it!
+        for(let i = offsetX; i < offsetX + this.roomWidth; i++){
+            for(let j = offsetY; j < offsetY + this.roomHeight; j++){
+                if(layer.layer.data[j - offsetY][i - offsetX].index !== -1){
+                    pathfindingArr[j][i] = layer.layer.data[j - offsetY][i - offsetX].index;
+                }
+            }
+        }
+    }
+
+
+
     levelFromLevel(tileArr){
         for (let i = 0; i < this.levelMap.height; i++) { //y val
             for (let j = 0; j < this.levelMap.width; j++) { //x val
@@ -690,6 +725,12 @@ class Platformer extends Phaser.Scene {
                     this.createRoom(tile.name, 18, 18, tile.x * this.roomWidth * SCALE * 18, tile.y * this.roomHeight * SCALE * 18, tile.type);
                 }
             }
+        }
+
+        //at this point the pathfinding array should be built
+        if(game.config.physics.arcade.debug){
+            console.log("Pathfinding array: ");
+            console.log(pathfindingArr);
         }
     }
 
