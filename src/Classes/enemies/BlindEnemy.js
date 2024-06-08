@@ -1,4 +1,4 @@
-class BlindEnemy extends EnemyTemplate{
+class BlindEnemy extends EnemyTemplate {
     constructor(scene, x, y, texture, frame) {
         super(scene, x, y, texture, frame);
 
@@ -17,7 +17,7 @@ class BlindEnemy extends EnemyTemplate{
         this.jumpSpeed = -500;
         this.hp = 2;
 
-        this.body.setSize(this.displayWidth/3, this.displayHeight/3, true);
+        this.body.setSize(this.displayWidth / 3, this.displayHeight / 3, true);
         this.body.setOffset(4.5, 7);
         this.searchLength = 1500;
         this.name = "blind";
@@ -36,9 +36,10 @@ class BlindEnemy extends EnemyTemplate{
         this.noiseTimer = this.scene.time.addEvent({
             paused: true,
             delay: 1,                // ms
-            callback: ()=>{
-            this.noiseListen = false;
-        }});
+            callback: () => {
+                this.noiseListen = false;
+            }
+        });
 
         this.signals.on("noise", (noiseMaker) => {
             if (this.active) {
@@ -86,7 +87,7 @@ class BlindEnemy extends EnemyTemplate{
         if (next === "chase") {
             if (cur === "idle") {
                 this.state = "chase";
-                this.anims.play(this.name+'Walk');
+                this.anims.play(this.name + 'Walk');
                 this.activeRange = this.BASERANGE * 2.5;
                 this.noiseRange = this.BASERANGE * 3;
             }
@@ -94,7 +95,7 @@ class BlindEnemy extends EnemyTemplate{
             if (cur === "chase") {
                 this.state = "idle";
             } else if (cur === "idle") {
-                this.anims.play(this.name+'Idle');
+                this.anims.play(this.name + 'Idle');
                 this.body.setVelocityX(0);
                 this.body.setAccelerationX(0);
                 this.moving = false;

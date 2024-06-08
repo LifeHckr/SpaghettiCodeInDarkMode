@@ -23,7 +23,6 @@ class EnemyTemplate extends Phaser.Physics.Arcade.Sprite {
         this.setMaxVelocity(1200, 1200);
 
 
-
         //Player Collision handling
         scene.physics.add.overlap(scene.playerGroup, this, (obj1, obj2) => {
             //Only kill if running and do particles
@@ -77,15 +76,15 @@ class EnemyTemplate extends Phaser.Physics.Arcade.Sprite {
 
     death() {
         this.scene.add.particles(this.x, this.y, 'x', {
-            angle: { min: 0, max: 360 },
+            angle: {min: 0, max: 360},
             gravityY: 600,
             delay: 10,
             speed: 100,
             lifespan: 300,
             quantity: 10,
-            scale: { start: 2, end: 0 },
+            scale: {start: 2, end: 0},
             emitting: true,
-            emitZone: { type: 'random', source: this, quantity:10, scale: { start: 2, end: 0 } },
+            emitZone: {type: 'random', source: this, quantity: 10, scale: {start: 2, end: 0}},
             duration: 10
         });
         let newPickup = new PickupPool(this.scene, this.x, this.y, null, null, this.scene.levelMap.rand);

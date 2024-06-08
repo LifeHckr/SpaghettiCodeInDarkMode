@@ -1,4 +1,4 @@
-class BlockheadEnemy extends EnemyTemplate{
+class BlockheadEnemy extends EnemyTemplate {
     constructor(scene, x, y, texture, frame) {
         super(scene, x, y, texture, frame);
 
@@ -39,7 +39,7 @@ class BlockheadEnemy extends EnemyTemplate{
         } else {
             this.state = next;
             this.anims.play('blockMove');
-            switch (next){
+            switch (next) {
                 case "left":
                     this.setAcceleration(-1 * this.acceleration, 0);
                     break;
@@ -50,7 +50,7 @@ class BlockheadEnemy extends EnemyTemplate{
                     this.setAcceleration(0, -1 * this.acceleration);
                     break;
                 case "down":
-                    this.setAcceleration(0,this.acceleration);
+                    this.setAcceleration(0, this.acceleration);
                     break;
             }
         }
@@ -90,7 +90,7 @@ class notRayCast extends Phaser.Physics.Arcade.Sprite {
         scene.physics.world.enable(this, Phaser.Physics.Arcade.DYNAMIC_BODY);
         this.body.setAllowGravity(false);
         this.direction = direction;
-        switch (direction){
+        switch (direction) {
             case "left":
                 this.setVelocityX(-1);
                 this.setOrigin(1, .5);
@@ -116,7 +116,6 @@ class notRayCast extends Phaser.Physics.Arcade.Sprite {
                 this.XScaling = 0;
                 break;
         }
-
 
 
         //PlayerCollisions

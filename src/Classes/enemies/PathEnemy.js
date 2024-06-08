@@ -1,8 +1,8 @@
-class PathEnemy extends EnemyTemplate{
+class PathEnemy extends EnemyTemplate {
     constructor(scene, x, y, texture, frame) {
         super(scene, x, y, texture, frame);
 
-        this.setOrigin(0,0);
+        this.setOrigin(0, 0);
 
         this.activeTween = null;
 

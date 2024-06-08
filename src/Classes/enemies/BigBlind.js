@@ -1,4 +1,4 @@
-class BigBlind extends BlindEnemy{
+class BigBlind extends BlindEnemy {
     constructor(scene, x, y, texture, frame) {
         super(scene, x, y, texture, frame);
 
