@@ -5,11 +5,13 @@ class PathEnemy extends EnemyTemplate {
         this.setOrigin(0, 0);
 
         this.activeTween = null;
+        this.hp = 100;
 
         this.finder = new EasyStar.js();
         this.finder.setGrid(pathfindingArr);
         this.finder.setAcceptableTiles([1]);
         this.finder.setTileCost(1, 1);
+
     }
 
     update() {

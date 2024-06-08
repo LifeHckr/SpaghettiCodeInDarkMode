@@ -16,6 +16,7 @@ class BlindEnemy extends EnemyTemplate {
         this.acceleration = 1;
         this.jumpSpeed = -500;
         this.hp = 2;
+        this.dashKillable = true;
 
         this.body.setSize(this.displayWidth / 3, this.displayHeight / 3, true);
         this.body.setOffset(4.5, 7);

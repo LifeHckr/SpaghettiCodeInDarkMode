@@ -11,6 +11,8 @@ class EnemyTemplate extends Phaser.Physics.Arcade.Sprite {
         this.canJump = true;
         this.moving = false;
 
+        this.dashKillable = false;
+
         //The amount of time that should be taken off the player when hit
         this.hitTime = 10;
 
@@ -25,6 +27,13 @@ class EnemyTemplate extends Phaser.Physics.Arcade.Sprite {
 
         //Player Collision handling
         scene.physics.add.overlap(scene.playerGroup, this, (obj1, obj2) => {
+
+            //kill enemy and dont knock back
+            if (this.dashKillable && obj1.running > 1) {
+                obj2.death();
+                return;
+            }
+
             //Only kill if running and do particles
             if (!obj1.hitStun) {
                 //Push player away, first remove current momentum, and set flag
