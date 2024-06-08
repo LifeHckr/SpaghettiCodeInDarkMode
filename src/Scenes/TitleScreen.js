@@ -71,7 +71,8 @@ class TitleScreen extends Phaser.Scene {
                 this.scene.get('platformerScene').scene.restart();
                 return;
             } else if(object === this.sprite.uhoh){
-                my.levelConfig = {minLength: 1, maxLength: 1, branches : 800, maxRooms: 700, treasures: 40, openWeight: 1, closedWeight: .1, seed: ["possible?"], width: 30, height: 30, duration: 999};            } else if (object === this.sprite.easy){
+                my.levelConfig = {minLength: 1, maxLength: 1, branches : 800, maxRooms: 700, treasures: 40, openWeight: 1, closedWeight: .1, seed: ["possible?"], width: 30, height: 30, duration: 999};
+            } else if (object === this.sprite.easy){
                 my.levelConfig = {minLength: 5, maxLength: 7, branches : 7, maxRooms: 20, treasures: 2, openWeight: 1, closedWeight: 0, seed: undefined, width: 4, height: 5, duration: 299};
 
             } else if (object === this.sprite.medium){

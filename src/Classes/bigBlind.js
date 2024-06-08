@@ -42,7 +42,7 @@ class BigBlind extends Blind {
                 this.scene.time.delayedCall(
                     475,                // ms
                     ()=>{
-                        this.scene.sprite.player.knockback = false;
+                        obj1.knockback = false;
                     });
                 this.scene.cameras.main.shake(75, 0.01);
                 this.scene.cameras.main.setZoom(game.config.width/1200 * 1.20 + 0.2, game.config.height/700 * 1.20 + 0.2);

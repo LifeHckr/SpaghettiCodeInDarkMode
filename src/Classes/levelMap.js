@@ -312,8 +312,13 @@ class LevelMap {
         this.levelPathLen = Math.floor((this.rand.frac() * this.levelMaxLength) + this.levelMinLength);
 
         //Weights for prioritizing opening or closing doors
-        this.openWeight = openWeight;
-        this.closedWeight = closedWeight;
+        this.closedWeight = Math.min(closedWeight, 0.9);
+        this.openWeight = Math.max(openWeight, 0.1);
+        //Make it statistically impossible
+        if (this.width * this.height <= 81) {
+            this.closedWeight = Math.min(closedWeight, (((this.width + this.width)/2/10) - .1))
+        }
+
 
         //Max rooms in level
         //Level may end up much less

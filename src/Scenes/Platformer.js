@@ -248,7 +248,6 @@ class Platformer extends Phaser.Scene {
 
             let newTreasure = new PickupPool(this, this.sprite.player.x + (60 * this.sprite.player.facing), this.sprite.player.y, null, null, this.levelMap.rand);
             //let test = new notRayCast(this, this.sprite.player.x + (60 * this.sprite.player.facing), this.sprite.player.y, "pizza", );
-            this.enemygroup.add(test);
             console.log("DB: Key and Chest Spawned");
         }, this);
 
