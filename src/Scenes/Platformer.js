@@ -105,6 +105,7 @@ class Platformer extends Phaser.Scene {
 // PlayerInit---------------------------------
 
         this.sprite.player = new Player(this, this.playerSpawn[0].x, this.playerSpawn[0].y, "platformer_characters", "tile_0000.png");
+
         //this.sprite.player = new Player(this, this.playerSpawn[0].x, this.playerSpawn[0].y, "pizza.png");
 
         this.playerGroup.add(this.sprite.player);
@@ -248,7 +249,6 @@ class Platformer extends Phaser.Scene {
 
             let newTreasure = new PickupPool(this, this.sprite.player.x + (60 * this.sprite.player.facing), this.sprite.player.y, null, null, this.levelMap.rand);
             //let test = new notRayCast(this, this.sprite.player.x + (60 * this.sprite.player.facing), this.sprite.player.y, "pizza", );
-            this.enemygroup.add(test);
             console.log("DB: Key and Chest Spawned");
         }, this);
 
@@ -323,6 +323,8 @@ class Platformer extends Phaser.Scene {
         my.bgm.rateVar = 1;
 
         this.minimap = new Minimap(this, -1000, -1000, 200, 200, this.levelMap);
+
+
     }
 //END CREATE---------------------------------------------------------
 
@@ -669,6 +671,10 @@ class Platformer extends Phaser.Scene {
                 water.x += x;
                 water.y += y;
                 this.physics.world.enable(water, Phaser.Physics.Arcade.STATIC_BODY);
+
+
+                //Spawn the seeker enemy too
+                this.enemygroup.add(new pathEnemy(this, water.x , water.y , "platformer_characters", "tile_0008.png"));
             });
         }
 

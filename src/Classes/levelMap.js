@@ -394,7 +394,7 @@ class LevelMap {
         pathfindingArr = new Array(this.data.length * 30);
 
         for(let i = 0; i < pathfindingArr.length; i++){
-            pathfindingArr[i] = new Array(this.data[0].length * 60).fill(0);
+            pathfindingArr[i] = new Array(this.data[0].length * 60).fill(1);
         }
         //-------------------------------------------------------------------
 
