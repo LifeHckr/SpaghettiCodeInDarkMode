@@ -439,7 +439,7 @@ class Platformer extends Phaser.Scene {
                 this.addLayerToPathfinding(curLayer, (x /(this.roomWidth * SCALE * 18)) , (y / (this.roomHeight * SCALE * 18))); ////Yay!!! Potentially doing math thrice!!!!!
 
             } else if (layer.name == "Top-Layer") {
-                curLayer.setDepth((1));
+                curLayer.setDepth((1.5));
             }
 
 
