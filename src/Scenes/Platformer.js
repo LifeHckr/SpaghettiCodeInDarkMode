@@ -592,7 +592,7 @@ class Platformer extends Phaser.Scene {
             spawnModifier *= 0.01;
         }
 
-        //Enemy
+        //FlyEnemy
         //FlySpawn
         let flySpawn = map.createFromObjects("Objects", {
             type: "flySpawn",
@@ -606,7 +606,7 @@ class Platformer extends Phaser.Scene {
                 enemy.y *= SCALE;
                 enemy.x += x;
                 enemy.y += y;
-                let newEnemy = new Enemy(this, enemy.x, enemy.y, "platformer_characters", "tile_0024.png", enemy.data.list.duration, enemy.data.list.pathLength);
+                let newEnemy = new FlyEnemy(this, enemy.x, enemy.y, "platformer_characters", "tile_0024.png", enemy.data.list.duration, enemy.data.list.pathLength);
                 newEnemy.facing = enumList.LEFT;
                 this.enemygroup.add(newEnemy);
             }
@@ -631,7 +631,7 @@ class Platformer extends Phaser.Scene {
                 if (chance <= enemy.data.list.secondaryChance) {
                     newBlind = new BigBlind(this, enemy.x, enemy.y, "platformer_characters", "tile_0021.png");
                 } else {
-                    newBlind = new Blind(this, enemy.x, enemy.y, "platformer_characters", "tile_0018.png");
+                    newBlind = new BlindEnemy(this, enemy.x, enemy.y, "platformer_characters", "tile_0018.png");
                 }
                 newBlind.facing = enumList.LEFT;
                 this.enemygroup.add(newBlind);
@@ -652,7 +652,7 @@ class Platformer extends Phaser.Scene {
                 enemy.y *= SCALE;
                 enemy.x += x;
                 enemy.y += y;
-                let newBlock = new Block(this, enemy.x, enemy.y, "platformer_characters", "tile_0011.png");
+                let newBlock = new BlockheadEnemy(this, enemy.x, enemy.y, "platformer_characters", "tile_0011.png");
                 this.enemygroup.add(newBlock);
             }
             enemy.destroy();
@@ -674,7 +674,7 @@ class Platformer extends Phaser.Scene {
 
 
                 //Spawn the seeker enemy too
-                this.enemygroup.add(new pathEnemy(this, water.x , water.y , "platformer_characters", "tile_0008.png"));
+                this.enemygroup.add(new PathEnemy(this, water.x , water.y , "platformer_characters", "tile_0008.png"));
             });
         }
 

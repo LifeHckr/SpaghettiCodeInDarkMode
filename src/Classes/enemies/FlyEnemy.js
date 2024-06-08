@@ -1,4 +1,4 @@
-class Enemy extends Phaser.GameObjects.PathFollower {
+class FlyEnemy extends Phaser.GameObjects.PathFollower {
     constructor(scene, x, y, texture, frame, duration = 4000, pathLength = 500, periods = 4, amplitude = 60, type = 'sine') {        
         super(scene, 'Path', x, y, texture, frame);
         this.visible = true;
