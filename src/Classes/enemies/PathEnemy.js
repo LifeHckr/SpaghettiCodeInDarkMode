@@ -20,8 +20,8 @@ class PathEnemy extends EnemyTemplate {
 
     moveEnemy() {
         //get the coordinates we are gonna travel between
-        //player pos
 
+        //player pos
         let playerX = Math.floor(this.scene.sprite.player.x / 36);
         let playerY = Math.floor(this.scene.sprite.player.y / 36);
 
@@ -32,10 +32,13 @@ class PathEnemy extends EnemyTemplate {
         if (enemyX == null) {
             return;
         }
+
         //get the path
         this.finder.findPath(enemyX, enemyY, playerX, playerY, (foundPath) => {
             if (foundPath === null) {
-                console.warn("Path was not found. Returning.");
+                if(game.config.physics.arcade.debug){
+                   console.warn("Path was not found. Returning.");
+                }
             } else {
 
                 if (game.config.physics.arcade.debug) {
@@ -44,9 +47,9 @@ class PathEnemy extends EnemyTemplate {
                 this.doEnemyTweenWithPath(foundPath, this);
             }
         });
+
         //Actually find the path because AAAAAAAAAAAAAAAAA why doesn't javascript just do this for me
         this.finder.calculate();
-
     }
 
     doEnemyTweenWithPath(path, enemy) {
