@@ -7,6 +7,7 @@ class BigBlind extends BlindEnemy {
         this.jumpSpeed = -200;
         this.BASERANGE = 250;
         this.hp = 5;
+        this.dashKillable =  false;
 
         this.searchLength = 2000;
         this.name = "big";

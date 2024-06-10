@@ -308,8 +308,8 @@
                  "type":"blindSpawn",
                  "visible":true,
                  "width":18,
-                 "x":36,
-                 "y":108
+                 "x":54,
+                 "y":90
                 }, 
                 {
                  "height":18,

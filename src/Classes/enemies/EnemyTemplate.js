@@ -73,6 +73,11 @@ class EnemyTemplate extends Phaser.Physics.Arcade.Sprite {
         //Enemy Collision handling
         this.mapCollider = scene.physics.add.collider(this, scene.collidesTrue);
 
+        //Enemy OneWay handling
+        this.extraCollider = scene.physics.add.collider(this, scene.oneWays, null, function (enemy, tile) {
+            return((enemy.body.y + enemy.displayHeight/2 - 5) <= (tile.layer.tilemapLayer.tileToWorldY(tile.y)));
+        });
+
         return this;
     }
 

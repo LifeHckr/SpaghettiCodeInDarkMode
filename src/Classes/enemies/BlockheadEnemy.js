@@ -5,7 +5,7 @@ class BlockheadEnemy extends EnemyTemplate {
         this.acceleration = 300;
         this.directions = ["left", "up", "down", "right"]; //up, down, left, right
         this.activeRange = 600;
-
+        this.dashKillable = false;
         this.left = null;
         this.up = null;
         this.down = null;

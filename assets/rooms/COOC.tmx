@@ -445,7 +445,7 @@
     <property name="spawnChance" type="float" value="0.4"/>
    </properties>
   </object>
-  <object id="22" name="blindSpawn" type="blindSpawn" x="36" y="108" width="18" height="18">
+  <object id="22" name="blindSpawn" type="blindSpawn" x="54" y="90" width="18" height="18">
    <properties>
     <property name="secondaryChance" type="float" value="0.15"/>
     <property name="spawnChance" type="float" value="0.5"/>
